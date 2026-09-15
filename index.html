@@ -1,0 +1,1882 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover,maximum-scale=1.0,user-scalable=no">
+<meta name="theme-color" content="#2f6bf6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>电梯维修操作证 · 刷题宝典</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --primary:#2f6bf6; --primary-d:#1f52cc; --primary-l:#eaf1ff;
+  --green:#12b76a; --green-l:#e6f8ef;
+  --red:#f04438; --red-l:#feecea;
+  --orange:#ff8a00; --orange-l:#fff4e5;
+  --bg:#f2f4f8; --card:#fff; --text:#161d2e; --text2:#6b7488; --text3:#9aa3b5;
+  --line:#e9edf4; --radius:16px;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+html,body{height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",sans-serif;
+  background:var(--bg); color:var(--text); font-size:15px; line-height:1.6;
+  -webkit-font-smoothing:antialiased; overflow:hidden;
+}
+.app{
+  position:relative; display:flex; flex-direction:column;
+  max-width:520px; margin:0 auto; height:100vh; height:100dvh;
+  background:var(--bg); overflow:hidden;
+}
+@media(min-width:560px){ .app{box-shadow:0 0 40px rgba(20,40,80,.12)} }
+
+/* ============ views ============ */
+.view{display:none; flex:1; min-height:0; flex-direction:column; overflow:hidden}
+.view.active{display:flex}
+.scroll{flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:0 14px 18px}
+.pad-b{height:24px}
+
+/* ============ common ============ */
+.ico-btn{
+  width:38px;height:38px;border:0;background:transparent;font-size:20px;color:var(--text);
+  display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;flex:0 0 auto;
+}
+.ico-btn:active{background:rgba(0,0,0,.06)}
+.btn{
+  border:0;border-radius:12px;padding:13px 18px;font-size:15px;font-weight:600;
+  font-family:inherit;cursor:pointer;transition:.15s;display:inline-flex;
+  align-items:center;justify-content:center;gap:6px;
+}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:disabled{background:#c3cee0;color:#fff}
+.btn-ghost{background:#fff;color:var(--text);border:1px solid var(--line)}
+.btn-line{background:#fff;color:var(--primary);border:1px solid var(--primary)}
+.btn-block{width:100%}
+.card{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+.sec-title{font-size:14px;font-weight:700;color:var(--text);margin:18px 4px 10px;display:flex;align-items:center;justify-content:space-between}
+.sec-title span{font-size:12px;font-weight:400;color:var(--text3)}
+
+/* ============ home ============ */
+.top-card{
+  background:linear-gradient(135deg,#2f6bf6 0%,#4f8bff 55%,#6aa6ff 100%);
+  border-radius:0 0 24px 24px; color:#fff; padding:18px 18px 22px; position:relative; overflow:hidden;
+}
+.top-card::after{
+  content:"";position:absolute;right:-40px;top:-50px;width:170px;height:170px;
+  border-radius:50%;background:rgba(255,255,255,.12)
+}
+.top-card::before{
+  content:"";position:absolute;right:30px;bottom:-70px;width:120px;height:120px;
+  border-radius:50%;background:rgba(255,255,255,.08)
+}
+.tc-head{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
+.tc-badge{
+  width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.2);
+  display:flex;align-items:center;justify-content:center;font-size:22px;flex:0 0 auto;
+  border:1px solid rgba(255,255,255,.35)
+}
+.tc-name{font-size:18px;font-weight:700;letter-spacing:.3px}
+.tc-sub{font-size:12px;opacity:.85;margin-top:1px}
+.tc-prog{display:flex;align-items:center;gap:14px;margin-top:18px;position:relative;z-index:1}
+.ring{width:74px;height:74px;flex:0 0 auto;position:relative}
+.ring svg{transform:rotate(-90deg)}
+.ring-txt{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-size:17px;font-weight:700;line-height:1.1
+}
+.ring-txt em{font-size:10px;font-style:normal;font-weight:400;opacity:.8}
+.tc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;flex:1;text-align:center}
+.tc-stats div b{display:block;font-size:17px;font-weight:700}
+.tc-stats div span{font-size:11px;opacity:.85}
+.entry-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 14px;margin-top:-14px;position:relative;z-index:2}
+.entry{
+  background:#fff;border-radius:var(--radius);padding:16px 14px;cursor:pointer;
+  box-shadow:0 4px 16px rgba(30,60,120,.07);transition:.15s;border:1px solid #f0f3f9;
+}
+.entry:active{transform:scale(.97)}
+.entry .ei{font-size:24px;line-height:1}
+.entry h4{font-size:15px;font-weight:700;margin:8px 0 3px}
+.entry p{font-size:11.5px;color:var(--text2);line-height:1.5}
+.entry.review{background:linear-gradient(135deg,#fff6ec,#fff)}
+.entry.exam{background:linear-gradient(135deg,#eef3ff,#fff)}
+
+/* ============ practice ============ */
+.pbar{
+  display:flex;align-items:center;gap:8px;padding:6px 8px;background:#fff;
+  border-bottom:1px solid var(--line);flex:0 0 auto;padding-top:calc(6px + env(safe-area-inset-top,0px))
+}
+.pbar-t{flex:1;text-align:center;font-size:15px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pbar-r{font-size:13px;color:var(--text2);font-weight:600;min-width:56px;text-align:right;padding-right:6px}
+.prog-line{height:3px;background:#e6ebf3;flex:0 0 auto}
+.prog-line i{display:block;height:100%;width:0;background:linear-gradient(90deg,#2f6bf6,#5b9bff);transition:width .25s}
+
+.q-body{padding:16px 0 0}
+.q-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.tag-p{font-size:11px;padding:2px 9px;border-radius:20px;background:var(--primary-l);color:var(--primary-d);font-weight:600}
+.tag-c{font-size:11px;padding:2px 9px;border-radius:20px;background:#f0f2f7;color:var(--text2)}
+.tag-t{font-size:11px;padding:2px 9px;border-radius:20px;background:var(--orange-l);color:#c96a00;font-weight:600}
+.q-stem{font-size:16.5px;line-height:1.72;font-weight:600;color:var(--text);margin-bottom:14px;word-break:break-word}
+.q-stem .qno{color:var(--primary);font-weight:700;margin-right:2px}
+
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{
+  display:flex;gap:11px;align-items:flex-start;padding:13px 14px;background:#fff;
+  border:1.5px solid #e7ecf4;border-radius:13px;cursor:pointer;transition:.15s;position:relative;
+}
+.opt:active{background:#f7f9fd}
+.opt .tag{
+  width:25px;height:25px;flex:0 0 auto;border-radius:50%;background:#f0f3f9;color:var(--text2);
+  font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:.15s
+}
+.opt .txt{flex:1;font-size:15px;line-height:1.62;word-break:break-word}
+.opt .mk{font-size:17px;font-weight:700;flex:0 0 auto;line-height:1.5}
+.opt.sel{border-color:var(--primary);background:var(--primary-l)}
+.opt.sel .tag{background:var(--primary);color:#fff}
+.opt.right{border-color:var(--green);background:var(--green-l)}
+.opt.right .tag{background:var(--green);color:#fff}
+.opt.right .mk{color:var(--green)}
+.opt.wrong{border-color:var(--red);background:var(--red-l)}
+.opt.wrong .tag{background:var(--red);color:#fff}
+.opt.wrong .mk{color:var(--red)}
+.opt.locked{pointer-events:none}
+.opt.faded{opacity:.55}
+
+/* answer / explain */
+.exp{
+  margin-top:14px;background:#fff;border-radius:14px;overflow:hidden;
+  border:1px solid var(--line);animation:slideIn .25s ease
+}
+@keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.exp-h{
+  padding:12px 15px;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px;
+  border-bottom:1px solid var(--line);background:#fafbfe
+}
+.exp-h .dot{width:6px;height:6px;border-radius:50%;background:var(--primary);flex:0 0 auto}
+.exp-h b{color:var(--green);font-size:16px;letter-spacing:1px}
+.exp-h .res{margin-left:auto;font-size:12.5px;font-weight:700;padding:2px 10px;border-radius:20px}
+.res.ok{background:var(--green-l);color:#0b8a51}
+.res.no{background:var(--red-l);color:#c62b20}
+.exp-b{padding:13px 15px;font-size:13.5px;line-height:1.78;color:#3b4457}
+.exp-b b{color:var(--text)}
+.exp-b .k{color:var(--primary-d);font-weight:600}
+
+.pfoot{
+  display:flex;gap:9px;padding:9px 12px;background:#fff;border-top:1px solid var(--line);
+  flex:0 0 auto;padding-bottom:calc(9px + var(--safe-b));
+}
+.pfoot .btn{flex:1;font-size:14px;padding:12px 8px}
+.pfoot .btn-ghost{flex:0 0 88px}
+.pfoot .btn-ghost em{font-style:normal;font-size:12px;color:var(--text2)}
+
+/* ============ sheet ============ */
+.mask{position:fixed;inset:0;background:rgba(12,20,40,.45);opacity:0;pointer-events:none;transition:.25s;z-index:80}
+.mask.show{opacity:1;pointer-events:auto}
+.sheet{
+  position:fixed;left:0;right:0;bottom:0;z-index:90;max-width:520px;margin:0 auto;
+  background:#fff;border-radius:20px 20px 0 0;transform:translateY(101%);transition:transform .3s cubic-bezier(.3,.9,.4,1);
+  max-height:78vh;display:flex;flex-direction:column;padding-bottom:var(--safe-b)
+}
+.sheet.show{transform:translateY(0)}
+.sh-head{display:flex;align-items:center;padding:15px 18px 12px;border-bottom:1px solid var(--line);flex:0 0 auto}
+.sh-head h3{font-size:16px;font-weight:700;flex:1}
+.sh-head .close{font-size:22px;color:var(--text3);background:none;border:0;cursor:pointer;line-height:1}
+.sh-body{overflow-y:auto;padding:14px 18px 20px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--text2);margin-bottom:12px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.grid-n{display:grid;grid-template-columns:repeat(6,1fr);gap:9px}
+.gn{
+  aspect-ratio:1/1;border-radius:9px;background:#f2f4f9;color:var(--text2);font-size:13px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;border:1.5px solid transparent;cursor:pointer
+}
+.gn.ok{background:var(--green);color:#fff}
+.gn.no{background:var(--red);color:#fff}
+.gn.do{background:#c8d2e4;color:#fff}
+.gn.cur{border-color:var(--primary);box-shadow:0 0 0 2px var(--primary-l)}
+
+/* ============ exam ============ */
+.exam-timer{
+  display:flex;align-items:center;gap:6px;background:var(--primary-l);color:var(--primary-d);
+  padding:5px 12px;border-radius:20px;font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums
+}
+.exam-timer.warn{background:var(--red-l);color:#c62b20;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.5}}
+.set-row{display:flex;align-items:center;justify-content:space-between;padding:15px 0;border-bottom:1px solid var(--line)}
+.set-row:last-child{border-bottom:0}
+.set-row .lb{font-size:15px;font-weight:600}
+.set-row .lb small{display:block;font-size:11.5px;color:var(--text2);font-weight:400;margin-top:2px}
+.seg{display:flex;background:#f2f4f9;border-radius:10px;padding:3px;gap:2px}
+.seg button{
+  border:0;background:transparent;padding:7px 13px;border-radius:8px;font-size:13px;font-weight:600;
+  color:var(--text2);cursor:pointer;font-family:inherit
+}
+.seg button.on{background:#fff;color:var(--primary);box-shadow:0 1px 4px rgba(30,60,120,.12)}
+
+/* result */
+.score-wrap{text-align:center;padding:26px 0 6px}
+.score-big{font-size:60px;font-weight:800;line-height:1;letter-spacing:-2px}
+.score-big.pass{color:var(--green)}
+.score-big.fail{color:var(--red)}
+.score-lb{font-size:14px;color:var(--text2);margin-top:8px}
+.score-lb b{font-size:15px}
+.rst-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px}
+.rst-grid div{background:#fff;border-radius:12px;padding:13px 6px;text-align:center;border:1px solid var(--line)}
+.rst-grid b{display:block;font-size:20px;font-weight:700}
+.rst-grid span{font-size:11.5px;color:var(--text2)}
+
+/* list */
+.wrong-item{background:#fff;border-radius:13px;padding:13px 14px;margin-bottom:10px;cursor:pointer;border:1px solid var(--line)}
+.wrong-item:active{background:#f8fafd}
+.wrong-item .wi-top{display:flex;gap:6px;align-items:center;margin-bottom:7px}
+.wrong-item .wi-q{font-size:14.5px;font-weight:600;line-height:1.6;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.wrong-item .wi-b{display:flex;align-items:center;margin-top:9px;font-size:12px;color:var(--text3);gap:10px}
+.wrong-item .wi-b .del{margin-left:auto;color:var(--red);font-weight:600}
+.badge-n{background:var(--red);color:#fff;font-size:11px;padding:1px 7px;border-radius:20px;font-weight:600}
+.empty{text-align:center;padding:70px 20px;color:var(--text3);font-size:14px}
+.empty .e-ico{font-size:44px;display:block;margin-bottom:12px;opacity:.5}
+
+/* stats blocks */
+.st-row{display:flex;gap:12px;margin-bottom:12px}
+.st-box{flex:1;background:#fff;border-radius:14px;padding:15px;border:1px solid var(--line);text-align:center}
+.st-box b{display:block;font-size:23px;font-weight:800;color:var(--primary)}
+.st-box span{font-size:12px;color:var(--text2)}
+.li-row{display:flex;align-items:center;padding:14px 4px;border-bottom:1px solid var(--line);font-size:15px;cursor:pointer}
+.li-row:last-child{border-bottom:0}
+.li-row .li-i{font-size:17px;width:26px}
+.li-row .li-v{margin-left:auto;color:var(--text3);font-size:13px}
+.li-row.li-danger{color:var(--red)}
+
+.ch-row{display:flex;align-items:center;gap:12px;padding:14px;background:#fff;border-radius:13px;margin-bottom:10px;cursor:pointer;border:1px solid var(--line)}
+.ch-row:active{background:#f8fafd}
+.ch-row .ch-i{width:38px;height:38px;border-radius:11px;background:var(--primary-l);display:flex;align-items:center;justify-content:center;font-size:19px;flex:0 0 auto}
+.ch-row .ch-t{flex:1;min-width:0}
+.ch-row .ch-t h4{font-size:15px;font-weight:600}
+.ch-row .ch-t p{font-size:11.5px;color:var(--text3);margin-top:2px}
+.ch-row .ch-n{font-size:12.5px;color:var(--text2);font-weight:600;flex:0 0 auto}
+.bar-mini{height:4px;background:#eef1f7;border-radius:3px;overflow:hidden;margin-top:6px}
+.bar-mini i{display:block;height:100%;background:var(--green);width:0}
+
+/* 错题本 / 未作答 双标签 */
+.seg-tabs{display:flex;gap:4px;padding:0 12px;background:#fff;border-bottom:1px solid var(--line);flex:0 0 auto}
+.seg-tabs button{
+  border:0;background:transparent;padding:11px 14px 12px;font-size:14px;font-weight:600;
+  color:var(--text2);cursor:pointer;font-family:inherit;border-bottom:2px solid transparent;margin-bottom:-1px
+}
+.seg-tabs button.on{color:var(--primary);border-bottom-color:var(--primary)}
+.seg-tabs button em{font-style:normal;font-size:12px;color:var(--text3);margin-left:2px}
+.seg-tabs button.on em{color:var(--primary)}
+
+/* 设置项的可点击选择器 */
+.pick-btn{
+  border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 13px;
+  font-size:13.5px;font-weight:600;color:var(--primary);cursor:pointer;font-family:inherit;
+  max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:0 0 auto
+}
+.pick-btn:active{background:#f4f7ff}
+.range-item{display:flex;align-items:center;gap:12px;padding:14px;background:#fff;border-radius:13px;margin-bottom:10px;cursor:pointer;border:1px solid var(--line)}
+.range-item:active{background:#f8fafd}
+.range-item.on{border-color:var(--primary);background:var(--primary-l)}
+.range-item .r-i{width:38px;height:38px;border-radius:11px;background:var(--primary-l);display:flex;align-items:center;justify-content:center;font-size:19px;flex:0 0 auto}
+.range-item.on .r-i{background:#fff}
+.range-item .r-t{flex:1;min-width:0}
+.range-item .r-t h4{font-size:15px;font-weight:600}
+.range-item .r-t p{font-size:11.5px;color:var(--text3);margin-top:2px}
+.range-item .r-c{font-size:16px;color:var(--primary);font-weight:700}
+
+/* 列表项上的"移出"按钮 */
+.wi-del{
+  border:1px solid var(--line);background:#fff;color:var(--text2);border-radius:8px;
+  padding:4px 10px;font-size:12px;font-family:inherit;cursor:pointer;flex:0 0 auto
+}
+.wi-del:active{background:#f2f4f9}
+.wi-del.danger{color:var(--red);border-color:#ffd9d5}
+
+/* tabbar */
+.tabbar{
+  display:none;flex:0 0 auto;background:#fff;border-top:1px solid var(--line);
+  padding:6px 0 calc(6px + var(--safe-b))
+}
+.tabbar.show{display:flex}
+.tabbar button{
+  flex:1;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;
+  font-size:10.5px;color:var(--text3);padding:5px 0;cursor:pointer;font-family:inherit;position:relative
+}
+.tabbar button .ti{font-size:19px;line-height:1.15}
+.tabbar button.on{color:var(--primary);font-weight:600}
+.tabbar .dot-n{
+  position:absolute;top:1px;left:50%;margin-left:7px;background:var(--red);color:#fff;
+  font-size:9.5px;min-width:16px;height:16px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 4px
+}
+.toast{
+  position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(22,29,46,.9);color:#fff;
+  padding:11px 20px;border-radius:10px;font-size:14px;z-index:200;opacity:0;pointer-events:none;transition:.25s;max-width:70%
+}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ============ 首页 ============ -->
+  <section class="view active" id="v-home">
+    <div class="scroll" style="padding:0 0 18px">
+      <div class="top-card">
+        <div class="tc-head">
+          <div class="tc-badge">🛗</div>
+          <div>
+            <div class="tc-name">电梯维修操作证</div>
+            <div class="tc-sub">T证 · 特种设备作业人员 · 理论机考</div>
+          </div>
+        </div>
+        <div class="tc-prog">
+          <div class="ring">
+            <svg width="74" height="74">
+              <circle cx="37" cy="37" r="31" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="6"></circle>
+              <circle id="ringArc" cx="37" cy="37" r="31" fill="none" stroke="#fff" stroke-width="6"
+                stroke-linecap="round" stroke-dasharray="195" stroke-dashoffset="195"></circle>
+            </svg>
+            <div class="ring-txt"><span id="ringPct">0%</span><em>已掌握</em></div>
+          </div>
+          <div class="tc-stats">
+            <div><b id="hs-total">0</b><span>已练题数</span></div>
+            <div><b id="hs-rate">0%</b><span>正确率</span></div>
+            <div><b id="hs-wrong">0</b><span>错题待复习</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="entry-grid">
+        <div class="entry" onclick="startPractice('order')">
+          <div class="ei">📖</div><h4>顺序练习</h4><p id="e-order">按题库顺序刷完 0 题</p>
+        </div>
+        <div class="entry" onclick="openChapters()">
+          <div class="ei">🗂️</div><h4>章节练习</h4><p>8 大章节 · 分块攻克</p>
+        </div>
+        <div class="entry review" onclick="startExamSetup()">
+          <div class="ei">⏱️</div><h4>模拟考试</h4><p>100 题 / 60 分钟 · 70 分合格</p>
+        </div>
+        <div class="entry" onclick="startPractice('random')">
+          <div class="ei">🎲</div><h4>随机练习</h4><p>打乱顺序 · 查漏补缺</p>
+        </div>
+        <div class="entry" style="grid-column:span 2;background:linear-gradient(135deg,#f2f0ff,#fff)" onclick="startPractice('recite')">
+          <div class="ei">🧠</div><h4>背题模式</h4><p>直接显示答案和解析，不做题，快速过一遍记忆</p>
+        </div>
+      </div>
+
+      <div style="padding:0 14px">
+        <div class="sec-title">继续上次 <span id="lastTip"></span></div>
+        <div class="card" id="resumeExamCard" style="display:none;align-items:center;gap:13px;cursor:pointer;background:linear-gradient(135deg,#fff6ec,#fff);border:1px solid #ffe2c2" onclick="resumeExam()">
+          <div style="width:42px;height:42px;border-radius:12px;background:#fff1e0;display:flex;align-items:center;justify-content:center;font-size:20px">⏱️</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:600;font-size:15px">继续模拟考试</div>
+            <div id="resumeExamSub" style="font-size:12px;color:var(--text3);margin-top:2px"></div>
+          </div>
+          <div style="color:var(--text3);font-size:18px">›</div>
+        </div>
+        <div class="card" style="display:flex;align-items:center;gap:13px;cursor:pointer" onclick="resumeLast()">
+          <div style="width:42px;height:42px;border-radius:12px;background:var(--primary-l);display:flex;align-items:center;justify-content:center;font-size:20px">▶️</div>
+          <div style="flex:1;min-width:0">
+            <div id="lastTitle" style="font-weight:600;font-size:15px">还没有练习记录</div>
+            <div id="lastSub" style="font-size:12px;color:var(--text3);margin-top:2px">从「顺序练习」开始，逐题吃透考点</div>
+          </div>
+          <div style="color:var(--text3);font-size:18px">›</div>
+        </div>
+
+        <div class="sec-title">考试说明</div>
+        <div class="card" style="font-size:13.5px;line-height:1.9;color:#3b4457">
+          <b style="color:var(--text)">📌 电梯修理（T证）理论机考</b><br>
+          · 题型：判断题 + 单选题 + 多选题，共 <b>100 题</b><br>
+          · 时长：<b>60 分钟</b>，满分 100 分，<b>70 分合格</b><br>
+          · 分值分布：基础知识 50%、专业知识 25%、法规标准 25%<br>
+          · 多选题多选、少选、错选均不得分<br>
+          · 单科不合格可在 1 年内补考 1 次<br>
+          <span style="color:var(--text3);font-size:12px">依据 TSG Z6001-2019《特种设备作业人员考核规则》附件 H</span>
+        </div>
+      </div>
+      <div class="pad-b"></div>
+    </div>
+  </section>
+
+  <!-- ============ 练习 ============ -->
+  <section class="view" id="v-practice">
+    <div class="pbar">
+      <button class="ico-btn" onclick="exitPractice()">‹</button>
+      <div class="pbar-t" id="pTitle">顺序练习</div>
+      <button class="ico-btn" id="favBtn" onclick="toggleFav()">☆</button>
+    </div>
+    <div class="prog-line"><i id="pProg"></i></div>
+    <div class="scroll" id="pScroll"><div class="q-body" id="pBody"></div></div>
+    <div class="pfoot">
+      <button class="btn btn-ghost" id="btnPrev" onclick="prevQ()">上一题</button>
+      <button class="btn btn-ghost" id="btnCard" onclick="openCard()">答题卡<em id="cardInfo"></em></button>
+      <button class="btn btn-primary" id="mainBtn" onclick="mainAction()">下一题</button>
+    </div>
+  </section>
+
+  <!-- ============ 考试设置 ============ -->
+  <section class="view" id="v-examset">
+    <div class="pbar">
+      <button class="ico-btn" onclick="show('home')">‹</button>
+      <div class="pbar-t">模拟考试</div>
+      <div style="width:38px"></div>
+    </div>
+    <div class="scroll">
+      <div class="card" style="margin-top:14px;background:linear-gradient(135deg,#eef3ff,#fff);border:1px solid #dfe8ff">
+        <div style="font-size:15px;font-weight:700;margin-bottom:6px">📝 考试规则</div>
+        <div style="font-size:13px;line-height:1.9;color:#3b4457">
+          满分 100 分，<b style="color:var(--green)">70 分及格</b>；考试过程中<b>不显示对错</b>，
+          交卷后统一评分并逐题查看解析。
+        </div>
+      </div>
+      <div class="sec-title">试卷设置</div>
+      <div class="card">
+        <div class="set-row">
+          <div class="lb">题量<small>建议按真实考试选 100 题</small></div>
+          <div class="seg" id="segCount">
+            <button data-v="20">20题</button><button data-v="50">50题</button>
+            <button data-v="100" class="on">100题</button>
+          </div>
+        </div>
+        <div class="set-row">
+          <div class="lb">时长<small>超时自动交卷</small></div>
+          <div class="seg" id="segTime">
+            <button data-v="60" class="on">60分钟</button><button data-v="90">90分钟</button>
+          </div>
+        </div>
+        <div class="set-row">
+          <div class="lb">出题范围<small>按章节，或按薄弱项组卷</small></div>
+          <button class="pick-btn" id="rangeBtn" onclick="openRangePicker()">全部题目 ›</button>
+        </div>
+      </div>
+      <div style="padding:6px 0 20px">
+        <button class="btn btn-primary btn-block" style="padding:15px" onclick="startExam()">开始考试</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 考试中 ============ -->
+  <section class="view" id="v-exam">
+    <div class="pbar" style="padding-top:calc(6px + env(safe-area-inset-top,0px))">
+      <button class="ico-btn" onclick="quitExam()">‹</button>
+      <div class="pbar-t" id="eCount">1 / 100</div>
+      <div class="exam-timer" id="eTimer">60:00</div>
+    </div>
+    <div class="prog-line"><i id="eProg"></i></div>
+    <div class="scroll" id="eScroll"><div class="q-body" id="eBody"></div></div>
+    <div class="pfoot">
+      <button class="btn btn-ghost" onclick="examPrev()">上一题</button>
+      <button class="btn btn-ghost" onclick="openCard()">答题卡<em id="eCardInfo"></em></button>
+      <button class="btn btn-primary" id="eMain" onclick="examNext()">下一题</button>
+    </div>
+  </section>
+
+  <!-- ============ 成绩 ============ -->
+  <section class="view" id="v-result">
+    <div class="pbar">
+      <button class="ico-btn" onclick="show('home')">‹</button>
+      <div class="pbar-t">考试成绩</div>
+      <div style="width:38px"></div>
+    </div>
+    <div class="scroll">
+      <div class="score-wrap">
+        <div class="score-big pass" id="rScore">0</div>
+        <div class="score-lb" id="rLabel">—</div>
+      </div>
+      <div class="rst-grid">
+        <div><b style="color:var(--green)" id="rRight">0</b><span>答对</span></div>
+        <div><b style="color:var(--red)" id="rWrong">0</b><span>答错</span></div>
+        <div><b style="color:var(--text3)" id="rSkip">0</b><span>未答</span></div>
+      </div>
+      <div class="sec-title">错题解析 <span id="rWrongTip"></span></div>
+      <div id="rWrongList"></div>
+      <div id="rActions" style="display:flex;gap:10px;margin-top:16px">
+        <button class="btn btn-ghost" style="flex:1" onclick="show('home')">返回首页</button>
+        <button class="btn btn-primary" style="flex:1" id="rRedo" onclick="redoWrong()">重做本轮错题</button>
+      </div>
+      <div class="pad-b"></div>
+    </div>
+  </section>
+
+  <!-- ============ 错题本 / 未作答 ============ -->
+  <section class="view" id="v-wrong">
+    <div class="pbar">
+      <div style="width:38px"></div>
+      <div class="pbar-t">我的题库本</div>
+      <button class="ico-btn" onclick="clearCurrentList()" title="清空当前列表">🗑️</button>
+    </div>
+    <div class="seg-tabs">
+      <button class="on" id="tbtnWrong" onclick="switchWrongTab('wrong')">错题<em id="tcntWrong"></em></button>
+      <button id="tbtnMissed" onclick="switchWrongTab('missed')">未作答<em id="tcntMissed"></em></button>
+    </div>
+    <div class="scroll" style="padding-top:14px">
+      <div id="wrongList"></div>
+      <div class="pad-b"></div>
+    </div>
+  </section>
+
+  <!-- ============ 我的 ============ -->
+  <section class="view" id="v-mine">
+    <div class="pbar">
+      <div style="width:38px"></div>
+      <div class="pbar-t">我的</div>
+      <div style="width:38px"></div>
+    </div>
+    <div class="scroll" style="padding-top:14px">
+      <div class="st-row">
+        <div class="st-box"><b id="m-total">0</b><span>累计答题</span></div>
+        <div class="st-box"><b id="m-rate">0%</b><span>正确率</span></div>
+        <div class="st-box"><b id="m-today">0</b><span>今日答题</span></div>
+      </div>
+      <div class="sec-title">学习工具</div>
+      <div class="card" style="padding:4px 16px">
+        <div class="li-row" onclick="startPractice('order')"><span class="li-i">📖</span>顺序练习<span class="li-v">›</span></div>
+        <div class="li-row" onclick="startPractice('recite')"><span class="li-i">🧠</span>背题模式<span class="li-v">›</span></div>
+        <div class="li-row" onclick="startPractice('wrong')"><span class="li-i">❌</span>错题重做<span class="li-v" id="m-wrongn">0 题 ›</span></div>
+        <div class="li-row" onclick="startPractice('missed')"><span class="li-i">🕳️</span>未作答重做<span class="li-v" id="m-missedn">0 题 ›</span></div>
+        <div class="li-row" onclick="startPractice('fav')"><span class="li-i">⭐</span>我的收藏<span class="li-v" id="m-favn">0 题 ›</span></div>
+        <div class="li-row" onclick="startPractice('random')"><span class="li-i">🎲</span>随机练习<span class="li-v">›</span></div>
+      </div>
+      <div class="sec-title">数据管理</div>
+      <div class="card" style="padding:4px 16px">
+        <div class="li-row li-danger" onclick="resetAll()"><span class="li-i">♻️</span>清空全部学习数据</div>
+      </div>
+      <div style="text-align:center;font-size:11.5px;color:var(--text3);padding:18px 20px 0;line-height:1.8">
+        题库依据 TSG Z6001-2019《特种设备作业人员考核规则》附件 H<br>
+        及《特种设备安全法》《TSG T5002 电梯维护保养规则》等整理<br>
+        共 <b id="m-bank">0</b> 题 · 仅供学习参考
+      </div>
+      <div class="pad-b"></div>
+    </div>
+  </section>
+
+  <!-- ============ 底部导航 ============ -->
+  <nav class="tabbar show" id="tabbar">
+    <button class="on" data-v="home" onclick="show('home')"><span class="ti">🏠</span>首页</button>
+    <button data-v="wrong" onclick="show('wrong')"><span class="ti">❌</span>题库本<span class="dot-n" id="tabWrong" style="display:none">0</span></button>
+    <button data-v="mine" onclick="show('mine')"><span class="ti">👤</span>我的</button>
+  </nav>
+</div>
+
+<div class="mask" id="mask" onclick="closeSheet()"></div>
+<div class="sheet" id="sheet">
+  <div class="sh-head"><h3 id="shTitle">答题卡</h3><button class="close" onclick="closeSheet()">×</button></div>
+  <div class="sh-body" id="shBody"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   题库数据
+   字段：t 题型 1单选 2多选 3判断 | c 章节 1-8 | q 题干 | o 选项 | a 正确答案下标 | e 解析
+   ========================================================= */
+const QUESTIONS = [
+/* ============ 第一章 法规标准 ============ */
+{t:3,c:1,q:'电梯属于特种设备，其生产、经营、使用、检验、检测均应当遵守《中华人民共和国特种设备安全法》。',o:['正确','错误'],a:[0],e:'《特种设备安全法》第二条明确特种设备包括电梯，电梯的生产（含制造、安装、改造、修理）、经营、使用、检验、检测均适用本法。'},
+{t:1,c:1,q:'《中华人民共和国特种设备安全法》自（）起施行。',o:['2013年1月1日','2014年1月1日','2013年6月29日','2014年6月29日'],a:[1],e:'《特种设备安全法》由第十二届全国人大常委会第三次会议于2013年6月29日通过，自2014年1月1日起施行。'},
+{t:1,c:1,q:'《特种设备安全法》规定，特种设备安全工作应当坚持的原则是（）。',o:['安全第一、预防为主、节能环保、综合治理','安全第一、生产为主、效率优先','预防为主、经济效益优先','以人为本、安全发展、效率优先'],a:[0],e:'《特种设备安全法》第三条规定：特种设备安全工作应当坚持安全第一、预防为主、节能环保、综合治理的原则。'},
+{t:3,c:1,q:'电梯的安装、改造、修理，必须由电梯制造单位或者其委托的依照本法取得相应许可的单位进行。',o:['正确','错误'],a:[0],e:'《特种设备安全法》第二十二条明确规定，电梯的安装、改造、修理必须由电梯制造单位或者其委托的取得相应许可的单位进行，这是电梯区别于其他特种设备的特殊要求。'},
+{t:1,c:1,q:'特种设备使用单位应当在特种设备投入使用前或者投入使用后（）内，向负责特种设备安全监督管理的部门办理使用登记。',o:['15日','30日','60日','90日'],a:[1],e:'《特种设备安全法》第三十三条规定，使用单位应当在特种设备投入使用前或者投入使用后三十日内办理使用登记，取得使用登记证书。'},
+{t:3,c:1,q:'电梯的维护保养必须由电梯制造单位或者依照本法取得许可的安装、改造、修理单位进行和使用单位自行进行均可。',o:['正确','错误'],a:[1],e:'《特种设备安全法》第四十五条规定，电梯的维护保养应当由电梯制造单位或者依照本法取得许可的安装、改造、修理单位进行。使用单位无相应许可不得自行维保。'},
+{t:1,c:1,q:'《特种设备作业人员证》的有效期为（）年，有效期满前应当申请复审。',o:['2年','3年','4年','6年'],a:[2],e:'《特种设备作业人员监督管理办法》规定，特种设备作业人员证有效期为4年，每4年复审一次，持证人员应当在有效期届满前1个月提出复审申请。'},
+{t:3,c:1,q:'《特种设备作业人员证》全国通用，可在全国特种设备公示信息查询平台验证。',o:['正确','错误'],a:[0],e:'特种设备作业人员证由国家市场监督管理总局统一监制，全国范围内有效，可通过全国特种设备公示信息查询平台查验真伪。'},
+{t:1,c:1,q:'根据《特种设备安全监察条例》，电梯应当至少每（）进行一次清洁、润滑、调整和检查。',o:['7日','15日','30日','60日'],a:[1],e:'《特种设备安全监察条例》第三十一条规定，电梯应当至少每15日进行一次清洁、润滑、调整和检查，这是法定的日常维护保养周期。'},
+{t:1,c:1,q:'特种设备使用单位对在用特种设备应当至少每（）进行一次自行检查，并作出记录。',o:['周','月','季度','年'],a:[1],e:'《特种设备安全监察条例》第二十七条规定，使用单位对在用特种设备应当至少每月进行一次自行检查。'},
+{t:3,c:1,q:'电梯应当每年进行至少一次定期检验，未经定期检验或者检验不合格的电梯不得继续使用。',o:['正确','错误'],a:[0],e:'电梯的定期检验周期为1年，由特种设备检验机构实施。超期未检或检验不合格的电梯必须停止使用，否则使用单位将被责令停止使用并处3万元以上30万元以下罚款。'},
+{t:2,c:1,q:'下列属于《特种设备安全法》所称特种设备的有（）。',o:['电梯','锅炉','起重机械','家用空调'],a:[0,1,2],e:'特种设备包括锅炉、压力容器（含气瓶）、压力管道、电梯、起重机械、客运索道、大型游乐设施、场（厂）内专用机动车辆八大类。家用空调不属于特种设备。'},
+{t:1,c:1,q:'违反《特种设备安全法》规定，使用未经检验或者检验不合格的特种设备，责令停止使用有关特种设备，处（）罚款。',o:['1万元以上5万元以下','3万元以上30万元以下','5万元以上20万元以下','10万元以上50万元以下'],a:[1],e:'《特种设备安全法》第八十四条规定，使用未取得许可生产、未经检验或者检验不合格的特种设备，责令停止使用，处三万元以上三十万元以下罚款。'},
+{t:3,c:1,q:'负责特种设备安全监督管理的部门应当对学校、医院、车站、商场、体育场馆等公众聚集场所的特种设备实施重点安全监督检查。',o:['正确','错误'],a:[0],e:'《特种设备安全法》第五十七条明确了公众聚集场所特种设备实施重点安全监督检查的要求。'},
+{t:1,c:1,q:'特种设备发生事故后，事故发生单位应当在（）内向事故发生地县级以上人民政府负责特种设备安全监督管理的部门和有关部门报告。',o:['1小时','2小时','12小时','24小时'],a:[0],e:'《特种设备安全法》第七十条规定，特种设备发生事故后，事故发生单位应当于1小时内向事故发生地县级以上人民政府负责特种设备安全监督管理的部门和有关部门报告。'},
+{t:3,c:1,q:'电梯的修理分为重大修理和一般修理，重大修理需要履行施工告知和监督检验手续。',o:['正确','错误'],a:[0],e:'电梯修理按影响安全性能的程度分为重大修理和一般修理。重大修理属于特种设备安装改造修理许可范围，施工前须书面告知监管部门并经监督检验合格。'},
+{t:1,c:1,q:'《特种设备安全法》规定，国家对特种设备实行（）管理。',o:['目录','备案','许可','抽查'],a:[0],e:'《特种设备安全法》第二条规定，国家对特种设备实行目录管理，特种设备目录由国务院负责特种设备安全监督管理的部门制定并公布。'},
+{t:2,c:1,q:'电梯使用单位的主要安全义务包括（）。',o:['办理使用登记','建立特种设备安全技术档案','对电梯进行经常性维护保养和定期自行检查','自行制造电梯主要安全部件'],a:[0,1,2],e:'使用单位应当办理使用登记、建立安全技术档案、进行经常性维护保养和定期自行检查、配备安全管理人员。自行制造安全部件不属于使用单位义务也不被允许。'},
+{t:3,c:1,q:'电梯使用单位只要具备维修能力，就可以自行对其使用的电梯进行维护保养，无需取得许可。',o:['正确','错误'],a:[1],e:'《特种设备安全法》第四十五条明确电梯维保必须由制造单位或取得许可的安装、改造、修理单位进行，使用单位未取得许可不得自行维保。'},
+{t:1,c:1,q:'特种设备作业人员证有效期满需要继续从事作业的，应当在有效期届满前（）个月向发证机关提出复审申请。',o:['1个月','2个月','3个月','6个月'],a:[0],e:'依据TSG Z6001-2019《特种设备作业人员考核规则》，持证人员应当在持证项目有效期届满的1个月以前提出复审申请。'},
+{t:1,c:1,q:'特种设备作业人员考试成绩有效期为1年，单项考试科目不合格的，可以在成绩有效期内补考（）次。',o:['1次','2次','3次','不限次数'],a:[0],e:'TSG Z6001-2019规定，单项考试科目不合格的可在成绩有效期内补考1次，补考仍不合格的须重新申请考试。'},
+{t:3,c:1,q:'电梯维修作业人员必须经专门的安全技术培训并考核合格，取得《特种设备作业人员证》后方可上岗作业。',o:['正确','错误'],a:[0],e:'《特种设备安全法》第十四条规定，特种设备作业人员应当按照国家有关规定取得相应资格，方可从事相关工作。无证作业属违法行为。'},
+{t:1,c:1,q:'《特种设备安全法》规定，特种设备的（）应当对特种设备的安全负责。',o:['使用单位','检验机构','监管机关','制造单位'],a:[0],e:'《特种设备安全法》第十三条规定，特种设备生产、经营、使用单位及其主要负责人对其生产、经营、使用的特种设备安全负责。'},
+{t:2,c:1,q:'下列属于特种设备作业人员违法行为的有（）。',o:['无证从事电梯维修作业','违反操作规程进行带电作业','发现事故隐患不及时报告','按规定填写维保记录'],a:[0,1,2],e:'无证上岗、违章作业、隐瞒不报事故隐患均属违法行为。按规定填写维保记录是作业人员的正常义务。'},
+{t:3,c:1,q:'电梯制造单位应当对其制造的电梯的安全运行情况进行跟踪调查和了解。',o:['正确','错误'],a:[0],e:'《特种设备安全法》第四十六条规定，电梯投入使用后，电梯制造单位应当对其制造的电梯的安全运行情况进行跟踪调查和了解，对电梯的维护保养单位或者使用单位在维护保养和安全运行方面存在的问题提出改进建议。'},
+{t:1,c:1,q:'为公众提供服务的电梯运营使用单位应当（）。',o:['设置特种设备安全管理机构或者配备专职的特种设备安全管理人员','只需委托维保单位负责即可','由制造单位负责安全管理','由物业保洁人员兼管'],a:[0],e:'《特种设备安全法》第三十六条规定，电梯、客运索道、大型游乐设施等为公众提供服务的特种设备的运营使用单位，应当设置特种设备安全管理机构或者配备专职的特种设备安全管理人员。'},
+{t:3,c:1,q:'负责特种设备安全监督管理的部门对存在严重事故隐患的电梯，可以依法予以查封、扣押。',o:['正确','错误'],a:[0],e:'《特种设备安全法》第六十二条规定，监管部门在检查中发现重大违法行为或者特种设备存在严重事故隐患时，可以查封、扣押相关特种设备。'},
+{t:2,c:1,q:'《特种设备安全法》规定的法律责任形式包括（）。',o:['责令停止使用','罚款','没收违法所得','吊销许可证'],a:[0,1,2,3],e:'该法规定的法律责任形式包括责令改正、责令停止使用、罚款、没收违法所得、吊销许可证以及追究刑事责任等。'},
+{t:1,c:1,q:'特种设备作业人员资格认定分类与项目由（）制定发布。',o:['国家市场监督管理总局','省级市场监督管理局','行业协会','考试机构'],a:[0],e:'依据TSG Z6001-2019第二条，国家市场监督管理总局负责制定发布《特种设备作业人员资格认定分类与项目》。'},
+{t:3,c:1,q:'电梯维修人员有权拒绝违章指挥和强令冒险作业。',o:['正确','错误'],a:[0],e:'《安全生产法》和《特种设备安全法》均赋予从业人员拒绝违章指挥、强令冒险作业的权利，作业人员在紧急情况下有权停止作业并撤离。'},
+{t:1,c:1,q:'下列不属于电梯安全技术档案内容的是（）。',o:['电梯设计文件、产品质量合格证明','定期检验报告','日常使用状况记录','电梯销售合同价格'],a:[3],e:'安全技术档案包括设计文件、合格证明、安装及使用维护保养说明、监督检验证明、定期检验报告、日常使用状况记录、日常维护保养记录、运行故障和事故记录等。销售合同价格不属于档案内容。'},
+{t:3,c:1,q:'电梯使用单位应当将电梯安全使用说明、安全注意事项和警示标志置于易于为乘客注意的显著位置。',o:['正确','错误'],a:[0],e:'《特种设备安全法》第四十三条规定，电梯、客运索道、大型游乐设施的运营使用单位应当将安全使用说明、安全注意事项和警示标志置于易于为乘客注意的显著位置。'},
+{t:1,c:1,q:'《特种设备安全法》规定，特种设备发生特别重大事故，由（）组织事故调查组进行调查。',o:['国务院或者国务院授权有关部门','省级人民政府','市级人民政府','县级人民政府'],a:[0],e:'《特种设备安全法》第七十二条规定，特种设备发生特别重大事故，由国务院或者国务院授权有关部门组织事故调查组进行调查；重大事故由省级人民政府组织调查。'},
+{t:3,c:1,q:'特种设备作业人员证书复审不合格或者逾期未申请复审的，其证书失效。',o:['正确','错误'],a:[0],e:'TSG Z6001-2019规定，复审不合格或者逾期未申请复审的，其《特种设备作业人员证》失效，不得继续从事相应作业。'},
+{t:2,c:1,q:'电梯维修作业人员的基本工作职责包括（）。',o:['按照维保方案和工艺文件完成维护保养作业','如实填写维保记录','发现隐患及时报告并配合整改','自行决定是否执行安全操作规程'],a:[0,1,2],e:'作业人员应当严格执行安全操作规程和维保工艺，如实记录，发现隐患立即报告。自行决定是否执行安全规程属于严重违规。'},
+
+/* ============ 第二章 维保规则与制度 ============ */
+{t:1,c:2,q:'《电梯维护保养规则》的安全技术规范编号是（）。',o:['TSG T5002','TSG T7001','TSG Z6001','GB 7588'],a:[0],e:'TSG T5002《电梯维护保养规则》规定了电梯维保的基本要求、维保项目内容及维保单位的职责。TSG T7001为监督检验和定期检验规则，GB 7588为制造与安装安全规范。'},
+{t:1,c:2,q:'《电梯维护保养规则》规定，维保单位应当设立（）维保值班电话，保证接到故障通知后及时予以排除。',o:['工作日8小时','24小时','12小时','夜间'],a:[1],e:'TSG T5002要求维保单位设立24小时维保值班电话，保证接到故障通知后及时予以排除，不得以非工作时间等理由推诿。'},
+{t:3,c:2,q:'接到电梯困人故障报告后，维保人员抵达现场的时间要求为：直辖市或者设区的市不超过30分钟，其他地区一般不超过1小时。',o:['正确','错误'],a:[0],e:'TSG T5002第十九条规定，接到电梯困人故障报告后，维保人员应当及时抵达现场实施救援，直辖市或者设区的市抵达时间不超过30分钟，其他地区一般不超过1小时。'},
+{t:1,c:2,q:'维保单位的电梯维保记录应当至少保存（）年。',o:['1年','2年','4年','10年'],a:[2],e:'TSG T5002规定，维保单位应当建立每台电梯的维保记录，及时归入电梯安全技术档案，并且至少保存4年。'},
+{t:3,c:2,q:'维保单位应当每半年至少针对本单位维保的不同类别（类型）电梯进行一次应急演练。',o:['正确','错误'],a:[0],e:'TSG T5002规定，维保单位应当制定应急措施和救援预案，每半年至少针对本单位维保的不同类别（类型）电梯进行一次应急演练。'},
+{t:1,c:2,q:'维保单位应当每年度至少进行一次（）检查，并且该检查应当在特种设备检验机构进行定期检验之前进行。',o:['监督','自行','委托第三方','抽样'],a:[1],e:'TSG T5002规定，维保单位应当每年度至少进行一次自行检查，自行检查在特种设备检验机构进行定期检验之前进行。'},
+{t:3,c:2,q:'年度维护保养项目（内容）和要求包括半年维护保养的项目（内容）和要求。',o:['正确','错误'],a:[0],e:'电梯维保按周期分为半月、季度、半年、年度四类，项目内容逐级包含，年度维保项目包含半年的、季度的和半月的全部内容。'},
+{t:2,c:2,q:'电梯维保单位应当履行的职责包括（）。',o:['按照安全技术规范和使用维护说明书要求制定维保方案','建立每台电梯的维保记录并归档','设立24小时维保值班电话','安排维保人员配合检验机构进行定期检验'],a:[0,1,2,3],e:'以上均属TSG T5002规定的维保单位法定职责，此外还包括配备持证作业人员、开展应急演练、书面告知使用单位隐患等。'},
+{t:1,c:2,q:'电梯日常维护保养的周期类型不包括（）。',o:['半月维护保养','季度维护保养','半年维护保养','每周维护保养'],a:[3],e:'TSG T5002将维保分为半月、季度、半年、年度四种周期，没有单独的每周维保要求。'},
+{t:3,c:2,q:'电梯维保单位应当在依法取得相应的许可后，方可从事电梯的维保工作。',o:['正确','错误'],a:[0],e:'TSG T5002第六条规定，电梯维保单位应当依法取得特种设备安装改造修理许可后，方可从事电梯维护保养工作。'},
+{t:1,c:2,q:'维保单位应当安排维保人员配合特种设备检验机构进行电梯的（）。',o:['定期检验','监督检验','型式试验','能效测试'],a:[0],e:'TSG T5002规定，维保单位应当安排维保人员配合特种设备检验机构进行电梯的定期检验，做好必要的拆检、试验和安全防护工作。'},
+{t:2,c:2,q:'电梯半月维护保养项目通常包括（）。',o:['层门门锁电气触点检查','轿门门锁及自动关闭层门装置检查','紧急报警装置试验','曳引钢丝绳全部拆解清洗'],a:[0,1,2],e:'半月维保主要包括层门轿门门锁检查、轿内操纵箱及层站按钮检查、紧急报警装置试验、轿厢照明通风检查等。钢丝绳只需清洁检查不需全部拆解清洗。'},
+{t:3,c:2,q:'电梯维保记录应当由维保人员填写并经使用单位安全管理人员签字确认。',o:['正确','错误'],a:[0],e:'TSG T5002要求维保记录应当经维保人员签字、使用单位安全管理人员签字确认，做到一机一档、真实可追溯。'},
+{t:1,c:2,q:'电梯维保单位不得将维保业务转包给（）的单位。',o:['未取得相应许可','其他城市','规模较小','成立时间较短'],a:[0],e:'维保单位不得将维保业务转包、分包给未取得相应特种设备安装改造修理许可的单位，否则属严重违法行为。'},
+{t:3,c:2,q:'电梯使用单位应当建立每台电梯的维保记录，并及时归入电梯安全技术档案。',o:['正确','错误'],a:[0],e:'维保记录是电梯安全技术档案的重要组成部分，由维保单位提供、使用单位归档，至少保存4年。'},
+{t:1,c:2,q:'电梯使用单位应当在电梯定期检验有效期届满前（）个月向检验机构提出定期检验申请。',o:['1个月','2个月','3个月','6个月'],a:[0],e:'特种设备使用单位应当在安全检验合格有效期届满前1个月向特种设备检验检测机构提出定期检验要求。'},
+{t:3,c:2,q:'维保单位发现电梯存在严重事故隐患时，应当书面告知使用单位，并及时向当地市场监管部门报告。',o:['正确','错误'],a:[0],e:'TSG T5002规定，维保中发现严重事故隐患应当书面告知使用单位，同时报告当地市场监管部门，使用单位应当立即停止使用并整改。'},
+{t:1,c:2,q:'TSG T7001《电梯监督检验和定期检验规则》规定，限速器应当每（）进行一次动作速度校验。',o:['1年','2年','3年','4年'],a:[1],e:'使用周期达到2年的电梯，或者限速器动作出现异常、各调节部位封记损坏的电梯，应当对限速器进行动作速度校验。'},
+{t:3,c:2,q:'电梯机房通道门不能向机房内开启，其高度不小于1.80m，宽度不小于0.60m。',o:['正确','错误'],a:[0],e:'TSG T7001规定，机房通道门不能向机房内开启，门的高度不小于1.80m、宽度不小于0.60m，且门上应装设用钥匙开启的锁。'},
+{t:1,c:2,q:'电梯机房通道门外侧应当设置警示标志，其内容为（）。',o:['电梯机器——危险，未经允许禁止入内','小心地滑','禁止吸烟','请勿靠近'],a:[0],e:'TSG T7001规定，机房通道门外侧应设置包含“电梯机器——危险，未经允许禁止入内”文字的警示标志。'},
+{t:3,c:2,q:'维保单位应当配备与维保业务规模相适应的持证作业人员。',o:['正确','错误'],a:[0],e:'TSG T5002要求维保单位应当配备与其维保业务规模相适应的、取得相应资格的作业人员，并定期开展培训。'},
+{t:1,c:2,q:'根据TSG T5002的规定，电梯维保作业现场持证作业人员不得少于（）。',o:['1人','2人','3人','4人'],a:[1],e:'TSG T5002规定，维保单位进行电梯维保作业时，现场持证作业人员不得少于2人，做到一人作业、一人监护，相互配合保障安全。'},
+{t:2,c:2,q:'电梯维护保养的基本作业内容包括（）。',o:['清洁','润滑','调整','检查'],a:[0,1,2,3],e:'《特种设备安全监察条例》和TSG T5002均把电梯维保界定为清洁、润滑、调整和检查四项基本作业内容。'},
+{t:3,c:2,q:'电梯使用单位可以委托未取得相应许可的单位进行电梯日常维护保养。',o:['正确','错误'],a:[1],e:'电梯维保必须由制造单位或取得许可的安装、改造、修理单位承担，委托无许可单位维保属违法行为，双方均要承担法律责任。'},
+{t:1,c:2,q:'电梯安全技术档案中，维护保养记录应当保存至电梯（）。',o:['下次检验','报废','转让','满4年'],a:[1],e:'依据TSG T5002及使用管理要求，电梯安全技术档案应长期保存，维保记录至少保存4年，且保存期限不应少于电梯使用年限届满后3年。建议按“保存至报废”掌握。'},
+{t:1,c:2,q:'电梯维保人员进入井道作业前，应当先确认轿厢位置，并在层门口设置（）。',o:['警示标志和防护围栏','临时照明','引导标识','清洁工具'],a:[0],e:'进入井道作业前必须确认轿厢停靠位置并设置警示标志、防护围栏，防止无关人员误入层门造成坠落事故。'},
+{t:3,c:2,q:'维保后的电梯应当保证其安全性能符合安全技术规范的要求，并在维保记录中如实记录。',o:['正确','错误'],a:[0],e:'维保质量由维保单位负责，维保后应确认安全性能符合要求，并如实填写维保记录，不得漏项、代签、造假。'},
+{t:2,c:2,q:'电梯维保记录应当包括的内容有（）。',o:['维保项目及维保时间','发现的问题及处理情况','维保人员签字','更换零部件的型号和数量'],a:[0,1,2,3],e:'TSG T5002规定的维保记录内容包括维保项目、时间、发现的问题及处理措施、更换零部件情况以及维保人员和使用单位安全管理人员签字。'},
+{t:3,c:2,q:'电梯维保单位可以将维保记录委托使用单位代为填写以节省时间。',o:['正确','错误'],a:[1],e:'维保记录必须由维保人员本人在作业现场如实填写并签字，不得由他人代填代签，否则属于弄虚作假的违法行为。'},
+{t:1,c:2,q:'电梯因故停用（预计停用时间超过1年）的，使用单位应当（）。',o:['向登记机关办理停用手续','无需办理任何手续','直接拆除','重新办理使用登记'],a:[0],e:'特种设备拟停用1年以上的，使用单位应当采取封存措施并书面告知登记机关；重新启用前应当进行自行检查并申请定期检验。'},
+{t:3,c:2,q:'维保单位应当对维保作业人员进行安全教育和技能培训，并保存培训记录。',o:['正确','错误'],a:[0],e:'TSG T5002要求维保单位应当对作业人员进行安全教育和技能培训，培训记录应当存档，作为安全管理资料保存。'},
+/* ============ 第三章 电工与机械基础 ============ */
+{t:1,c:3,q:'电路中电压的方向规定为（）。',o:['由高电位点指向低电位点','由低电位点指向高电位点','与电流方向相反','与电流方向相同'],a:[0],e:'电压的方向规定为由高电位点指向低电位点；在电源内部，电动势的方向由低电位指向高电位。'},
+{t:3,c:3,q:'在直流稳态电路中，电容器相当于断路。',o:['正确','错误'],a:[0],e:'直流稳态时电容两端电压恒定，不再有充电电流通过，因此相当于断路；而在交流电路中电容会不断充放电，相当于有电流通过。'},
+{t:1,c:3,q:'在直流稳态电路中，电感线圈相当于（）。',o:['短路','断路','电容','电阻无穷大'],a:[0],e:'直流稳态时电感两端电压为零，电流恒定不产生自感电动势，故相当于短路；交流电路中电感则表现为感抗。'},
+{t:1,c:3,q:'用万用表测量二极管时，如果测得正反向电阻均很小甚至为零，说明二极管（）。',o:['性能良好','性能一般','断路损坏','短路损坏'],a:[3],e:'二极管具有单向导电性，正常时正向电阻小、反向电阻大。正反向电阻都很小说明内部击穿短路；都很大则说明断路损坏。'},
+{t:1,c:3,q:'用万用表测量二极管时，如果测得正反向电阻均很大（接近无穷大），说明二极管（）。',o:['短路损坏','断路损坏','性能良好','性能优良'],a:[1],e:'正反向电阻都很大说明二极管PN结已开路失效，即断路损坏，应更换。'},
+{t:1,c:3,q:'欧姆定律的表达式是（）。',o:['I = U / R','I = R / U','U = I / R','R = U × I'],a:[0],e:'欧姆定律为I=U/R，即通过导体的电流与导体两端电压成正比、与导体电阻成反比。'},
+{t:2,c:3,q:'三相交流电的特点包括（）。',o:['三个电动势的最大值相等','频率相同','相位互差120°','三个电动势相位相同'],a:[0,1,2],e:'对称三相交流电的三个电动势幅值相等、频率相同、相位互差120°，其相量和为零。'},
+{t:3,c:3,q:'我国电力系统的交流电频率为50Hz，即每秒变化50个周期。',o:['正确','错误'],a:[0],e:'我国采用50Hz工频交流电，周期为0.02秒。电梯电动机、变频器等参数均按50Hz设计。'},
+{t:1,c:3,q:'用万用表测量电路电压时，应当将万用表（）在电路中。',o:['并联','串联','混联','短接'],a:[0],e:'测量电压时万用表应并联在被测元件两端；测量电流时应串联在电路中。误将电流档并联会造成短路。'},
+{t:1,c:3,q:'用万用表测量电路电流时，应当将万用表（）在电路中。',o:['并联','串联','并联或串联均可','跨接在线路两端'],a:[1],e:'测量电流时万用表必须串联接入被测支路，且应选择合适量程，避免因量程过小烧毁仪表。'},
+{t:3,c:3,q:'使用万用表测量电阻前，应当先切断被测电路的电源。',o:['正确','错误'],a:[0],e:'带电测量电阻会损坏万用表并造成读数错误，甚至引发触电危险，因此必须先断电，被测电路中如有电容还应先行放电。'},
+{t:1,c:3,q:'测量电梯电气设备的绝缘电阻应当使用（）。',o:['万用表','钳形电流表','绝缘电阻表（兆欧表）','示波器'],a:[2],e:'绝缘电阻表（兆欧表）输出高压直流，可测量绝缘电阻值。测量前必须切断电源、验电并对地放电，测量后也要放电。'},
+{t:3,c:3,q:'使用兆欧表测量绝缘电阻时，被测设备必须停电、验电并进行放电处理。',o:['正确','错误'],a:[0],e:'兆欧表输出电压高，带电测量或被测设备残留电荷都会造成触电危险，因此必须先停电、验电、充分放电后方可测量。'},
+{t:1,c:3,q:'使用钳形电流表测量时，正确的做法是（）。',o:['一次只夹住一根导线','把两根导线一起夹入钳口','把三根相线一起夹入钳口','钳口张开时测量'],a:[0],e:'钳形电流表依据电磁感应原理工作，一次只能夹一根导线。同时夹住两根（如相线和零线）会使磁场相互抵消，读数错误或为零。'},
+{t:2,c:3,q:'电梯维修常用的电气测量仪器包括（）。',o:['万用表','钳形电流表','绝缘电阻表','游标卡尺'],a:[0,1,2],e:'万用表、钳形电流表、绝缘电阻表属于电气测量仪器；游标卡尺属于机械测量器具。'},
+{t:1,c:3,q:'测量电梯曳引钢丝绳的直径，应当使用（）。',o:['游标卡尺','塞尺','钢直尺','卷尺'],a:[0],e:'钢丝绳直径应使用游标卡尺测量，且应在钢丝绳无张力弯曲处的直线段上测量，以准确判断磨损程度。'},
+{t:1,c:3,q:'测量层门门锁的啮合深度，应当使用（）。',o:['钢直尺或深度尺','万用表','塞尺','红外测温仪'],a:[0],e:'门锁啮合深度需用钢直尺、深度尺等长度量具测量，GB 7588要求门锁最小啮合长度不小于7mm。'},
+{t:3,c:3,q:'塞尺主要用于测量两个结合面之间的间隙大小。',o:['正确','错误'],a:[0],e:'塞尺由一组厚度不同的钢片组成，用于测量间隙。电梯维修中常用于测量制动器间隙、安全钳楔块与导轨间隙等。'},
+{t:1,c:3,q:'TN-S系统中，工作零线N和保护线PE的关系是（）。',o:['完全分开','完全合一','部分合一','可以随意短接'],a:[0],e:'TN-S系统中整个系统的N线和PE线是分开的，安全性最好；TN-C-S系统则前段合一、后段分开。'},
+{t:3,c:3,q:'保护接地线（PE）上严禁装设开关或熔断器，且不得作为其他用途。',o:['正确','错误'],a:[0],e:'PE线是保命线，一旦断开将失去保护接地作用，因此严禁在PE线上装设开关、熔断器，也不允许将PE线作N线使用。'},
+{t:1,c:3,q:'三相异步电动机的转速与（）无关。',o:['电源频率','磁极对数','转差率','电动机外壳颜色'],a:[3],e:'三相异步电动机转速n=60f(1-s)/p，与电源频率f、磁极对数p和转差率s有关，与外壳颜色无关。'},
+{t:3,c:3,q:'变频器调速是通过改变供给电动机的电源频率来实现的。',o:['正确','错误'],a:[0],e:'变频器先将工频交流电整流为直流，再逆变为频率和电压可调的交流电，实现电梯的平滑调速和节能运行。'},
+{t:1,c:3,q:'接触器在电梯电气系统中的主要作用是（）。',o:['远距离频繁接通和断开大电流电路','测量电压','限制电流','防止触电'],a:[0],e:'接触器利用线圈电磁力带动主触点动作，可实现远距离、频繁地接通和断开大电流电路，是电梯控制柜的主要执行元件。'},
+{t:3,c:3,q:'热继电器主要用于电动机的过载保护，不能用作短路保护。',o:['正确','错误'],a:[0],e:'热继电器靠双金属片受热弯曲动作，具有热惯性，适合过载保护；短路瞬间电流极大需由熔断器或断路器瞬时切断，故热继电器不能替代短路保护。'},
+{t:1,c:3,q:'熔断器在电路中的主要作用是（）。',o:['短路保护','过载保护','欠压保护','漏电保护'],a:[0],e:'熔断器（保险丝）在电路发生短路时迅速熔断切断电源，起短路保护作用，其熔体额定电流按被保护电路额定电流选取。'},
+{t:2,c:3,q:'电梯常用的电气器件包括（）。',o:['接触器和继电器','变频器','旋转编码器','液压缓冲器'],a:[0,1,2],e:'接触器、继电器、变频器、编码器、变压器、制动电阻等属于电气控制装置；液压缓冲器属于机械安全保护装置。'},
+{t:1,c:3,q:'电梯导轨通常采用的材质是（）。',o:['优质碳素结构钢冷轧加工','铝合金','铸铁','不锈钢'],a:[0],e:'电梯导轨通常采用优质碳素结构钢冷轧加工制成，常见型式有T型导轨和空心导轨，具有足够的强度和导向精度。'},
+{t:3,c:3,q:'润滑脂适用于高速轻载轴承的润滑，更适合散热要求高的场合。',o:['正确','错误'],a:[1],e:'润滑脂黏度大、流动性差、散热能力弱，适用于低速重载、不易经常加油或密封要求高的部位；高速轻载场合宜采用润滑油。'},
+{t:1,c:3,q:'电梯减速箱通常采用的润滑方式是（）。',o:['浸油（飞溅）润滑','干摩擦润滑','水冷润滑','压缩空气润滑'],a:[0],e:'电梯蜗轮蜗杆减速箱通常采用浸油润滑，靠蜗轮旋转将润滑油飞溅到啮合面，需定期检查油位和油质。'},
+{t:2,c:3,q:'常用的机械传动方式包括（）。',o:['齿轮传动','带传动','链传动','蜗轮蜗杆传动'],a:[0,1,2,3],e:'机械传动主要有齿轮传动、带传动、链传动、蜗轮蜗杆传动等。电梯门机常用带传动，自动扶梯梯级常用链传动，曳引机常用蜗轮蜗杆传动。'},
+{t:3,c:3,q:'蜗轮蜗杆传动具有自锁性能，常用于电梯曳引机减速装置。',o:['正确','错误'],a:[0],e:'蜗轮蜗杆传动传动比大、结构紧凑、具有一定自锁性，常用于有齿轮曳引机。但其传动效率较低，且发热量大需注意润滑和散热。'},
+{t:1,c:3,q:'电梯用曳引钢丝绳的安全系数不应小于（）。',o:['8','10','12','16'],a:[2],e:'GB 7588规定，对于使用三根或三根以上钢丝绳的曳引驱动电梯，悬挂钢丝绳的安全系数不应小于12。'},
+{t:3,c:3,q:'曳引钢丝绳出现断股、笼状畸变、绳芯外露等情况时应当报废更换。',o:['正确','错误'],a:[0],e:'依据GB/T 5972钢丝绳报废标准，出现断股、笼状畸变、绳径显著减小、严重锈蚀或磨损等情况之一即应报废，不得继续使用。'},
+{t:1,c:3,q:'电梯曳引钢丝绳绳芯的主要作用是（）。',o:['储存润滑油并增加柔韧性','增加重量','连接绳头','屏蔽电磁干扰'],a:[0],e:'钢丝绳绳芯可储存润滑油、减少钢丝间磨损，并提高钢丝绳的柔韧性；绳芯分为纤维芯和钢芯两类。'},
+{t:3,c:3,q:'电梯维修作业中，可以使用铜丝、铁丝代替熔断器的熔体。',o:['正确','错误'],a:[1],e:'用铜丝、铁丝代替熔体将使熔断器失去保护作用，短路时无法及时切断电源，极易引发火灾和设备损毁，属严重违章行为。'},
+{t:1,c:3,q:'电梯电气原理图中，交流接触器线圈一般标注为（）。',o:['KM','KA','FU','QF'],a:[0],e:'电气图形符号中，KM表示接触器，KA表示继电器，FU表示熔断器，QF表示断路器，这是识读电气原理图的基础。'},
+{t:3,c:3,q:'电梯电动机的绝缘电阻测量一般在冷态下进行，测量值应符合相关规定要求。',o:['正确','错误'],a:[0],e:'电动机绝缘电阻应使用兆欧表测量，测量前断电并放电，测量结果应满足设备技术文件或相关标准要求，不合格的须查明原因处理后再用。'},
+
+/* ============ 第四章 电梯结构与原理 ============ */
+{t:1,c:4,q:'电梯的八大系统中，下列不属于电梯基本组成系统的是（）。',o:['曳引系统','导向系统','通风系统','门系统'],a:[2],e:'电梯由曳引系统、导向系统、重量平衡系统、轿厢系统、门系统、电力拖动系统、电气控制系统和安全保护系统八大系统组成，通风系统不属于基本组成系统。'},
+{t:2,c:4,q:'电梯曳引系统由（）组成。',o:['曳引机','曳引钢丝绳','导向轮','反绳轮'],a:[0,1,2,3],e:'曳引系统由曳引机（含电动机、减速器、制动器、曳引轮）、曳引钢丝绳、导向轮、反绳轮及绳头组合等组成，其功能是输出和传递动力。'},
+{t:1,c:4,q:'常用的曳引轮绳槽有三种型式，下列不属于其中一种的是（）。',o:['凹形槽','半圆形槽','V形槽','梯形槽'],a:[3],e:'曳引轮绳槽常见型式有凹形槽（带切口）、半圆形槽和V形槽三种。V形槽曳引力最大但磨损最快。'},
+{t:1,c:4,q:'曳引力与下列（）因素有关。',o:['包角和曳引钢丝绳的润滑程度','安全钳作用力','限速器动作力','对重块数量'],a:[0],e:'曳引力与包角、绳槽型式、当量摩擦系数以及钢丝绳的润滑程度有关。曳引轮绳槽中过多的润滑油会使摩擦系数下降、曳引力不足。'},
+{t:1,c:4,q:'调整（）间距或采用复绕形式可以改变曳引钢丝绳在曳引轮上的包角。',o:['曳引轮与导向轮','轿厢与对重','导轨与导靴','层门与轿门'],a:[0],e:'曳引轮与导向轮的相对间距直接决定钢丝绳的包角大小，采用复绕方式可增大包角从而提高曳引力。'},
+{t:2,c:4,q:'电梯导向系统由（）组成。',o:['导轨','导靴','导轨架','对重块'],a:[0,1,2],e:'导向系统由导轨、导靴和导轨架组成，作用是限定轿厢和对重的运动自由度，使其只能沿导轨上下运行。'},
+{t:2,c:4,q:'常见的导靴型式有（）。',o:['滑动导靴','滚轮导靴','弹性导靴','刚性导靴'],a:[0,1],e:'导靴分为滑动导靴和滚轮导靴两大类。滑动导靴多用于低速电梯，滚轮导靴用于高速电梯，运行平稳、噪声低。'},
+{t:3,c:4,q:'T型导轨是电梯常用的导轨型式之一，还有空心导轨。',o:['正确','错误'],a:[0],e:'电梯导轨主要有T型导轨和空心导轨。T型导轨刚性好、导向精度高，应用最广；空心导轨多用于低速电梯和对重侧。'},
+{t:2,c:4,q:'重量平衡系统由（）组成。',o:['对重装置','补偿装置','轿厢','曳引机'],a:[0,1],e:'重量平衡系统由对重装置和补偿装置组成，可使曳引机只需克服轿厢侧与对重侧的重量差，降低驱动功率。'},
+{t:1,c:4,q:'对重装置的主要作用是（）。',o:['平衡轿厢自重和部分额定载重量','增加电梯运行速度','限制轿厢运动','提供制动力'],a:[0],e:'对重装置可平衡轿厢自重和约一半的额定载重量，使曳引机只需克服不平衡载荷，从而减小电动机功率、节省能源。'},
+{t:3,c:4,q:'补偿装置（补偿链、补偿缆、补偿绳）的作用是平衡曳引钢丝绳、随行电缆的重量影响。',o:['正确','错误'],a:[0],e:'当提升高度较大时，轿厢侧与对重侧的曳引钢丝绳重量差会引起不平衡，补偿装置用于平衡这部分重量，减小曳引机负荷波动。'},
+{t:2,c:4,q:'轿厢系统的组成包括（）。',o:['轿厢架','轿厢壁','轿厢顶和轿厢底','护脚板'],a:[0,1,2,3],e:'轿厢由轿厢架、轿厢壁、轿顶、轿底、护脚板、操纵箱、轿顶检修装置等组成，是运送乘客和货物的承载部件。'},
+{t:3,c:4,q:'轿厢护脚板的作用是防止乘客脚部被夹入层门地坎与轿厢之间的间隙。',o:['正确','错误'],a:[0],e:'护脚板安装在轿厢门口两侧，其作用是当轿厢位於层门附近时，防止人员的脚部卡入轿厢与井道壁之间，避免剪切伤害。'},
+{t:1,c:4,q:'下列不属于轿厢系统组成部分的是（）。',o:['轿厢架','轿厢壁','门机','轿厢底'],a:[2],e:'门机属于门系统，包括轿门、层门、门机、门锁等。轿厢系统主要包括轿厢架、轿壁、轿顶、轿底、护脚板、操纵箱等。'},
+{t:1,c:4,q:'层门地坎与轿厢地坎之间的水平距离不应大于（）mm。',o:['25','35','45','50'],a:[1],e:'GB 7588规定，层门地坎与轿厢地坎之间的水平距离不应大于35mm，距离过大易造成乘客绊倒或脚部卡入。'},
+{t:1,c:4,q:'电梯门扇与门套、地坎之间的间隙不应大于（）mm。',o:['4','6','8','10'],a:[1],e:'GB 7588规定，电梯门扇之间以及门扇与门套、地坎等之间的间隙不应大于6mm，防止手指被夹入。'},
+{t:3,c:4,q:'电梯层门门锁的最小啮合长度不应小于7mm。',o:['正确','错误'],a:[0],e:'GB 7588规定，门锁装置的最小啮合长度不应小于7mm。啮合深度不足时门锁可能在受外力时脱开，造成层门意外开启的坠落风险。'},
+{t:1,c:4,q:'电梯层门门锁的主要作用是（）。',o:['防止层门在非开锁区域被打开','控制轿厢运行速度','防止轿厢超载','吸收冲击能量'],a:[0],e:'门锁保证层门只有在轿厢位于该层开锁区域时才能被打开，同时其电气触点串接在安全回路中，门未锁闭电梯不能运行。'},
+{t:2,c:4,q:'电梯安全保护装置主要包括（）。',o:['限速器','安全钳','缓冲器','门锁装置'],a:[0,1,2,3],e:'电梯安全保护装置包括限速器、安全钳、缓冲器、门锁装置、轿厢上行超速保护装置、轿厢意外移动保护装置、超载保护装置、终端限位开关和极限开关等。'},
+{t:1,c:4,q:'电梯限速器的动作速度应不低于额定速度的（）。',o:['105%','110%','115%','125%'],a:[2],e:'GB 7588规定，限速器的动作速度应不低于额定速度的115%，且不超过规定的上限值，以保证既能在超速时可靠动作又不误动作。'},
+{t:3,c:4,q:'在限速器—安全钳系统中，限速器是指令机构，安全钳是执行机构。',o:['正确','错误'],a:[0],e:'当轿厢超速或悬挂装置断裂时，限速器首先动作并通过限速器绳拉动安全钳提拉机构，使安全钳夹紧导轨将轿厢制停在导轨上。'},
+{t:1,c:4,q:'安全钳楔块与导轨侧工作面的间隙应当均匀，一般控制在（）mm。',o:['0.5~1','2~3','4~5','6~8'],a:[1],e:'安全钳楔块与导轨侧工作面之间的间隙应当均匀且保持在2~3mm范围内，间隙过大会导致安全钳动作时卡不住导轨。'},
+{t:1,c:4,q:'限速器动作时，限速器绳的张紧力不应小于（）N。',o:['150','200','300','500'],a:[2],e:'GB 7588规定，限速器动作时，限速器绳的张紧力不得小于300N，且不得小于安全钳起作用所需力的两倍。'},
+{t:3,c:4,q:'限速器张紧装置对绳索每个分支的拉力不应小于150N。',o:['正确','错误'],a:[0],e:'限速器张紧装置依靠重力和弹簧提供张力，其每个分支的拉力不应小于150N，以保证限速器绳不松弛、动作可靠。'},
+{t:1,c:4,q:'额定速度大于1.0m/s的电梯应当采用（）缓冲器。',o:['蓄能型（弹簧）','耗能型（液压）','橡胶式','聚氨酯式'],a:[1],e:'GB 7588规定，额定速度大于1.0m/s的电梯应采用耗能型（液压）缓冲器；额定速度不大于1.0m/s的电梯可采用蓄能型缓冲器。'},
+{t:1,c:4,q:'蓄能型缓冲器适用于额定速度不大于（）m/s的电梯。',o:['0.5','1.0','1.5','2.0'],a:[1],e:'蓄能型缓冲器（如弹簧缓冲器）仅适用于额定速度不大于1.0m/s的电梯，靠弹性变形储存并释放能量；速度更高时须使用耗能型缓冲器。'},
+{t:2,c:4,q:'下列属于电梯安全保护系统的有（）。',o:['终端限位开关和极限开关','超载保护装置','轿厢上行超速保护装置','轿厢装饰面板'],a:[0,1,2],e:'终端限位开关、极限开关、超载保护装置、上行超速保护装置、轿厢意外移动保护装置均属安全保护系统；装饰面板仅起美观作用。'},
+{t:1,c:4,q:'电梯极限开关的作用是（）。',o:['强迫减速','切断安全保护回路使电梯停止运行','缓冲','增加曳引力'],a:[1],e:'当轿厢运行超过端站限位开关仍不能停止时，极限开关动作切断安全回路，使电梯被迫停止，防止冲顶或蹲底事故。'},
+{t:3,c:4,q:'轿厢内载荷超过额定载重量时，超载装置应动作并使电梯不能启动。',o:['正确','错误'],a:[0],e:'超载装置在轿厢载荷达到额定载重量的110%时应动作，发出声光报警并禁止电梯启动和关门，防止超载运行造成事故。'},
+{t:1,c:4,q:'电梯超载保护装置一般在轿厢载荷达到额定载重量的（）时动作。',o:['100%','105%','110%','125%'],a:[2],e:'依据GB 7588和相关标准，当轿厢载荷大于额定载重量的110%时，超载装置应能发出正确信号使电梯不能启动。'},
+{t:3,c:4,q:'缓冲器的作用是吸收轿厢或对重撞击底坑时的动能，减轻冲击伤害。',o:['正确','错误'],a:[0],e:'缓冲器安装在井道底坑，是电梯最后一道保护装置，用于吸收轿厢或对重在极限位置失控下行时产生的动能，将冲击减到最小。'},
+{t:1,c:4,q:'交流变频调速电梯的平层精度一般要求为（）mm。',o:['±3','±5','±10','±15'],a:[1],e:'GB/T 10058《电梯技术条件》规定，交流变频调速电梯的平层精度一般要求为±5mm，交流双速电梯为±15mm。'},
+{t:3,c:4,q:'电梯制动器间隙一般应调整为0.3~0.5mm，且两侧间隙均匀。',o:['正确','错误'],a:[0],e:'制动器间隙过大会造成制动迟滞、冲击大；过小会导致制动器打不开、摩擦发热。一般调整为0.3~0.5mm并保持两侧对称均匀。'},
+{t:1,c:4,q:'电梯制动器的主要作用是（）。',o:['使运行中的轿厢制停并保持静止','调节运行速度','增加曳引力','检测轿厢位置'],a:[0],e:'制动器是电梯的关键安全部件，既要能使运行中的轿厢可靠制停，又要在轿厢静止时保持其位置不动，还须满足失电制动的安全要求。'},
+{t:2,c:4,q:'电梯门系统包括（）。',o:['层门','轿门','门机','门锁装置'],a:[0,1,2,3],e:'门系统由轿门、层门、门机（开门机）、门锁装置、地坎、门刀门球、自动关闭层门装置以及门入口保护装置等组成。'},
+{t:1,c:4,q:'电梯门入口保护装置通常采用（）。',o:['安全触板或光幕','限速器','缓冲器','接近开关'],a:[0],e:'门入口保护装置用于防止关门时夹伤乘客，常见型式有安全触板（机械式）和光幕（光电式），两者也可组合使用。'},
+{t:3,c:4,q:'电梯的层门应当设置自动关闭装置，以保证层门在开启后能自动关闭并锁紧。',o:['正确','错误'],a:[0],e:'自动关闭层门装置（如重锤或弹簧）保证层门开启后自动关闭并锁紧，防止层门长时间敞开形成坠落危险。'},
+{t:1,c:4,q:'梯群控制一般集中控制的电梯台数为（）。',o:['2~3台','4~5台','6~8台','10台以上'],a:[2],e:'梯群控制是将多台（通常6~8台）电梯按规定程序集中控制，统一处理各台电梯的召唤信号，自动统筹、优选应答，提高运送效率。'},
+{t:1,c:4,q:'电梯型号中字母H表示（）。',o:['客梯','货梯','病床梯','观光梯'],a:[1],e:'电梯型号中，K表示乘客电梯，H表示载货电梯，B表示病床电梯，G表示观光电梯，Z表示住宅电梯。'},
+{t:1,c:4,q:'电梯型号中字母K表示（）。',o:['客梯','货梯','杂物梯','液压梯'],a:[0],e:'电梯产品型号中，K代表乘客电梯（客车），H代表载货电梯。识读型号是电梯基础知识的常见考点。'},
+{t:3,c:4,q:'电梯的额定载重量是指电梯设计规定的轿厢内允许的最大载荷，单位为kg。',o:['正确','错误'],a:[0],e:'额定载重量是电梯设计允许的最大载荷（kg），与额定速度、轿厢尺寸共同构成电梯的主要基本参数。'},
+{t:1,c:4,q:'下列不属于电梯基本参数的是（）。',o:['额定载重量','额定速度','层站数','轿厢装饰颜色'],a:[3],e:'电梯基本参数包括额定载重量、额定速度、层站数、提升高度、轿厢尺寸等，装饰颜色不属于技术参数。'},
+{t:2,c:4,q:'消防员电梯（消防电梯）应具备的特点包括（）。',o:['设置消防专用操作按钮','具有火灾时迫降功能','采用两路电源供电','可以取消所有安全保护装置'],a:[0,1,2],e:'消防员电梯应设消防专用按钮、火灾时自动返回基站（迫降）、采用双电源供电并具备防火、防水措施。任何情况下都不允许取消安全保护装置。'},
+{t:3,c:4,q:'消防电梯接到火警信号后，应能返回基站或指定的疏散层待命。',o:['正确','错误'],a:[0],e:'消防电梯的迫降功能要求接到火警信号后立即取消内外召唤，直接返回基站（或疏散层）开门待命，供消防人员使用。'},
+{t:1,c:4,q:'杂物电梯的额定载重量一般不大于（）kg。',o:['200','300','500','1000'],a:[1],e:'依据GB 25194《杂物电梯制造与安装安全规范》，杂物电梯额定载重量一般不大于300kg，轿厢内不允许人员进入。'},
+{t:3,c:4,q:'液压电梯系统中的破裂阀（限速切断阀）的作用是当油管破裂时关闭油缸出油口，防止轿厢下落。',o:['正确','错误'],a:[0],e:'破裂阀安装在液压缸与液压泵站之间的管路上，当管路破裂导致流量异常增大时会自动关闭，防止轿厢因失压突然下降。'},
+{t:1,c:4,q:'液压电梯中，当油管破裂造成流量异常时自动关闭、防止轿厢下落的部件是（）。',o:['限速切断阀（破裂阀）','溢流阀','换向阀','滤油器'],a:[0],e:'限速切断阀（破裂阀）是液压电梯的重要安全装置，其动作流量和关闭时间都有严格要求，需定期检查和试验。'},
+{t:3,c:4,q:'防爆电梯适用于有爆炸性气体或粉尘混合物的危险场所。',o:['正确','错误'],a:[0],e:'防爆电梯的电气设备和机械部件均采取防爆措施，适用于石油、化工等存在爆炸性混合物的场所，对其选型、安装和检修有专门要求。'},
+{t:2,c:4,q:'电梯电力拖动系统包括（）。',o:['电动机','调速装置','供电系统','门锁装置'],a:[0,1,2],e:'电力拖动系统由曳引电动机、调速装置（变频器等）和供电系统组成，其功能是提供动力并实现速度控制。门锁属安全保护与门系统。'},
+{t:1,c:4,q:'轿厢意外移动保护装置（UCMP）的作用是（）。',o:['防止轿厢在层门未锁闭状态下意外移动离开开锁区','防止轿厢超速下行','防止轿厢超载','防止门夹人'],a:[0],e:'轿厢意外移动保护装置用于在层门和轿门未锁闭、轿厢处于开锁区域时因制动力不足等原因发生意外移动的情况下，自动将轿厢制停，防止剪切和坠落事故。'},
+{t:3,c:4,q:'曳引轮绳槽磨损后，可以通过加大钢丝绳张力的方式长期维持曳引能力而无需更换曳引轮。',o:['正确','错误'],a:[1],e:'曳引轮绳槽磨损到一定程度后曳引力会明显下降，须按规定判废更换曳引轮。单纯加大钢丝绳张力会造成轴承和绳轮过度磨损，不能解决根本问题。'},
+{t:1,c:4,q:'曳引式电梯中，钢丝绳绕过曳引轮时形成的包角越大，曳引力（）。',o:['越大','越小','不变','先大后小'],a:[0],e:'根据曳引计算式，包角越大，曳引轮与钢丝绳之间的摩擦力越大，曳引力越大。可通过设置导向轮或采用复绕方式来增大包角。'},
+{t:2,c:4,q:'电梯中属于机械安全保护装置的有（）。',o:['限速器','安全钳','缓冲器','抱闸制动器'],a:[0,1,2,3],e:'限速器、安全钳、缓冲器、制动器（含附加制动器）均属于机械安全保护装置，是电梯安全保护系统的重要组成部分。'},
+{t:3,c:4,q:'轿厢顶检修装置应当设置检修开关和急停开关，检修运行时轿顶操作优先于其他操作。',o:['正确','错误'],a:[0],e:'轿顶检修装置设有检修转换开关和急停开关，转入检修状态后轿顶操作具有最高优先级，这是保证轿顶作业人员安全的关键。'},
+/* ============ 第五章 自动扶梯与人行道 ============ */
+{t:2,c:5,q:'自动扶梯由（）组成。',o:['梯路系统','扶手系统','驱动系统','安全保护系统'],a:[0,1,2,3],e:'自动扶梯由梯路系统（梯级、梯级链、导轨等）、扶手系统、驱动系统和安全保护系统四大系统组成。'},
+{t:1,c:5,q:'自动扶梯的倾斜角一般采用（）。',o:['25°或30°','30°或35°','35°或40°','任意角度'],a:[1],e:'GB 16899规定，自动扶梯的倾斜角一般采用30°，当提升高度不超过6m、名义速度不超过0.5m/s时可使用35°。'},
+{t:2,c:5,q:'自动扶梯梯级的有效宽度（名义宽度）有（）mm几种规格。',o:['600','800','1000','1200'],a:[0,1,2],e:'自动扶梯梯级名义宽度分为600mm、800mm和1000mm三种规格，分别对应单人、单人或双人、双人站立的使用需求。'},
+{t:1,c:5,q:'自动扶梯的名义速度一般不应超过（）m/s。',o:['0.5','0.65','0.75','1.0'],a:[2],e:'GB 16899规定，自动扶梯的名义速度不应超过0.75m/s；当名义速度大于0.65m/s时，制动距离等参数需相应加大以满足安全要求。'},
+{t:3,c:5,q:'梯路是指自动扶梯中输送乘客的线路，由梯级、梯级链、导轨及支撑导向装置等构成。',o:['正确','错误'],a:[0],e:'梯路是自动扶梯中承载并输送乘客的运行线路，包括梯级、梯级链（梯级滚轮）、梯路导轨及其支撑导向装置。'},
+{t:1,c:5,q:'梳齿板与梯级齿槽的啮合深度不应小于（）mm。',o:['3','4','6','8'],a:[2],e:'GB 16899规定，梳齿板梳齿与梯级齿槽的啮合深度应当不小于6mm，啮合过浅会造成异物卡入形成危险。'},
+{t:1,c:5,q:'梯级与围裙板之间的单侧间隙不应大于（）mm。',o:['3','4','5','7'],a:[1],e:'GB 16899规定，梯级与围裙板之间的单侧间隙不应大于4mm，两侧间隙之和不应大于7mm，防止衣物、鞋类被夹入。'},
+{t:3,c:5,q:'梯级与围裙板两侧间隙之和不应大于7mm。',o:['正确','错误'],a:[0],e:'单侧间隙不大于4mm、两侧之和不大7mm，是防止夹伤的关键尺寸要求，维保时应重点检查测量。'},
+{t:2,c:5,q:'自动扶梯的安全保护装置包括（）。',o:['梳齿板保护装置','梯级下陷保护装置','扶手带入口保护装置','附加制动器'],a:[0,1,2,3],e:'此外还包括梯级缺失保护、超速保护、非操纵逆转保护、围裙板防夹装置、急停装置、扶手带出入口保护等。'},
+{t:1,c:5,q:'自动扶梯附加制动器的作用是（）。',o:['当工作制动器失效或发生超速、逆转时制停扶梯','增加启动力矩','调节扶手带速度','防止梯级下陷'],a:[0],e:'附加制动器是自动扶梯的第二道制动保护，当工作制动器不能有效制动、发生超速或非操纵逆转时动作，将扶梯可靠制停。'},
+{t:3,c:5,q:'自动扶梯控制电路与安全电路的直流电压平均值、交流电压有效值不应超过250V。',o:['正确','错误'],a:[0],e:'GB 16899规定，自动扶梯和自动人行道控制电路与安全电路的直流电压平均值、交流电压有效值不应超过250V。'},
+{t:1,c:5,q:'自动扶梯梯级下陷保护装置动作后，扶梯应当（）。',o:['立即停止运行','继续运行','降速运行','发出报警但不停止'],a:[0],e:'梯级下陷（或缺失）保护装置动作后，自动扶梯应立即停止运行，待查明原因、排除故障后方可重新启动。'},
+{t:2,c:5,q:'扶手系统由（）组成。',o:['扶手带','扶手带驱动装置','扶手导轨','扶手带张紧装置'],a:[0,1,2,3],e:'扶手系统由扶手带、扶手带驱动装置、扶手导轨、扶手带张紧装置及扶手带入口保护装置等组成，其运行速度应与梯级速度相匹配。'},
+{t:1,c:5,q:'扶手带入口保护装置的主要作用是（）。',o:['防止手或异物被夹入扶手带入口','调节扶手带张力','增加扶手带摩擦力','检测扶手带速度'],a:[0],e:'扶手带入口保护装置是在扶手带进入扶手装置的入口处设置的安全开关，当有手指或异物进入时动作，使扶梯立即停止。'},
+{t:3,c:5,q:'自动扶梯应设置红色停止（急停）按钮，且数量、位置和标识应符合规范要求。',o:['正确','错误'],a:[0],e:'自动扶梯应在出入口附近及中部（提升高度超过12m时）设置红色急停按钮，标识应清晰明显，任何人操作后扶梯均应停止运行。'},
+{t:1,c:5,q:'自动人行道的倾斜角一般不应大于（）度。',o:['6','12','15','20'],a:[1],e:'GB 16899规定，自动人行道的倾斜角不应大于12°；倾斜角不大于6°时可称为水平型自动人行道。'},
+{t:2,c:5,q:'自动扶梯的驱动装置包括（）。',o:['主驱动链','驱动皮带','主驱动链轮','附加制动器'],a:[0,1,2,3],e:'驱动装置由驱动主机、主驱动链（或驱动皮带）、主驱动链轮、梯级链（踏板链）、附加制动器等组成，负责驱动梯级运行。'},
+{t:3,c:5,q:'自动扶梯的空载制动距离和载有制动距离都需要进行试验，且应满足规范要求。',o:['正确','错误'],a:[0],e:'制动距离试验是自动扶梯维保和检验的重要项目，空载和有载制动距离均应符合规定，制动距离过大会造成乘客前倾摔倒，过小则冲击大。'},
+{t:1,c:5,q:'自动扶梯围裙板防夹装置的设置目的是（）。',o:['防止衣物、软底鞋等被夹入梯级与围裙板的间隙','增加围裙板强度','防止梯级脱落','提示乘客站稳'],a:[0],e:'围裙板防夹装置（如防夹毛刷、防夹条）安装在围裙板下部，用于减小缝隙并阻止衣物、软底鞋等被卷入，是防夹伤的重要措施。'},
+{t:3,c:5,q:'自动扶梯的检修盖板和楼层板应当设置电气安全装置，在盖板打开时扶梯不能运行。',o:['正确','错误'],a:[0],e:'检修盖板、楼层板属于可开启部件，必须设置电气安全装置（安全开关），一旦打开即切断安全电路使扶梯停止，防止人员跌落。'},
+{t:1,c:5,q:'自动扶梯非操纵逆转保护装置的作用是（）。',o:['在扶梯发生非操纵逆转时使其停止运行','防止扶梯超速','防止梯级下陷','防止扶手带打滑'],a:[0],e:'非操纵逆转保护装置（逆转保护）在扶梯因负载过大、制动器失效等发生非操纵方向逆转时动作，使扶梯立即停止，防止踩踏事故。'},
+{t:2,c:5,q:'自动扶梯的监测装置包括（）。',o:['传感器','检测开关','限速器','滤油器'],a:[0,1],e:'自动扶梯的监测装置主要由传感器和检测开关组成，用于监测梯级下陷、缺失、扶手带速度、超速、逆转等状态。'},
+{t:3,c:5,q:'梳齿板梳齿发生缺损时应及时更换，不得继续运行。',o:['正确','错误'],a:[0],e:'梳齿板梳齿缺损会造成梯级与梳齿板间形成凹坑，易夹住鞋类、行李造成事故，发现缺损必须立即停梯更换。'},
+{t:1,c:5,q:'自动扶梯扶手带的运行速度相对于梯级的运行速度，允许偏差为（）。',o:['-2%~0','0~+2%','±5%','±10%'],a:[1],e:'GB 16899规定，扶手带的运行速度相对于梯级速度的允许偏差为0～+2%，即扶手带不得慢于梯级，以防止乘客因扶手带滞后而向后倾倒。'},
+{t:3,c:5,q:'自动扶梯梯级缺失保护装置动作后，扶梯应当停止运行。',o:['正确','错误'],a:[0],e:'梯级缺失保护装置通过检测梯级的连续性来判断是否有梯级缺失，一旦发现缺失立即切断安全电路使扶梯停止。'},
+{t:1,c:5,q:'自动扶梯的紧急停止按钮应当设置在（）。',o:['仅在扶梯上部','仅在扶梯下部','上、下出入口处以及中部（提升高度超过12m时）','扶手带内部'],a:[2],e:'自动扶梯应在上下出入口附近设置急停按钮；当提升高度超过12m时还应在中部设置，使人员在扶梯任何位置发生紧急情况时都能就近操作。'},
+{t:3,c:5,q:'自动扶梯的润滑系统应当定期检查，链条和导轨的润滑状态直接影响运行平稳性。',o:['正确','错误'],a:[0],e:'润滑系统为梯级链、扶手带驱动链、导轨等提供润滑，润滑不良会造成链条磨损加剧、运行噪声增大，应定期检查和补充润滑剂。'},
+{t:1,c:5,q:'自动扶梯出入口的梳齿支撑板、楼层板应当（）。',o:['固定可靠且能通过电气安全装置监测','可以随意取下','仅用螺钉压紧无需安全开关','焊接固定不可拆卸'],a:[0],e:'梳齿支撑板、楼层板是乘客进出扶梯的踏板，必须固定可靠；当其被打开时，电气安全装置应使扶梯不能运行。'},
+
+/* ============ 第六章 安全操作与防护 ============ */
+{t:1,c:6,q:'进入轿顶作业的正确顺序是（）。',o:['将电梯转入检修状态→开层门→确认轿厢平层→按下轿顶急停→进入轿顶','直接开层门跳上轿顶','按检修按钮后立即进入轿顶','在电梯运行中从层门进入轿顶'],a:[0],e:'正确顺序为先确认电梯处于检修状态、开启层门、确认轿厢处于平层位置、按下轿顶急停开关，然后从层门进入轿顶，全过程需一人监护。'},
+{t:3,c:6,q:'进入轿顶前可以在层门外探头探身查看轿厢位置，以确认是否平层。',o:['正确','错误'],a:[1],e:'严禁探身进入井道查看轿厢位置，应通过层楼指示、观察窗确认或采用检修操作方式，防止发生坠落和挤压事故。'},
+{t:1,c:6,q:'进入底坑作业前，必须先按下（）开关。',o:['底坑急停开关','轿顶检修开关','机房主电源开关','层门门锁开关'],a:[0],e:'进入底坑前应先按底坑急停开关，使电梯在检修状态下不能运行；同时应确认井道内无人、轿厢已停靠在方便进出的位置。'},
+{t:3,c:6,q:'电梯运行时，作业人员可以从层门外探头探身查看轿厢所在位置。',o:['正确','错误'],a:[1],e:'井道内轿厢随时可能运动或被挤压，探头探身极易造成坠落或挤压伤亡，必须通过楼层显示、观察窗或检修运行方式确认轿厢位置。'},
+{t:2,c:6,q:'电梯作业人员应当配备的劳动防护用品包括（）。',o:['安全帽','绝缘鞋','安全带','绝缘手套'],a:[0,1,2,3],e:'作业人员应按规定佩戴安全帽、绝缘鞋、安全带、绝缘手套等劳动防护用品，并根据作业性质加戴防护眼镜、耳塞等。'},
+{t:1,c:6,q:'高处作业时安全带的正确使用方法是（）。',o:['高挂低用','低挂高用','水平悬挂','系在腰部不用固定'],a:[0],e:'安全带必须高挂低用，即挂点高于人体，这样一旦坠落冲击距离小、受力安全；低挂高用会加大冲击距离，十分危险。'},
+{t:3,c:6,q:'动火作业前必须办理动火审批手续，并配备灭火器材、安排监护人。',o:['正确','错误'],a:[0],e:'电梯机房、井道等处动火作业属于高风险作业，必须履行审批手续、清理周边可燃物、配备灭火器并设专人监护，作业后还应检查确认无火种残留。'},
+{t:1,c:6,q:'电梯作业现场临时用电应当加装（）保护装置。',o:['漏电保护器','电压表','电流表','电容器'],a:[0],e:'临时用电必须装设漏电保护器（剩余电流保护装置），做到一闸一漏一箱，防止触电事故。'},
+{t:2,c:6,q:'断电作业时应当执行（）的安全流程。',o:['切断电源','验电确认无电','悬挂警示标示牌','加锁防止误送电'],a:[0,1,2,3],e:'即挂牌上锁（LOTO）流程：断电、验电、挂牌、上锁，并妥善保管钥匙，防止他人误合闸造成触电事故。'},
+{t:3,c:6,q:'为了方便检修，可以临时短接电梯安全回路和门锁回路。',o:['正确','错误'],a:[1],e:'严禁短接安全回路和门锁回路运行电梯，这会使所有安全保护失效，极易造成剪切、坠落等重大伤亡事故，属于严重违章。'},
+{t:1,c:6,q:'电梯层门紧急开锁装置（三角钥匙）应当由（）保管。',o:['使用单位指定的专人','任意维保人员','乘客','保洁人员'],a:[0],e:'三角钥匙应指定专人保管，建立使用登记制度，仅限持证作业人员在应急救援时使用，严禁随意存放或外借。'},
+{t:3,c:6,q:'电梯层门紧急开锁用的三角钥匙可以借给非持证人员用于日常开门。',o:['正确','错误'],a:[1],e:'三角钥匙是应急救援专用工具，非持证人员使用极易造成坠落伤亡，严禁外借或擅自使用。'},
+{t:2,c:6,q:'使用三角钥匙开启层门的正确做法包括（）。',o:['先确认轿厢位置','站稳身体、保持与层门的安全距离','缓慢开启层门并注意脚下','直接从层门口跳入井道'],a:[0,1,2],e:'开层门前必须确认轿厢位置并站稳，缓慢开启；严禁从层门口跳入井道或轿厢，层门开启后应保持关闭或设专人看守。'},
+{t:1,c:6,q:'电梯机房内应当配备的消防器材是（）。',o:['二氧化碳或干粉灭火器','泡沫灭火器','消防水带','沙土'],a:[0],e:'机房属于电气场所，应配备二氧化碳或干粉灭火器，禁止用水和泡沫灭火器扑救带电火灾，以防触电。'},
+{t:3,c:6,q:'电梯机房发生电气火灾时，可以使用水直接扑救。',o:['正确','错误'],a:[1],e:'水导电，用于带电灭火会造成触电危险，并使设备损坏扩大。应先切断电源，再用二氧化碳或干粉灭火器灭火。'},
+{t:1,c:6,q:'发现有人触电时，首先应当（）。',o:['立即切断电源或用绝缘物挑开电线','用手把触电者拉开','向触电者泼水','马上做人工呼吸'],a:[0],e:'救护人员首先应切断电源或用干燥的木棒、竹竿等绝缘物挑开电线，使触电者脱离电源，然后再进行现场急救，切勿直接用手拉。'},
+{t:3,c:6,q:'触电急救时，救护人员可以用手直接将触电者拉开脱离电源。',o:['正确','错误'],a:[1],e:'直接用手拉会造成救护人员一同触电。应先切断电源或用干燥绝缘物使触电者脱离电源，脱离后立即就地抢救并呼叫急救。'},
+{t:2,c:6,q:'电梯机房作业的安全要求包括（）。',o:['通道畅通、无杂物堆放','照明充足','门锁可靠、随手锁门','可以存放易燃易爆物品'],a:[0,1,2],e:'机房应保持通道畅通、照明充足、门锁可靠、环境整洁干燥，严禁存放易燃易爆物品和其他无关杂物。'},
+{t:3,c:6,q:'电梯井道内应当设置永久性的电气照明装置。',o:['正确','错误'],a:[0],e:'TSG T7001要求电梯井道内应设置永久性电气照明，照明亮度满足作业要求，照明开关应设置在井道外。'},
+{t:3,c:6,q:'在井道内作业时，严禁上下抛掷工具和材料。',o:['正确','错误'],a:[0],e:'井道内上下抛掷工具极易砸伤下方人员，必须使用工具袋并系挂牢固，材料应用绳索吊运，作业区域下方不得站人。'},
+{t:1,c:6,q:'在轿顶作业时，运行控制的优先级最高的是（）。',o:['轿顶检修装置','机房操作','层站召唤','轿内操纵箱'],a:[0],e:'轿顶检修装置具有最高操作优先级，只要转入检修状态，其他操作均失效，这是保证轿顶作业人员安全的关键设计。'},
+{t:3,c:6,q:'轿顶作业时，应当保持轿顶检修装置处于检修状态并随手按下急停开关。',o:['正确','错误'],a:[0],e:'轿顶作业期间必须保持检修状态，移动时按急停开关取出后检修运行，做到“动着不走、走着不站、站稳再动”的安全要求。'},
+{t:2,c:6,q:'电梯作业中的“不准”事项包括（）。',o:['不准无证操作','不准酒后作业','不准违章指挥和强令冒险作业','不准如实报告事故隐患'],a:[0,1,2],e:'无证操作、酒后作业、违章指挥均属严禁行为。如实报告事故隐患是作业人员的义务而非禁止事项。'},
+{t:1,c:6,q:'维保作业时，工具和备件应当（）。',o:['放置在专用工具袋中并妥善固定','放在层门口方便取用','随手放在轿顶边缘','放在井道内导靴上'],a:[0],e:'工具和备件应放在专用工具袋内并妥善固定，严禁放置在层门口、轿顶边缘、井道内等位置，防止坠落伤人和损坏设备。'},
+{t:3,c:6,q:'作业人员可以在饮酒后从事电梯维修作业。',o:['正确','错误'],a:[1],e:'电梯维修属高风险作业，酒后作业会严重影响判断力和反应能力，极易造成事故，属严禁行为。'},
+{t:1,c:6,q:'作业人员发现直接危及人身安全的紧急情况时，应当（）。',o:['停止作业或者采取应急措施后撤离作业场所','继续作业完成任务','等待领导指示','自行隐瞒不报'],a:[0],e:'《安全生产法》赋予从业人员在紧急情况下的停止作业权和紧急撤离权，任何单位和个人不得因此降低其工资福利待遇或解除劳动合同。'},
+{t:3,c:6,q:'电梯作业中多人配合时，应当明确一人负责统一指挥。',o:['正确','错误'],a:[0],e:'多人配合作业必须明确统一指挥人，行动前先沟通确认、口令清晰一致，避免误操作造成挤压、坠落事故。'},
+{t:2,c:6,q:'吊装作业的安全要求包括（）。',o:['作业前检查吊具索具','设置警戒区域','由专人统一指挥','可以在人员上方直接吊运'],a:[0,1,2],e:'吊装前应检查吊具完好性，划定警戒区禁止无关人员进入，由专人统一指挥，严禁在人员上方起吊或超载吊运。'},
+{t:1,c:6,q:'使用手持电动工具时，应优先选用（）类工具或加装漏电保护器。',o:['Ⅰ类','Ⅱ类','Ⅲ类','任意'],a:[1],e:'Ⅱ类工具具有双重绝缘或加强绝缘，安全性好，宜优先选用。在潮湿场所使用时应选用Ⅲ类（安全电压）工具，并加装漏电保护装置。'},
+{t:3,c:6,q:'电梯维修作业应当在检修状态下进行，并在基站或作业层设置警示标志。',o:['正确','错误'],a:[0],e:'作业时应在基站和作业层门口设置“电梯检修、禁止使用”等警示标志，并安排人员看护或锁闭层门，防止乘客误入。'},
+{t:1,c:6,q:'电梯作业现场应当设置（）标志。',o:['安全警示','广告宣传','企业标牌','装饰标识'],a:[0],e:'作业现场应设置明显的安全警示标志，包括禁止使用、当心坠落、当心触电、必须戴安全帽等，提醒人员注意风险。'},
+{t:3,c:6,q:'在机房、井道、底坑作业时，应保持与外界通讯畅通，以便紧急情况下求助。',o:['正确','错误'],a:[0],e:'电梯作业属于受限空间和高风险作业，应保持通讯畅通或安排监护人员在外守候，一旦发生意外可及时被发现和救援。'},
+{t:2,c:6,q:'电梯作业用电安全的基本要求包括（）。',o:['一机一闸一漏一箱','禁止私拉乱接电源线','使用合格的电气设备','用铜丝代替保险丝'],a:[0,1,2],e:'临时用电应做到一机一闸一漏一箱，禁止私拉乱接和使用不合格电器；严禁用铜丝代替保险丝，以免失去短路保护。'},
+{t:3,c:6,q:'电梯作业人员进入现场应当穿着工作服、绝缘鞋，禁止穿拖鞋、短裤作业。',o:['正确','错误'],a:[0],e:'作业人员应按规定穿戴劳动防护用品，禁止穿拖鞋、短裤、裙子等进入现场，防止被设备转动部位缠绕或造成触电、砸伤。'},
+{t:1,c:6,q:'电梯维修作业时，作业区域下方的防护要求是（）。',o:['设置警示围栏并防止无关人员进入','只需口头提醒','无需任何防护','由乘客自行避让'],a:[0],e:'作业区域下方属于高处坠物危险区，应设置警戒围栏和警示标志，安排人员看护，严禁无关人员进入或通行。'},
+{t:3,c:6,q:'电梯作业人员在作业前应当熟悉作业方案和应急处置措施。',o:['正确','错误'],a:[0],e:'作业前应当明确作业内容、步骤、危险点和应急措施，做好安全技术交底，做到心中有数再动手。'},
+/* ============ 第七章 故障排除与应急救援 ============ */
+{t:1,c:7,q:'接到电梯困人报告后，维保人员到场后应当首先（）。',o:['确认被困人员情况和轿厢位置，安抚被困人员','立即撬开轿门放人','立即切断轿厢内照明','等待消防人员到场'],a:[0],e:'救援第一步是了解被困人数、身体状况，确认轿厢所在位置，通过对讲或电话安抚乘客情绪，然后再按规范流程实施救援。'},
+{t:2,c:7,q:'电梯困人救援的规范步骤包括（）。',o:['接警确认并安抚乘客','切断电梯主电源并挂牌','手动盘车使轿厢到达平层位置','开启层门轿门放出乘客并恢复设备'],a:[0,1,2,3],e:'完整流程为接警确认、安抚乘客、切断主电源、松闸盘车至平层区、开启层门和轿门放出乘客、复位设备并做好记录。'},
+{t:3,c:7,q:'电梯困人时，为了节省时间，可以引导乘客自行从轿顶或井道内逃生。',o:['正确','错误'],a:[1],e:'轿顶和井道内布满运动部件和危险空隙，乘客自行逃生极易造成坠落、剪切伤害，必须由专业维保人员在平层位置开门放人。'},
+{t:1,c:7,q:'手动盘车使轿厢移动时，应当至少有（）人配合操作。',o:['1人','2人','3人','4人'],a:[1],e:'盘车需要两人配合，一人负责松闸（保持制动器打开），一人负责盘车，并保持口令沟通，防止溜车失控。'},
+{t:3,c:7,q:'手动盘车时应当缓慢进行，并注意观察钢丝绳上的平层标记。',o:['正确','错误'],a:[0],e:'盘车速度应缓慢均匀，随时观察曳引钢丝绳上的平层标记（一般为黄色标记）判断轿厢位置，避免冲过平层区造成危险。'},
+{t:1,c:7,q:'电梯停在一楼，关门后不启动，最可能的原因是（）。',o:['开门按钮故障','关门按钮故障','一楼厅门锁故障','轿厢照明故障'],a:[2],e:'电梯关门到位后仍不启动，多因该层厅门（层门）锁电气触点未接通，导致门锁回路断开，安全回路不成立，电梯无法启动。'},
+{t:1,c:7,q:'电梯只有层楼显示，所有按钮都无效，最可能的原因是（）。',o:['开门按钮故障','关门按钮故障','照明故障','松断绳开关被碰动作'],a:[3],e:'松断绳（安全绳）开关一旦被碰触动作会断开安全回路，此时电梯停止运行、按钮失效，但层楼显示仍可能正常。'},
+{t:2,c:7,q:'电梯平层误差超标的常见原因包括（）。',o:['编码器故障或安装松动','门区感应器（平层装置）位置偏移','曳引钢丝绳张力不均','变频器参数设置错误'],a:[0,1,2,3],e:'此外还可能是曳引轮打滑、制动器间隙不当、称重装置补偿参数不准等，应逐项排查并用仪器测量确认。'},
+{t:1,c:7,q:'电梯发生冲顶事故的常见原因是（）。',o:['上限位开关或极限开关失灵、制动器失效','轿厢照明故障','层门地坎间隙过大','曳引钢丝绳张紧力过大'],a:[0],e:'冲顶多由上限位（极限）开关失效、制动器制动力不足或曳引机失控引起，使轿厢越过顶层端站继续上行。'},
+{t:3,c:7,q:'电梯发生蹲底后，应当检查缓冲器、下极限开关和底坑设备是否损坏。',o:['正确','错误'],a:[0],e:'蹲底会对缓冲器、底坑设备、轿厢底和导靴造成冲击损伤，事故后必须全面检查并更换损坏部件，经检验合格后方可恢复运行。'},
+{t:1,c:7,q:'无机房电梯发生困人时，救援人员应当使用（）实施救援。',o:['紧急电动运行装置或手动松闸盘车装置','直接撬开层门','拆除井道壁板','等待电梯自行恢复'],a:[0],e:'无机房电梯通常配备紧急电动运行装置或手动盘车装置，救援人员应按制造单位说明在指定位置操作，使轿厢到达平层位置后开门放人。'},
+{t:3,c:7,q:'无机房电梯的紧急操作装置应当设置在便于操作和观察轿厢运行的位置。',o:['正确','错误'],a:[0],e:'无机房电梯的紧急操作和动态试验装置应设置在便于操作、便于观察轿厢运动的位置，且应能从井道外安全操作。'},
+{t:1,c:7,q:'液压电梯实施应急救援时，应当使用（）使轿厢下降到平层位置。',o:['手动泵和紧急下降阀','手拉葫芦','气动泵','撬棍'],a:[0],e:'液压电梯救援一般通过手动泵加压或操作紧急下降阀（手动卸压阀）使轿厢缓慢下降至平层位置，操作应缓慢平稳，防止失速。'},
+{t:2,c:7,q:'电梯发生火灾时的正确处置措施包括（）。',o:['立即停用普通电梯并切断电源','引导乘客从楼梯疏散','消防电梯迫降待命供消防人员使用','乘普通电梯逃生以加快疏散'],a:[0,1,2],e:'火灾时应停用普通电梯、切断电源、引导人员走楼梯疏散；消防电梯迫降后可交由消防人员使用。火灾时严禁乘坐普通电梯逃生。'},
+{t:3,c:7,q:'发生电气火灾时，应当先切断电源，再使用二氧化碳或干粉灭火器灭火。',o:['正确','错误'],a:[0],e:'切断电源可防止触电和火势蔓延；带电灭火应使用二氧化碳或干粉灭火器，严禁使用水或泡沫灭火器。'},
+{t:1,c:7,q:'电梯安全回路被切断时，电梯的状态是（）。',o:['不能启动运行','可以正常运行','只能检修运行','自动返回基站'],a:[0],e:'安全回路串联了所有安全保护装置的电气触点，任一触点断开都会使安全回路失电，电梯立即停止且不能启动，这是电梯最基本的安全设计。'},
+{t:3,c:7,q:'排查安全回路故障时，可以临时短接分段排查，但故障排除后必须立即恢复。',o:['正确','错误'],a:[0],e:'短接法仅作为专业人员排查故障的临时手段，且必须做好记录、安排专人监视，故障定位后立即拆除短接线并恢复原状，严禁短接运行电梯。'},
+{t:1,c:7,q:'门锁回路断开时，电梯会（）。',o:['无法启动运行','正常运行','只能开门不能关门','自动平层'],a:[0],e:'门锁回路串接在安全回路中，任一层门未锁闭或门锁触点接触不良，电梯均不能启动运行，这是防止剪切事故的关键保护。'},
+{t:2,c:7,q:'电梯常见的故障现象包括（）。',o:['不启动或启动后立即停止','平层不准确','门系统异常（不开门、不关门、关门夹人）','运行中抖动或异响'],a:[0,1,2,3],e:'上述均为电梯常见故障，此外还有冲顶蹲底、困人、按钮失灵、层楼显示异常等，处理时应先分析原因再动手。'},
+{t:3,c:7,q:'电梯限速器动作触发安全钳后，应当先查明动作原因，不得直接复位恢复运行。',o:['正确','错误'],a:[0],e:'限速器—安全钳动作说明电梯存在超速或坠落风险，必须查明原因、排除故障并对限速器、安全钳、导轨进行全面检查后，方可复位运行。'},
+{t:1,c:7,q:'电梯制动器打不开（抱闸不松）的常见原因是（）。',o:['制动器线圈故障或机械卡阻','轿厢超载','层门未关闭','缓冲器漏油'],a:[0],e:'制动器打不开多因电磁线圈烧损、供电异常、间隙过小、机械卡阻或弹簧压力过大引起，应断电检查线圈电阻和机械动作情况。'},
+{t:3,c:7,q:'电梯运行时出现异常声响，应当立即停梯检查，查明原因后再运行。',o:['正确','错误'],a:[0],e:'异常声响往往预示轴承损坏、链条松动、导轨润滑不良或部件松动等隐患，继续运行可能造成设备损坏甚至事故。'},
+{t:1,c:7,q:'调整电梯曳引钢丝绳张力，通常通过（）来实现。',o:['绳头组合的调节螺杆或弹簧','更换曳引轮','调整制动器间隙','增加对重块'],a:[0],e:'钢丝绳张力通过绳头组合上的调节螺母（压缩弹簧）进行调整，调整后各绳张力差不应超过平均值的5%，并需复查确认。'},
+{t:2,c:7,q:'电梯故障排除作业的安全要求包括（）。',o:['先切断电源做好防护','设置警示标志防止他人误操作','严禁带电作业和短接安全回路','详细记录故障现象和处理情况'],a:[0,1,2,3],e:'故障排除必须坚持安全第一，做到断电、防护、警示、记录齐全，禁止未经确认擅自送电或试运行。'},
+{t:3,c:7,q:'电梯故障排除后应当进行试运行，确认运行正常后方可交付使用。',o:['正确','错误'],a:[0],e:'故障排除后应进行空载和负载试运行，观察启停、平层、开关门、安全回路是否正常，确认无误后填写记录并交付使用单位。'},
+{t:3,c:7,q:'电梯底坑积水时应当先排水并处理积水原因，作业时注意防止触电。',o:['正确','错误'],a:[0],e:'底坑积水会造成电气设备绝缘下降、触电和设备锈蚀风险，应先切断相关电源、排水并查明渗漏原因，作业时穿绝缘鞋、使用安全电压照明。'},
+{t:2,c:7,q:'常见的电梯事故类型包括（）。',o:['电击事故','坠落事故','剪切事故','挤压事故'],a:[0,1,2,3],e:'电梯事故类型主要有电击、坠落、剪切、挤压、火灾以及自动扶梯的滑倒、跌倒等，对应的应急处置要求各不相同。'},
+{t:1,c:7,q:'电梯剪切事故最容易发生的部位是（）。',o:['轿厢与层门之间','机房内','轿厢内','控制柜旁'],a:[0],e:'剪切事故多发生在轿厢与层门之间或轿顶与井道顶部之间，通常由层门被非正常打开、轿厢意外移动或人处于运动部件之间造成。'},
+{t:3,c:7,q:'发生电梯困人时，维保人员应当先切断轿厢照明以节省电能。',o:['正确','错误'],a:[1],e:'轿厢照明和通风应保持正常，有助于稳定被困人员情绪、防止恐慌。救援期间不应切断轿厢照明，反而应保证应急照明有效。'},
+{t:1,c:7,q:'电梯紧急电动运行装置的作用是（）。',o:['在紧急情况下以较低速度使轿厢移动至平层区','提高电梯运行速度','替代正常维保','检测曳引机温度'],a:[0],e:'紧急电动运行装置可供救援人员在机房以检修速度移动轿厢至平层位置，其运行时应短接限速器、安全钳等开关，但门锁、急停等保护仍然有效。'},
+{t:3,c:7,q:'电梯的紧急报警装置应当能够随时与救援服务实现有效通话。',o:['正确','错误'],a:[0],e:'TSG T5002要求紧急报警装置应能随时与值班人员或救援服务实现有效通话，维保中应每15日至少试验一次，确保功能正常。'},
+
+/* ============ 第八章 事故案例与职业道德 ============ */
+{t:1,c:8,q:'未确认轿厢位置就打开层门，最容易造成（）事故。',o:['坠落','火灾','超速','过载'],a:[0],e:'这是电梯行业最常见也最致命的违章行为。层门打开而轿厢不在该层时，人员会直接坠入井道，造成坠落伤亡。'},
+{t:3,c:8,q:'短接门锁回路运行电梯，可能造成剪切、坠落等重大伤亡事故。',o:['正确','错误'],a:[0],e:'短接门锁回路会使层门在未锁闭状态下电梯仍能运行，乘客或作业人员可能被夹在轿厢与层门之间，造成剪切伤亡。'},
+{t:2,c:8,q:'电梯维保不到位可能导致的事故包括（）。',o:['冲顶事故','蹲底事故','夹人剪切事故','困人事故'],a:[0,1,2,3],e:'维保不到位会使制动器、限速器、安全钳、门锁等安全装置失效，引发冲顶、蹲底、剪切、夹人、困人等多种事故。'},
+{t:1,c:8,q:'职业道德的核心要求是（）。',o:['爱岗敬业、诚实守信','追求经济效益最大化','服从一切指令','避免承担责任'],a:[0],e:'职业道德的核心是爱岗敬业、诚实守信、办事公道、服务群众、奉献社会。对电梯作业人员而言，还应做到不弄虚作假、不违章作业。'},
+{t:3,c:8,q:'作业人员应当遵守劳动纪律、服从管理，同时有权拒绝违章指挥。',o:['正确','错误'],a:[0],e:'遵守劳动纪律是基本要求，但法律赋予从业人员拒绝违章指挥和强令冒险作业的权利，两者并不矛盾。'},
+{t:1,c:8,q:'作业人员在维保中发现电梯存在事故隐患时，应当（）。',o:['立即采取措施并报告使用单位和本单位','自行处理不告知他人','先完成其他工作再报告','视情况决定是否报告'],a:[0],e:'发现事故隐患应当立即停止相关作业、采取措施防止事故发生，并书面告知使用单位，存在严重事故隐患的还应报告市场监管部门。'},
+{t:2,c:8,q:'电梯作业人员的基本职责包括（）。',o:['严格执行操作规程和维保工艺','如实填写维保记录','及时发现并报告事故隐患','参加安全教育培训'],a:[0,1,2,3],e:'作业人员应做到持证上岗、按规程作业、如实记录、报告隐患、参加培训，对自己的作业质量和安全负直接责任。'},
+{t:3,c:8,q:'发生事故后应当保护事故现场、及时报告，不得瞒报、谎报或者迟报。',o:['正确','错误'],a:[0],e:'《特种设备安全法》规定，任何单位和个人对特种设备事故不得瞒报、谎报或者迟报，违者将依法追究责任。'},
+{t:1,c:8,q:'电梯困人时，维保人员擅自让乘客自行扒门逃生的后果是（）。',o:['可能造成坠落或剪切伤亡','可以节省救援时间','不影响安全','符合规范要求'],a:[0],e:'乘客自行扒门逃生时轿厢不一定处于平层位置，极易坠入井道或被夹在轿厢与井道之间，必须由专业人员按规范救援。'},
+{t:3,c:8,q:'电梯作业人员应当定期参加安全教育和技能培训，不断提高安全意识和操作技能。',o:['正确','错误'],a:[0],e:'安全教育培训是从业人员的权利也是义务，未经培训或培训不合格不得从事电梯维修作业。'},
+{t:1,c:8,q:'特种设备事故按照严重程度分为（）个等级。',o:['二','三','四','五'],a:[2],e:'特种设备事故分为特别重大事故、重大事故、较大事故和一般事故四个等级，不同等级对应不同的调查主体和责任追究。'},
+{t:2,c:8,q:'事故调查处理应当遵循的原则包括（）。',o:['实事求是','尊重科学','及时准确','隐瞒不报以维护声誉'],a:[0,1,2],e:'事故调查处理应当坚持实事求是、尊重科学、及时准确的原则，查明原因、分清责任、落实整改，不得隐瞒不报。'},
+{t:3,c:8,q:'事发单位应当对事故进行统计分析，并落实整改措施，防止同类事故再次发生。',o:['正确','错误'],a:[0],e:'事故处理的目的是查明原因、吸取教训、落实整改。事发单位应做好统计分析、举一反三，并将整改措施落实到制度和管理中。'},
+{t:1,c:8,q:'电梯作业人员违反操作规程造成事故的，应当（）。',o:['依法承担相应法律责任','仅接受口头批评','由单位承担全部责任','无需承担任何责任'],a:[0],e:'《特种设备安全法》规定，特种设备作业人员违反操作规程和有关安全规章制度造成事故的，依法承担相应法律责任，构成犯罪的依法追究刑事责任。'},
+{t:3,c:8,q:'“安全第一、预防为主、综合治理”是我国安全生产工作的基本方针。',o:['正确','错误'],a:[0],e:'这一方针要求把安全放在首位，通过事前预防和综合治理消除隐患。“安全第一、预防为主、节能环保、综合治理”也是《特种设备安全法》确立的原则。'},
+{t:2,c:8,q:'电梯维保人员弄虚作假（虚假维保、代签记录）可能造成的后果有（）。',o:['被依法处以罚款','吊销作业人员证','发生事故时承担法律责任','不受任何影响'],a:[0,1,2],e:'虚假维保掩盖真实隐患，是特种设备安全领域重点整治的违法行为，一经查实将被行政处罚，情节严重的吊销证件并追究法律责任，发生事故时须担责。'},
+
+/* ============ 扩充：法规标准 ============ */
+{t:3,c:1,q:'负责特种设备安全监督管理的部门实施监督检查时，有权查阅、复制有关资料。',o:['正确','错误'],a:[0],e:'《特种设备安全法》第六十一条规定，监管部门实施监督检查时可以查阅、复制特种设备生产、经营、使用单位和检验、检测机构的有关资料。'},
+{t:1,c:1,q:'特种设备生产单位应当保证特种设备生产符合（）的要求。',o:['安全技术规范及相关标准','企业自定标准','用户口头要求','行业惯例'],a:[0],e:'《特种设备安全法》第十九条规定，特种设备生产单位应当保证特种设备生产符合安全技术规范及相关标准的要求，对其生产的特种设备的安全性能负责。'},
+{t:3,c:1,q:'特种设备使用单位应当对特种设备作业人员进行安全教育和技能培训。',o:['正确','错误'],a:[0],e:'《特种设备安全法》第十三条规定，使用单位应当对作业人员进行必要的安全教育和技能培训，未经培训或培训不合格不得上岗作业。'},
+{t:1,c:1,q:'特种设备存在严重事故隐患，无改造、修理价值，或者达到安全技术规范规定的其他报废条件的，使用单位应当（）。',o:['依法履行报废义务','继续使用至报废期','转让给他人使用','只需停用不需处理'],a:[0],e:'《特种设备安全法》第四十八条规定，出现上述情形的，使用单位应当依法履行报废义务，采取必要措施消除该特种设备的使用功能，并向登记机关办理使用登记证书注销手续。'},
+{t:3,c:1,q:'已经报废的特种设备，经过简单维修后仍可继续作为特种设备使用。',o:['正确','错误'],a:[1],e:'报废设备必须消除使用功能并注销使用登记，不得再作为特种设备使用，也不得转让、出售给他人作为特种设备使用。'},
+{t:1,c:1,q:'特种设备使用单位应当建立、健全特种设备（）和岗位安全责任制度。',o:['安全管理制度','财务管理制度','绩效考核制度','采购管理制度'],a:[0],e:'《特种设备安全法》第三十四条规定，特种设备使用单位应当建立、健全特种设备安全管理制度和岗位安全责任制度。'},
+{t:2,c:1,q:'电梯使用单位应当建立的安全技术档案内容包括（）。',o:['电梯的设计文件、产品质量合格证明','安装及使用维护保养说明','定期检验报告和日常维护保养记录','运行故障和事故记录'],a:[0,1,2,3],e:'《特种设备安全法》第三十五条规定，安全技术档案包括设计文件、产品质量合格证明、安装及使用维护保养说明、监督检验证明、定期检验报告、日常使用状况记录、日常维护保养记录、运行故障和事故记录等。'},
+{t:3,c:1,q:'特种设备检验、检测机构及其检验、检测人员不得从事特种设备的生产、经营活动。',o:['正确','错误'],a:[0],e:'《特种设备安全法》第五十五条规定，特种设备检验、检测机构及其检验、检测人员不得从事有关特种设备的生产、经营活动，不得推荐或者监制、监销特种设备，以保证检验检测的独立性。'},
+{t:1,c:1,q:'特种设备安全管理人员、检测人员和作业人员应当（）后，方可从事相关工作。',o:['取得相应资格','与单位签订合同','通过单位内部考核','工作满一年'],a:[0],e:'《特种设备安全法》第十四条规定，特种设备安全管理人员、检测人员和作业人员应当按照国家有关规定取得相应资格，方可从事相关工作。'},
+{t:3,c:1,q:'《特种设备作业人员证》遗失或者损毁的，持证人应当向发证机关申请补发。',o:['正确','错误'],a:[0],e:'证书遗失或损毁的，持证人应当向原发证机关提出补发申请，不得使用他人证书或者伪造证书上岗。'},
+{t:1,c:1,q:'电梯的安装、改造、修理，施工单位应当在施工前将拟进行的情况（）特种设备安全监督管理部门。',o:['书面告知','口头报告','无需告知','施工后补报'],a:[0],e:'《特种设备安全法》第二十三条规定，特种设备安装、改造、修理的施工单位应当在施工前将拟进行的情况书面告知直辖市或者设区的市级人民政府负责特种设备安全监督管理的部门。'},
+{t:3,c:1,q:'电梯的安装、改造、重大修理过程应当经特种设备检验机构按照安全技术规范的要求进行监督检验。',o:['正确','错误'],a:[0],e:'《特种设备安全法》第二十五条规定，锅炉、压力容器、压力管道元件等特种设备的制造过程和锅炉、压力容器、压力管道、电梯、起重机械、客运索道、大型游乐设施的安装、改造、重大修理过程，应当经特种设备检验机构进行监督检验。'},
+{t:1,c:1,q:'特种设备使用单位变更时，应当在（）内办理变更登记。',o:['15日','30日','60日','90日'],a:[1],e:'特种设备使用单位应当在变更后30日内向原登记机关办理变更登记，保证使用登记信息与实际一致。'},
+{t:3,c:1,q:'特种设备使用登记证书应当置于或者附着于该特种设备的显著位置。',o:['正确','错误'],a:[0],e:'《特种设备安全法》第三十三条规定，使用登记证书应当置于或者附着于该特种设备的显著位置，便于查验和监督。'},
+{t:1,c:1,q:'电梯使用单位应当针对电梯制定（）并定期组织演练。',o:['应急救援预案','生产计划','销售方案','投资计划'],a:[0],e:'《特种设备安全法》第六十九条规定，特种设备使用单位应当制定特种设备事故应急救援预案，并定期进行应急演练。'},
+{t:2,c:1,q:'电梯日常维护保养合同应当明确的内容包括（）。',o:['维保执行的安全技术规范标准','维保期限和频次','双方的权利和义务','应急处置要求和响应时间'],a:[0,1,2,3],e:'维保合同应当明确维保标准、期限、频次、双方权利义务以及困人救援响应时间等内容，是划分责任的重要依据。'},
+{t:3,c:1,q:'电梯维保单位应当对其维保作业的质量和安全负责。',o:['正确','错误'],a:[0],e:'维保单位对所维保电梯的安全性能负责，因维保不到位造成事故的，应当依法承担相应法律责任。'},
+{t:1,c:1,q:'特种设备作业人员持证上岗的要求是（）。',o:['取得国家统一格式的特种设备作业人员证','取得企业内部上岗证','取得技能等级证书','取得安全生产考核合格证'],a:[0],e:'作业人员必须取得国家统一格式的《特种设备安全管理和作业人员证》，证书由国家市场监督管理总局统一监制，全国通用。'},
+{t:3,c:1,q:'进出口特种设备应当符合我国有关法律、行政法规和安全技术规范的要求。',o:['正确','错误'],a:[0],e:'《特种设备安全法》第三十条规定，进口特种设备应当符合我国安全技术规范的要求，并经检验合格；出口特种设备应当符合进口国的要求。'},
+{t:1,c:1,q:'电梯的定期检验报告应当存入电梯的（）。',o:['安全技术档案','财务档案','人事档案','销售档案'],a:[0],e:'定期检验报告是安全技术档案的核心内容之一，用以证明电梯在检验时安全性能符合要求，应当长期保存备查。'},
+{t:3,c:1,q:'任何单位和个人对违反特种设备安全法的行为，都有权向特种设备安全监督管理部门举报。',o:['正确','错误'],a:[0],e:'《特种设备安全法》第十一条规定，任何单位和个人对违反本法规定的行为，有权向特种设备安全监督管理部门和有关部门举报，受理部门应当及时处理。'},
+{t:3,c:1,q:'特种设备生产单位不再具备本法规定的许可条件的，应当立即停止生产。',o:['正确','错误'],a:[0],e:'《特种设备安全法》第二十条规定，生产单位不再具备许可条件的，应当立即停止生产，并向原许可机关申请办理许可证注销手续。'},
+{t:1,c:1,q:'特种设备安全监督管理部门应当对特种设备（）实施监督检查。',o:['生产、经营、使用单位和检验、检测机构','仅生产单位','仅使用单位','仅检验机构'],a:[0],e:'《特种设备安全法》第五十三条规定，负责特种设备安全监督管理的部门应当对特种设备生产、经营、使用单位和检验、检测机构实施监督检查。'},
+{t:1,c:1,q:'电梯的改造和重大修理应当由（）进行。',o:['电梯制造单位或者其委托的取得相应许可的单位','任何具备电工资质的单位','使用单位自行组织','物业管理公司'],a:[0],e:'《特种设备安全法》第二十二条明确，电梯的安装、改造、修理必须由电梯制造单位或者其委托的依照本法取得相应许可的单位进行。'},
+{t:1,c:1,q:'特种设备安全监督管理部门实施重点安全监督检查的对象是（）。',o:['学校、医院、车站、商场等公众聚集场所的特种设备','所有特种设备','仅新安装的特种设备','仅老旧特种设备'],a:[0],e:'《特种设备安全法》第五十七条规定，监管部门应当对学校、幼儿园以及医院、车站、客运码头、商场、体育场馆、展览馆、公园等公众聚集场所的特种设备实施重点安全监督检查。'},
+{t:3,c:1,q:'特种设备使用单位应当对其使用的特种设备进行经常性维护保养和定期自行检查，并作出记录。',o:['正确','错误'],a:[0],e:'《特种设备安全法》第三十九条规定，使用单位应当对其使用的特种设备进行经常性维护保养和定期自行检查，并作出记录；对在用特种设备至少每月进行一次自行检查。'},
+
+/* ============ 扩充：维保规则与制度 ============ */
+{t:1,c:2,q:'维保单位的维保质量保证体系应当包括多方面制度，其中不包括（）。',o:['电梯销售价格审批制度','维保记录管理制度','人员培训与考核制度','应急救援与值班制度'],a:[0],e:'维保质量保证体系应包括维保方案与作业规程、记录管理、人员培训考核、应急救援与值班等制度。销售价格审批属于经营管理范畴，与维保质量无关。'},
+{t:1,c:2,q:'电梯维保单位配备的持证作业人员数量应当与其（）相适应。',o:['维保业务规模','注册资本','办公面积','销售业绩'],a:[0],e:'TSG T5002规定，维保单位应当配备与其维保业务规模相适应的、取得相应资格的作业人员，保证维保质量。'},
+{t:2,c:2,q:'电梯维保方案应当依据（）制定。',o:['安全技术规范','产品安装使用维护说明书','电梯的实际使用状况','维保人员个人习惯'],a:[0,1,2],e:'维保方案应当依据安全技术规范、产品安装使用维护说明书的要求，并结合电梯的实际使用状况制定，不能凭个人习惯随意作业。'},
+{t:3,c:2,q:'电梯维保单位可以将维保业务分包给使用单位指定的任意单位。',o:['正确','错误'],a:[1],e:'维保单位不得将维保业务转包、分包给未取得相应许可的单位。使用单位指定的单位也必须具备相应资质。'},
+{t:1,c:2,q:'电梯维保单位发现电梯存在一般事故隐患时，应当（）。',o:['及时处理并记录，同时告知使用单位','等下次维保再处理','直接停用电梯不再处理','仅口头告知乘客'],a:[0],e:'维保中发现的事故隐患应当及时处理并如实记录，同时告知使用单位；存在严重事故隐患的还应当书面告知并向市场监管部门报告。'},
+{t:3,c:2,q:'维保单位应当协助电梯使用单位制定应急救援预案并配合开展演练。',o:['正确','错误'],a:[0],e:'TSG T5002要求维保单位制定应急措施和救援预案，并协助使用单位开展应急演练，保证困人时能及时有效救援。'},
+{t:1,c:2,q:'电梯维保作业时现场持证作业人员不得少于（）。',o:['1人','2人','3人','4人'],a:[1],e:'TSG T5002规定，维保作业时现场持证作业人员不得少于2人，做到一人作业、一人监护，保证作业安全。'},
+{t:3,c:2,q:'维保人员作业前应当检查所使用的工具、量具和仪器是否完好有效。',o:['正确','错误'],a:[0],e:'作业前应检查工具和仪器，特别是万用表、兆欧表、安全带等涉及安全的器具，不合格的不得使用，防止因工具失效造成事故。'},
+{t:2,c:2,q:'电梯半月维护保养中需要检查的安全装置包括（）。',o:['层门门锁装置','急停装置','紧急报警装置','限速器动作速度'],a:[0,1,2],e:'半月维保主要检查门锁、急停、紧急报警等日常安全装置的有效性；限速器动作速度校验属于年度维保和2年一次的校验内容。'},
+{t:1,c:2,q:'电梯季度维护保养中需要重点检查和调整的部件是（）。',o:['制动器','层门地坎','轿厢装饰','通风机'],a:[0],e:'季度维保需对制动器间隙、动作情况进行检查和调整，同时对曳引钢丝绳、导靴等部件进行检查润滑。'},
+{t:3,c:2,q:'电梯年度维护保养应当包含对限速器和安全钳的检查以及限速器—安全钳联动试验。',o:['正确','错误'],a:[0],e:'年度维保是项目最全的维保，应当对限速器、安全钳进行清洁、检查和调整，并进行限速器—安全钳联动动作试验。'},
+{t:1,c:2,q:'电梯维保记录由维保人员填写后，还需要（）签字确认。',o:['使用单位安全管理人员','电梯乘客代表','物业保洁人员','电梯制造厂家'],a:[0],e:'TSG T5002规定维保记录应当经维保人员签字、使用单位安全管理人员签字确认，做到记录真实、责任明确。'},
+{t:3,c:2,q:'电梯维保单位应当建立每台电梯的维保档案，做到一机一档。',o:['正确','错误'],a:[0],e:'一机一档是维保管理的基本要求，档案应包含维保记录、故障处理记录、零部件更换记录等，至少保存4年。'},
+{t:1,c:2,q:'电梯维保档案中不应当包含的内容是（）。',o:['电梯销售发票','维保记录','故障处理记录','零部件更换记录'],a:[0],e:'维保档案围绕电梯安全技术状况建立，包含维保记录、故障与事故记录、零部件更换情况等。销售发票属于商务凭证，不属于维保档案内容。'},
+{t:2,c:2,q:'电梯维保交接班制度应当明确的内容包括（）。',o:['当班维保项目完成情况','遗留问题和未完成事项','工具、备件清点交接','维保人员家庭住址'],a:[0,1,2],e:'交接班应交接作业完成情况、遗留问题、工具备件及安全注意事项，保证维保工作的连续性和可追溯性。'},
+{t:3,c:2,q:'电梯维保作业完成后应当清理作业现场，恢复电梯正常状态并做好记录。',o:['正确','错误'],a:[0],e:'作业完成后应清点工具、清理现场、复位所有开关和保护装置，确认电梯正常运行后再撤离，防止遗留工具造成故障或伤人。'},
+{t:3,c:2,q:'维保单位应当建立24小时值班制度，保证接到故障通知后能够及时处理。',o:['正确','错误'],a:[0],e:'TSG T5002要求维保单位设立24小时维保值班电话，困人故障的到场时间有明确规定，不得以任何理由拖延。'},
+{t:1,c:2,q:'电梯的日常维护保养记录应当由（）负责保管。',o:['使用单位','维保单位上级公司','检验机构','监管部门'],a:[0],e:'维保记录由维保单位填写后交使用单位归入电梯安全技术档案，由使用单位负责保管，至少保存4年。'},
+{t:2,c:2,q:'衡量电梯维保质量的主要指标包括（）。',o:['故障率','困人率','维保及时率','电梯轿厢装修档次'],a:[0,1,2],e:'故障率、困人率、维保及时率、一次检验合格率等是衡量维保质量的主要技术指标，与装修档次无关。'},
+{t:3,c:2,q:'电梯维保中需要更换零部件时，应当使用符合要求的原厂件或者同等质量的产品。',o:['正确','错误'],a:[0],e:'更换的零部件应当符合设计要求和安全技术规范，涉及安全部件（限速器、安全钳、门锁等）的还应当取得型式试验合格证书。'},
+{t:1,c:2,q:'电梯维保合同终止时，维保单位应当（）。',o:['将维保记录等资料移交给使用单位','自行销毁维保记录','带走全部技术资料','拒绝提供任何资料'],a:[0],e:'维保合同终止时，维保单位应当将维保记录、故障处理记录等资料完整移交使用单位，由使用单位继续归入安全技术档案。'},
+{t:3,c:2,q:'电梯使用单位应当对维保单位的维保质量进行监督和确认。',o:['正确','错误'],a:[0],e:'使用单位应当对维保单位的作业过程和质量进行监督，核对维保项目是否落实，并在维保记录上签字确认。'},
+{t:1,c:2,q:'电梯轿厢内应当张贴的维保相关信息标识中不包括（）。',o:['维保人员的家庭住址','维保单位名称','最近一次维保日期','维保人员姓名'],a:[0],e:'电梯轿厢内应当张贴维保标识，载明维保单位、维保日期、维保人员以及应急救援电话等信息，便于乘客监督。'},
+{t:3,c:2,q:'电梯维保单位应当建立维保质量回访制度，听取使用单位的意见。',o:['正确','错误'],a:[0],e:'建立维保质量回访和投诉处理制度，有助于及时发现维保中的薄弱环节，持续改进维保质量。'},
+{t:1,c:2,q:'电梯维保作业中，下列不属于"清洁"作业内容的是（）。',o:['更换曳引钢丝绳','清理门锁触点积尘','擦拭导轨并清除油污','清扫底坑杂物'],a:[0],e:'更换曳引钢丝绳属于修理更换范畴，不属于清洁作业。清洁、润滑、调整、检查是维保的四项基本作业内容。'},
+{t:3,c:2,q:'维保单位应当对每次维保情况作出记录，记录应当真实、完整，不得事后补记或者代签。',o:['正确','错误'],a:[0],e:'维保记录造假是特种设备安全领域严查的违法行为，一经查实将受到行政处罚，情节严重的吊销许可证并追究法律责任。'},
+{t:1,c:2,q:'电梯维保单位在接到电梯故障通知后，下列做法正确的是（）。',o:['及时安排维保人员排除故障','等下一次计划维保时再处理','要求使用单位自行处理','仅电话指导乘客自行修理'],a:[0],e:'TSG T5002规定，维保单位应当设立24小时维保值班电话，保证接到故障通知后及时予以排除；接到困人故障报告的还应按规定时限到场救援。'},
+
+/* ============ 扩充：电工与机械基础 ============ */
+{t:1,c:3,q:'正弦交流电的有效值约为最大值的（）倍。',o:['0.5','0.707','1','1.414'],a:[1],e:'正弦交流电的有效值等于最大值的1/√2，约0.707倍。日常所说的220V即有效值，其最大值约为311V。'},
+{t:3,c:3,q:'电流互感器在运行中二次侧不允许开路。',o:['正确','错误'],a:[0],e:'电流互感器二次侧开路会产生很高的感应电动势，危及人身和设备安全，因此运行中严禁开路，检修时应先短接二次侧。'},
+{t:1,c:3,q:'三相异步电动机的旋转方向取决于（）。',o:['三相电源的相序','电源电压高低','电动机容量','负载大小'],a:[0],e:'三相异步电动机的转向由三相电源的相序决定。任意对调两相接线即可改变旋转方向，这是电梯调试中常用的方法。'},
+{t:3,c:3,q:'把三相电源中的任意两相接线对调，三相异步电动机就会反转。',o:['正确','错误'],a:[0],e:'对调任意两相即改变了相序，旋转磁场方向随之反转。电梯维修中调整曳引机转向时应先确认相序，切忌盲目接线。'},
+{t:1,c:3,q:'电功率的单位是（）。',o:['瓦特（W）','焦耳（J）','安培（A）','伏特（V）'],a:[0],e:'电功率P=UI，单位为瓦特（W）；电功W=Pt，单位为焦耳（J），工程上也常用千瓦时（度）。'},
+{t:3,c:3,q:'电功的常用单位是千瓦时，俗称"度"。',o:['正确','错误'],a:[0],e:'1千瓦时即1度电，表示功率为1千瓦的电器工作1小时所消耗的电能。'},
+{t:1,c:3,q:'一段均匀导体的电阻与（）成正比。',o:['导体的长度','导体的横截面积','电流大小','电压高低'],a:[0],e:'电阻定律R=ρL/S，导体电阻与材料电阻率和长度成正比、与横截面积成反比，与所加电压和电流无关。'},
+{t:3,c:3,q:'导体电阻与其横截面积成反比，横截面积越大电阻越小。',o:['正确','错误'],a:[0],e:'由R=ρL/S可知，横截面积越大，电子通行越顺畅，电阻越小。这是选用导线截面积的重要依据。'},
+{t:1,c:3,q:'电阻串联时，总电阻等于（）。',o:['各电阻之和','各电阻倒数之和','各电阻之积','最小电阻值'],a:[0],e:'串联电路总电阻等于各电阻之和，电流处处相等，各电阻上分得的电压与其阻值成正比。'},
+{t:3,c:3,q:'电阻并联后的总电阻小于其中最小的那个电阻。',o:['正确','错误'],a:[0],e:'并联相当于增大了导体的横截面积，因此总电阻必小于任一分电阻。并联电路各支路电压相等。'},
+{t:1,c:3,q:'电容器的电容单位是（）。',o:['法拉（F）','亨利（H）','欧姆（Ω）','特斯拉（T）'],a:[0],e:'电容单位为法拉（F），常用微法（μF）和皮法（pF）；电感单位为亨利（H）。'},
+{t:1,c:3,q:'电感线圈的电感单位是（）。',o:['亨利（H）','法拉（F）','西门子（S）','韦伯（Wb）'],a:[0],e:'电感单位为亨利（H）。电感线圈具有"通直流、阻交流"的特性，在电梯电路中常用于滤波和限流。'},
+{t:2,c:3,q:'下列属于常用低压电器的有（）。',o:['断路器','接触器','继电器','熔断器'],a:[0,1,2,3],e:'断路器、接触器、继电器、熔断器、按钮、行程开关等均属低压电器，是电梯控制柜的主要组成元件。'},
+{t:1,c:3,q:'漏电保护器的主要作用是（）。',o:['防止人身触电和漏电引起的火灾','防止电压过高','防止电动机过载','防止短路电流过大'],a:[0],e:'漏电保护器通过检测零序电流判断是否发生漏电，动作后迅速切断电源，主要用于防止人身触电和漏电火灾。'},
+{t:3,c:3,q:'接地电阻越小，保护接地的效果越好。',o:['正确','错误'],a:[0],e:'接地电阻越小，发生漏电时设备外壳对地电压越低，人身触电的危险越小，因此接地电阻有明确的上限要求。'},
+{t:1,c:3,q:'电梯控制柜中变频器的主要作用是（）。',o:['改变电动机供电频率实现平滑调速','增大电动机功率','限制电动机电流','降低电网电压'],a:[0],e:'变频器将工频交流电整流后逆变为频率、电压可调的交流电，实现电梯起动、加速、匀速、减速的平滑调速。'},
+{t:1,c:3,q:'电梯旋转编码器的主要作用是（）。',o:['检测电动机转速并反馈轿厢位置','测量电动机温度','测量绝缘电阻','提供制动电源'],a:[0],e:'旋转编码器与电动机同轴连接，输出脉冲信号反映转速和转角，是变频调速闭环控制和轿厢位置判断的关键元件。'},
+{t:3,c:3,q:'编码器与电动机轴之间的联轴器松动，会导致电梯平层不准。',o:['正确','错误'],a:[0],e:'联轴器松动会使编码器反馈信号与电动机实际转动不符，造成速度控制失准、平层超差，严重时触发故障保护停梯。'},
+{t:2,c:3,q:'万用表可以测量的物理量包括（）。',o:['直流电压','交流电压','电阻','绝缘电阻'],a:[0,1,2],e:'普通万用表可测直流/交流电压、直流电流和电阻。绝缘电阻必须用绝缘电阻表（兆欧表）测量，因其需要输出高压。'},
+{t:1,c:3,q:'用万用表测量直流电压时，红表笔应当接（）。',o:['高电位端','低电位端','任意一端','接地端'],a:[0],e:'测量直流电压时红表笔接高电位（正极），黑表笔接低电位（负极），指针式万用表反接会打表损坏。'},
+{t:3,c:3,q:'万用表使用完毕后，应将转换开关置于交流电压最高档或空档。',o:['正确','错误'],a:[0],e:'这样可防止下次误用电阻档或电流档测量电压而损坏仪表，是使用万用表的良好习惯。'},
+{t:1,c:3,q:'使用绝缘电阻表测量前，应当先进行（）。',o:['开路和短路试验','耐压试验','温升试验','负载试验'],a:[0],e:'兆欧表使用前应做开路试验（指针指∞）和短路试验（指针指0），确认仪表完好后再接入被测设备测量。'},
+{t:3,c:3,q:'使用绝缘电阻表测量时，L端接被测导体，E端接地或设备外壳。',o:['正确','错误'],a:[0],e:'兆欧表的L（线路）端接被测导体，E（接地）端接设备外壳或大地，G（屏蔽）端用于消除表面泄漏电流的影响。'},
+{t:1,c:3,q:'测量电梯电动机绕组对地绝缘电阻，一般要求不低于（）MΩ。',o:['0.1','0.5','5','50'],a:[1],e:'低压电动机绕组的绝缘电阻一般要求不低于0.5MΩ（通常用500V兆欧表测量），低于该值应查明原因，烘干处理或检修。'},
+{t:2,c:3,q:'影响电梯曳引钢丝绳使用寿命的因素包括（）。',o:['弯曲次数','载荷大小','润滑状况','腐蚀环境'],a:[0,1,2,3],e:'钢丝绳在曳引轮和反绳轮上反复弯曲会产生疲劳，载荷越大、润滑越差、环境腐蚀越严重，寿命越短。'},
+{t:1,c:3,q:'选择电梯润滑油牌号的主要依据是（）。',o:['环境温度和运动速度','电梯载重量','曳引机颜色','导轨长度'],a:[0],e:'润滑油黏度需与工作温度和运动速度匹配：温度高、速度低宜选黏度大的油；温度低、速度高宜选黏度小的油。'},
+{t:3,c:3,q:'润滑油在使用过程中会氧化变质，应当定期检查并按周期更换。',o:['正确','错误'],a:[0],e:'润滑油氧化后黏度变化、产生油泥，会加剧磨损和发热。应按说明书要求定期检查油位、油质并按周期换油。'},
+{t:1,c:3,q:'机械制图中的尺寸标注，默认单位通常是（）。',o:['毫米（mm）','厘米（cm）','米（m）','英寸（in）'],a:[0],e:'机械制图中尺寸数字的默认单位为毫米（mm），一般不需要在图上另注单位，这是机械制图的基本约定。'},
+{t:3,c:3,q:'公差是指允许尺寸的变动量，等于最大极限尺寸与最小极限尺寸之差。',o:['正确','错误'],a:[0],e:'公差不带正负号，表示允许的尺寸变动范围。维修中若部件尺寸超出公差范围，应修复或更换。'},
+{t:1,c:3,q:'测量轴与孔的配合间隙，最常用的量具是（）。',o:['塞尺','游标卡尺','钢直尺','卷尺'],a:[0],e:'塞尺由一组不同厚度的钢片组成，可直观地测出配合间隙的大小，常用于测量制动器间隙、楔块间隙等。'},
+
+/* ============ 扩充：电梯结构与原理 ============ */
+{t:1,c:4,q:'电梯用曳引机的制动器属于（）制动器。',o:['常闭式（失电制动）','常开式（得电制动）','手动式','液压式'],a:[0],e:'电梯制动器必须是常闭式：电磁线圈失电时靠弹簧力制动，只有通电时才能松闸。这样一旦停电或断线，电梯能立即制动，保证安全。'},
+{t:3,c:4,q:'电梯制动器应当是常闭式结构，即线圈失电时处于制动状态。',o:['正确','错误'],a:[0],e:'常闭式制动器的安全意义在于：一旦停电、断线或线圈烧毁，制动器自动抱闸使电梯停止，避免溜车坠落。'},
+{t:1,c:4,q:'曳引机按有无减速箱可分为（）。',o:['有齿轮曳引机和无齿轮曳引机','快速曳引机和慢速曳引机','直流曳引机和交流曳引机','单速曳引机和双速曳引机'],a:[0],e:'曳引机按有无减速箱分为有齿轮和无齿轮两类。无齿轮曳引机通常采用低速永磁同步电动机直接驱动曳引轮，结构紧凑、效率高。'},
+{t:3,c:4,q:'无齿轮永磁同步曳引机不需要减速箱，结构更紧凑、传动效率更高。',o:['正确','错误'],a:[0],e:'永磁同步电动机转速低、扭矩大，可直接驱动曳引轮，省去减速箱后可减小机房体积、降低噪声和能耗。'},
+{t:1,c:4,q:'电梯的额定速度是指（）。',o:['电梯设计规定的运行速度','电梯实际运行的平均速度','电梯最高允许速度','电梯检修运行速度'],a:[0],e:'额定速度是电梯设计规定并在铭牌上标明的运行速度，单位m/s。限速器动作速度、缓冲器选型等均以此为基准。'},
+{t:1,c:4,q:'电梯的提升高度是指（）。',o:['端站之间轿厢运行的垂直行程','楼层高度','井道总深度','轿厢高度'],a:[0],e:'提升高度是下端站与上端站之间的垂直距离，是电梯的主要基本参数之一，直接影响曳引钢丝绳和补偿装置的长度配置。'},
+{t:3,c:4,q:'电梯的层站数是指井道内层门的总数。',o:['正确','错误'],a:[0],e:'层站数即各楼层可停靠的层门数量。层站数与提升高度、额定载重量、额定速度共同构成电梯的基本参数。'},
+{t:2,c:4,q:'曳引钢丝绳的端接装置包括（）。',o:['锥套','巴氏合金（或树脂）','绳头组合','曳引轮'],a:[0,1,2],e:'钢丝绳端接通常采用锥套加巴氏合金（或专用树脂）浇注固定，再通过绳头组合与轿架、对重架连接。曳引轮属于曳引部件而非端接装置。'},
+{t:1,c:4,q:'曳引钢丝绳绳头组合上的弹簧主要作用是（）。',o:['缓冲冲击并保持各绳张力均匀','增大曳引力','防止钢丝绳生锈','减少钢丝绳长度'],a:[0],e:'绳头弹簧（压簧）既可在冲击时起缓冲作用，又可通过调节螺母调整各根钢丝绳的张力，使其偏差不超过平均值的5%。'},
+{t:3,c:4,q:'钢丝绳绳头锥套的巴氏合金浇注应当饱满密实，不得有松动、裂纹。',o:['正确','错误'],a:[0],e:'浇注不实会造成钢丝绳在锥套内滑移甚至脱出，酿成坠落事故。检查时应重点查看端接部位有无松动、渗油或合金开裂。'},
+{t:1,c:4,q:'电梯补偿装置常见的型式有（）。',o:['补偿链、补偿缆和补偿绳','只有补偿链','只有补偿绳','弹簧补偿器'],a:[0],e:'补偿链用于低速小高度电梯，补偿缆和补偿绳用于高速大高度电梯，补偿绳还需设置张紧装置和防跳装置。'},
+{t:3,c:4,q:'电梯提升高度较小时，一般只需采用补偿链即可满足补偿要求。',o:['正确','错误'],a:[0],e:'提升高度小时曳引钢丝绳重量差影响有限，采用结构简单的补偿链即可；高度大、速度高时则需采用补偿绳并设置张紧装置。'},
+{t:1,c:4,q:'对重块应当设置（）装置，防止运行中松动窜动。',o:['压紧（压板）','加热','冷却','绝缘'],a:[0],e:'对重块必须用压板可靠压紧并锁固，否则电梯运行中振动会使对重块松动、移位，甚至脱落掉入井道造成事故。'},
+{t:1,c:4,q:'电梯导轨支架的间距一般不大于（）m。',o:['1','2.5','5','8'],a:[1],e:'导轨支架间距一般不大于2.5m，且每根导轨至少有两个支架。间距过大会使导轨刚度不足，影响运行平稳性。'},
+{t:3,c:4,q:'导轨安装的垂直度偏差会直接影响电梯运行的平稳性和舒适感。',o:['正确','错误'],a:[0],e:'导轨是轿厢和对重的运行基准，垂直度超差会造成运行晃动、噪声增大，并加剧导靴和导轨的磨损。'},
+{t:1,c:4,q:'滑动导靴需要定期进行的维护工作是（）。',o:['润滑和调整间隙','更换滚轮','调整制动器','检查编码器'],a:[0],e:'滑动导靴靠靴衬与导轨滑动配合，需定期清理积尘、加注润滑油并调整间隙，间隙过大会造成晃动，过小会加剧磨损。'},
+{t:2,c:4,q:'滚轮导靴相比滑动导靴的优点包括（）。',o:['运行平稳','噪声较低','磨损较小','不需要任何维护'],a:[0,1,2],e:'滚轮导靴以滚动代替滑动，摩擦阻力小、运行平稳、噪声低，广泛用于高速电梯。但仍需定期检查滚轮磨损和紧固情况。'},
+{t:1,c:4,q:'电梯必须层门和轿门都关闭后才能运行，这主要依靠（）保证。',o:['门锁电气联锁','限速器','缓冲器','制动器'],a:[0],e:'门锁的电气触点串接在安全回路中，只有当所有层门和轿门都关闭并锁紧时安全回路才接通，电梯才能启动运行。'},
+{t:3,c:4,q:'开门走梯（层门未关闭电梯仍能运行）是电梯最危险的故障之一，必须严格防止。',o:['正确','错误'],a:[0],e:'开门走梯会导致乘客在层门口坠落或被轿厢与井道剪切，多因短接门锁回路或门锁触点粘连造成，属重大安全隐患。'},
+{t:1,c:4,q:'层门门刀与层门门锁滚轮的啮合深度一般应为（）mm。',o:['1~2','5~8','15~20','20~30'],a:[1],e:'门刀插入门锁滚轮两轮之间的深度一般控制在5~8mm，啮合过浅会使门锁无法解开或解不开，过深会造成卡阻和磨损。'},
+{t:1,c:4,q:'电梯门机通常采用的传动方式是（）。',o:['带传动','链传动','齿轮传动','蜗轮蜗杆传动'],a:[0],e:'门机多采用同步带传动，具有传动平稳、噪声低、可实现精确位置控制的特点，也便于调整门扇开合速度。'},
+{t:3,c:4,q:'门机皮带张紧度不当，会造成开关门不顺畅、冲击大或门机异响。',o:['正确','错误'],a:[0],e:'皮带过松会打滑、门扇到位不准；过紧会加剧轴承磨损、增大噪声。应按要求调整张紧度并定期检查。'},
+{t:1,c:4,q:'光幕保护装置安装在（）。',o:['轿门两侧','层门顶部','轿厢底部','井道壁上'],a:[0],e:'光幕由发射器和接收器组成，分别安装在轿门两侧，关门过程中若有物体遮挡光束，门立即反向开启，防止夹伤乘客。'},
+{t:2,c:4,q:'电梯门系统常见的故障有（）。',o:['不开门','不关门','关门夹人','开门走梯'],a:[0,1,2,3],e:'门系统故障在电梯故障中占比很高，常见原因有光幕失效、门机皮带松动、门锁触点氧化、地坎滑槽有异物等。'},
+{t:1,c:4,q:'下列不属于轿顶检修装置组成部件的是（）。',o:['限速器','检修转换开关','轿顶急停开关','检修运行按钮'],a:[0],e:'轿顶检修装置包括检修转换开关、急停开关、检修运行按钮（上/下行）以及照明和插座等。限速器属于机房安全部件。'},
+{t:3,c:4,q:'电梯轿厢内应当设置紧急报警装置，并保证能够与救援服务实现有效通话。',o:['正确','错误'],a:[0],e:'紧急报警装置是困人时乘客与外界联系的唯一手段，应能在停电情况下依靠应急电源继续工作，维保中应每15日试验一次。'},
+{t:1,c:4,q:'轿厢内紧急报警装置的供电应当来自（）。',o:['应急（独立）电源','电梯主拖动电源','轿厢照明同一回路','机房市电插座'],a:[0],e:'紧急报警装置应由应急电源供电，保证在电梯主电源中断时仍能正常使用，防止困人时失去联系。'},
+{t:1,c:4,q:'电梯轿厢内的应急照明在正常照明电源中断后，应至少维持（）的供电。',o:['1W灯泡用电1小时','5W灯泡用电5小时','10W灯泡用电10小时','无时间要求'],a:[0],e:'相关标准要求轿厢应急照明在正常照明中断后至少维持1W灯泡用电1小时的供电，以保证困人时轿厢内可见、乘客情绪稳定。'},
+{t:3,c:4,q:'电梯停电时，轿厢内的应急照明应当能够自动投入工作。',o:['正确','错误'],a:[0],e:'应急照明由蓄电池供电，在主电源失电时自动点亮，是困人救援等待期间保障乘客安全的重要设施。'},
+{t:1,c:4,q:'电梯随行电缆的主要作用是（）。',o:['连接轿厢与控制柜，传输电力和信号','提供轿厢照明电源','固定轿厢','承载轿厢重量'],a:[0],e:'随行电缆随轿厢上下移动，为轿厢提供控制信号、电力、通讯和照明回路，其固定方式和弯曲半径应符合要求。'},
+{t:3,c:4,q:'随行电缆的固定和弯曲半径应符合要求，防止长期弯折造成芯线疲劳断裂。',o:['正确','错误'],a:[0],e:'随行电缆应使用专用线卡按要求固定，避免扭曲和过度弯折；断裂会造成轿内按钮失灵、通讯中断等故障。'},
+{t:1,c:4,q:'电梯端站保护中，极限开关与限位开关的主要区别是（）。',o:['极限开关切断安全回路，限位开关只强迫换速','两者完全相同','限位开关更危险','极限开关只报警不停梯'],a:[0],e:'端站保护分三级：强迫换速开关使电梯减速，限位开关在越位时强迫停梯但仍可反向运行，极限开关则直接切断安全回路使电梯停止，须人工复位。'},
+{t:1,c:4,q:'电梯强迫换速开关的作用是（）。',o:['使电梯在到达端站前提前减速','切断安全回路','吸收冲击能量','限制轿厢载荷'],a:[0],e:'强迫换速开关安装在端站附近，电梯运行至此时控制系统强制减速，防止因速度过快冲过端站。'},
+{t:3,c:4,q:'电梯端站保护由强迫换速开关、限位开关和极限开关三级组成。',o:['正确','错误'],a:[0],e:'三级保护层层设防：一级减速、二级限位停梯、三级极限切断安全回路，任何一级失效都应由后续级别兜底。'},
+{t:1,c:4,q:'电梯平层装置常用的形式是（）。',o:['磁感应式（干簧管）或光电式','液压式','气动式','机械齿轮式'],a:[0],e:'平层装置通常采用磁感应式（隔磁板加干簧管或霍尔元件）或光电式，通过检测轿厢与层站的相对位置实现准确平层。'},
+{t:1,c:4,q:'电梯称重装置的主要作用是（）。',o:['检测轿厢载荷并提供起动补偿信号','测量电梯速度','检测门锁状态','记录运行次数'],a:[0],e:'称重装置检测轿厢内的载荷，在起动时提供预转矩补偿，使重载和轻载情况下都能平稳起动，同时兼顾超载保护功能。'},
+{t:3,c:4,q:'集选控制的电梯在无司机状态下能够自动响应层站召唤并顺向截梯。',o:['正确','错误'],a:[0],e:'集选控制是最常见的电梯控制方式，可自动响应轿内指令和层站召唤，按运行方向顺向截梯，提高运行效率。'},
+{t:1,c:4,q:'电梯并联控制的台数一般为（）。',o:['2~3台','5~6台','8~10台','10台以上'],a:[0],e:'并联控制一般用于2~3台电梯，共用层站召唤信号，通过逻辑分配减少重复停靠。台数更多时则采用梯群控制。'},
+{t:2,c:4,q:'电梯的节能技术措施包括（）。',o:['变频调速（VVVF）','能量回馈装置','永磁同步无齿轮曳引机','增加轿厢装饰重量'],a:[0,1,2],e:'变频调速、能量回馈、永磁同步曳引机、轿内照明LED化等均可显著降低电梯能耗；增加装饰重量反而会增大能耗。'},
+{t:1,c:4,q:'电梯曳引机减速箱油温过高，应当首先检查（）。',o:['润滑油油位和油质','曳引轮直径','导轨长度','轿厢装饰'],a:[0],e:'油位过低、油质劣化或油号选择不当都会导致散热不良、油温过高，应及时补充或更换规定牌号的润滑油，并检查通风散热情况。'},
+
+/* ============ 扩充：自动扶梯与自动人行道 ============ */
+{t:1,c:5,q:'自动扶梯梯级链（梯级链组）的主要作用是（）。',o:['连接并牵引梯级沿梯路运行','支撑桁架','驱动扶手带','提供制动力'],a:[0],e:'梯级链连接各个梯级，由主驱动链轮驱动，牵引梯级沿梯路循环运行，是梯路系统的核心传动部件。'},
+{t:3,c:5,q:'自动扶梯的梯级滚轮分为主轮和辅轮，分别沿不同的导轨运行。',o:['正确','错误'],a:[0],e:'主轮（外侧滚轮）沿主轨运行并承受载荷，辅轮（内侧滚轮）沿辅轨运行，两者共同约束梯级的运行轨迹并保证梯级保持水平。'},
+{t:1,c:5,q:'自动扶梯的主驱动链连接（）。',o:['驱动主机与主驱动轴（梯级链轮）','桁架与围裙板','扶手带与梯级','梳齿板与楼层板'],a:[0],e:'主驱动链将驱动主机的动力传递给主驱动轴，再由主驱动轴上的梯级链轮驱动梯级链运行。'},
+{t:3,c:5,q:'主驱动链过松或润滑不良，会造成梯级运行不平稳和异响。',o:['正确','错误'],a:[0],e:'主驱动链应保持适当张紧度并定期润滑，链条过松会跳动、磨损加剧，严重时可能跳齿导致梯级失控。'},
+{t:1,c:5,q:'自动扶梯的桁架（支撑结构）通常采用（）结构。',o:['型钢焊接（铆接）','钢筋混凝土','铝合金压铸','木质'],a:[0],e:'自动扶梯桁架一般为型钢焊接或铆接而成的空间桁架结构，强度高、刚度好，可支撑全部梯路、扶手和驱动部件并承受载荷。'},
+{t:3,c:5,q:'自动扶梯桁架的强度和刚度直接影响扶梯的运行安全和使用寿命。',o:['正确','错误'],a:[0],e:'桁架是自动扶梯的承载骨架，一旦变形会使梯路导轨错位、梯级运行不平稳，因此安装时对水平度和挠度有严格要求。'},
+{t:1,c:5,q:'自动扶梯的围裙板应当（）。',o:['固定可靠，与梯级的间隙符合规定','可以轻微松动','与梯级紧贴无间隙','可以拆除以便清洁'],a:[0],e:'围裙板必须固定可靠，与梯级单侧间隙不大于4mm、两侧之和不大于7mm，且其上应设置防夹装置。'},
+{t:3,c:5,q:'自动扶梯的护壁板（内、外盖板）作用是保护乘客并防止异物进入扶手装置内部。',o:['正确','错误'],a:[0],e:'护壁板分隔梯路与扶手装置，防止乘客衣物或异物卷入扶手带驱动机构，同时起到美观和防护作用。'},
+{t:1,c:5,q:'自动扶梯扶手带张紧装置的主要作用是（）。',o:['保持扶手带具有适当张力','调节扶手带速度','增加扶手带摩擦系数','防止扶手带断裂'],a:[0],e:'张紧装置使扶手带保持适当张力，防止因过松打滑或过紧加剧磨损，其张紧量应根据使用说明书定期检查调整。'},
+{t:3,c:5,q:'扶手带过松会造成打滑、速度滞后，过紧则会加剧磨损和发热。',o:['正确','错误'],a:[0],e:'扶手带张力必须适中。速度滞后超过允许值时，乘客扶握的手会相对后移，易造成后仰跌倒。'},
+{t:2,c:5,q:'自动扶梯出入口部位的部件包括（）。',o:['梳齿板','梳齿支撑板','楼层板','检修盖板'],a:[0,1,2,3],e:'出入口部位由梳齿板、梳齿支撑板、楼层板和检修盖板组成，其中可开启部件均应设置电气安全装置。'},
+{t:1,c:5,q:'自动扶梯的安全电路属于（）。',o:['安全相关电路，电压有明确限值','普通控制电路','动力主回路','照明电路'],a:[0],e:'自动扶梯控制电路与安全电路的直流电压平均值、交流电压有效值不应超过250V，安全电路须具有较高的可靠性。'},
+{t:3,c:5,q:'自动扶梯的安全开关动作后，必须查明原因、排除故障并复位，才能重新启动。',o:['正确','错误'],a:[0],e:'严禁在未查明原因的情况下反复强行启动，也不能拆除或短接安全开关，否则会掩盖隐患导致事故。'},
+{t:1,c:5,q:'自动扶梯超速保护装置的动作速度一般不应超过名义速度的（）倍。',o:['1.1','1.2','1.5','2.0'],a:[1],e:'GB 16899规定，当自动扶梯的运行速度超过名义速度的1.2倍时，超速保护装置应当动作，使扶梯停止运行。'},
+{t:3,c:5,q:'自动扶梯应当设置梯级下陷保护和梯级缺失保护装置。',o:['正确','错误'],a:[0],e:'两者分别监测梯级的下沉和缺失，任一情况发生即切断安全电路使扶梯停止，防止乘客踏空或异物卡入。'},
+{t:1,c:5,q:'自动扶梯附加制动器动作后，正确的处理方法是（）。',o:['人工复位并查明动作原因','直接强行启动','短接制动器开关','等待自动复位'],a:[0],e:'附加制动器是工作制动器失效或超速、逆转时的后备保护，动作后必须查明原因、排除故障后人工复位，绝不可强行启动。'},
+{t:2,c:5,q:'自动扶梯需要定期润滑的部位包括（）。',o:['梯级链','扶手带驱动链','梯路导轨','楼层板表面'],a:[0,1,2],e:'梯级链、扶手带驱动链、传动链和梯路导轨需按润滑周期加注规定牌号的润滑剂。楼层板表面属乘客通行面，不得涂油。'},
+{t:1,c:5,q:'自动扶梯扶手带的驱动方式多采用（）。',o:['摩擦轮驱动','齿轮直接驱动','链条直接驱动','液压驱动'],a:[0],e:'扶手带一般由扶手带驱动轮（摩擦轮）通过摩擦方式驱动，使扶手带与梯级同步运行，速度偏差允许范围为0～+2%。'},
+{t:3,c:5,q:'扶手带运行速度与梯级速度不同步，可能造成乘客后仰跌倒。',o:['正确','错误'],a:[0],e:'若扶手带速度慢于梯级，乘客扶握的手相对身体后移，身体失去平衡易向后倾倒，因此规范明确要求扶手带不得慢于梯级。'},
+{t:1,c:5,q:'自动人行道主要用于（）。',o:['水平或微倾斜输送乘客','垂直输送乘客','输送货物','输送车辆'],a:[0],e:'自动人行道用于水平或微倾斜（倾角不大于12°）地输送乘客，常见于机场、商场、车站的长距离通道。'},
+{t:3,c:5,q:'自动人行道按输送线路分为水平型和倾斜型两种。',o:['正确','错误'],a:[0],e:'倾角不大于6°的称为水平型自动人行道，倾角大于6°但不大于12°的称为倾斜型自动人行道。'},
+{t:1,c:5,q:'自动扶梯梯级的踏面深度不应小于（）mm。',o:['300','380','450','600'],a:[1],e:'GB 16899规定梯级的踏面深度不应小于380mm，以保证乘客站立时有足够的支撑面，减小跌倒风险。'},
+{t:3,c:5,q:'自动扶梯梯级的踏面应当设置防滑齿槽和黄色警示边框。',o:['正确','错误'],a:[0],e:'踏面防滑齿槽增大摩擦力，黄色警示边框提示乘客安全站立范围，两者均为防止乘客滑倒、踩空的重要措施。'},
+{t:2,c:5,q:'自动扶梯应当设置的标志与警示装置包括（）。',o:['急停按钮标志','禁止攀爬标志','安全站立区域标识','维保单位广告'],a:[0,1,2],e:'自动扶梯出入口和显著位置应设置急停按钮标志、禁止攀爬扶手带标志、安全站立区域标识以及儿童须由成年人陪同等警示。'},
+{t:1,c:5,q:'自动扶梯定期检验的周期为（）年一次。',o:['半年','1年','2年','3年'],a:[1],e:'自动扶梯和自动人行道与电梯一样实行1年一次的定期检验，未经定期检验或检验不合格的不得继续使用。'},
+{t:3,c:5,q:'自动扶梯的日常维护保养周期同样是至少15日一次。',o:['正确','错误'],a:[0],e:'自动扶梯和自动人行道纳入电梯类特种设备管理，日常维护保养周期同为至少每15日一次，并按规定开展半月、季度、半年和年度维保。'},
+{t:1,c:5,q:'自动扶梯需要长期停用时，正确的做法是（）。',o:['切断电源并采取防护措施，悬挂停用标识','保持通电随时可用','拆除部分梯级','不作任何处理'],a:[0],e:'长期停用应切断电源、锁闭出入口或设置围挡并悬挂停用标识，防止无关人员进入；重新启用前应全面检查并试运行。'},
+
+/* ============ 扩充：安全操作与防护 ============ */
+{t:1,c:6,q:'电梯维修作业前应当首先进行的工作是（）。',o:['确认作业内容和现场安全状况','立即动手拆检','先通电试运行','通知乘客停用电梯'],a:[0],e:'作业前应明确作业内容、危险点和安全措施，观察现场环境（是否有人、是否断电、是否有坠落风险），做到心中有数再动手。'},
+{t:3,c:6,q:'电梯作业前应当对作业环境进行危险源辨识并采取相应的防范措施。',o:['正确','错误'],a:[0],e:'危险源辨识是安全作业的第一步，包括坠落、触电、挤压、机械伤害、火灾等的识别与防范，是安全技术交底的核心内容。'},
+{t:1,c:6,q:'进入井道或底坑作业时，应当使用（）照明。',o:['安全电压行灯','220V普通白炽灯','手电筒以外的明火','电梯轿厢照明'],a:[0],e:'井道、底坑属潮湿或金属容器环境，应使用安全电压行灯照明，避免使用220V临时照明造成触电。'},
+{t:3,c:6,q:'行灯的安全电压一般不应超过36V，在潮湿场所不应超过12V。',o:['正确','错误'],a:[0],e:'我国安全电压等级为42V、36V、24V、12V、6V。一般场所行灯用36V，潮湿、狭窄金属容器内应用12V。'},
+{t:1,c:6,q:'电梯作业中使用梯子时，正确的做法是（）。',o:['放置平稳并有人扶持，人字梯应有拉绳','倚靠在层门上作业','站在最上一级作业','两人同时上梯'],a:[0],e:'使用梯子应放置平稳、有人监护扶持，人字梯须张开到位并用拉绳（拉链）固定，严禁站在最上两级或两人同时登梯。'},
+{t:3,c:6,q:'使用梯子作业时，禁止站在梯子最上两级。',o:['正确','错误'],a:[0],e:'站在最上两级时人体重心超出支撑范围，极易失衡坠落，应保持三点接触并由他人扶持梯子。'},
+{t:1,c:6,q:'在轿顶作业时，下列做法错误的是（）。',o:['站在轿顶边缘探身作业','站在轿顶中央并抓牢扶手','将急停开关置于随手可及处','保持轿顶检修状态'],a:[0],e:'轿顶空间有限且上方可能有对重、下方是深井道，严禁站在边缘探身作业，应站在轿顶中央、抓牢扶手并保持检修状态。'},
+{t:3,c:6,q:'轿顶作业时应当站在轿顶中央位置并抓牢扶手，防止因急停或意外移动而失衡。',o:['正确','错误'],a:[0],e:'轿顶四周无可靠防护，站立位置不当极易被井道凸出物碰伤或坠落，因此必须居中站立并抓牢扶手。'},
+{t:1,c:6,q:'进入底坑作业时，首先应当（）。',o:['按下底坑急停开关并确认电梯已停止','直接跳入底坑','先清理底坑积水','先检查缓冲器'],a:[0],e:'进入底坑前先按急停开关，使电梯处于不能运行的状态，同时确认井道内无人、轿厢停靠位置便于安全出入。'},
+{t:3,c:6,q:'底坑作业时严禁从底坑向上抛掷工具和材料。',o:['正确','错误'],a:[0],e:'向上抛掷物品可能砸伤上方人员或掉落损坏设备，应使用绳索吊运或工具袋传递。'},
+{t:1,c:6,q:'电梯维修中如确需拆除安全保护装置，应当（）。',o:['作业完成后立即恢复并经确认','可以暂不恢复','交由使用单位恢复','下次维保时再恢复'],a:[0],e:'安全保护装置拆除期间电梯不得载客运行，作业结束后必须立即恢复并检查确认功能有效，方可交付使用。'},
+{t:3,c:6,q:'维修时拆除的安全保护装置必须恢复并经检查确认后才能交付使用。',o:['正确','错误'],a:[0],e:'安全装置未恢复就交付使用是重大隐患，一旦发生事故将追究维保单位和作业人员的法律责任。'},
+{t:2,c:6,q:'电梯维修现场应当设置的安全设施包括（）。',o:['警示标志','防护围栏','监护人员','临时广告牌'],a:[0,1,2],e:'现场应设置"电梯检修、禁止使用"等警示标志和防护围栏，并安排专人监护，防止无关人员误入作业区域。'},
+{t:1,c:6,q:'电梯维修作业人员在作业前应当经过（）。',o:['安全技术交底','体检','技术比武','工会讨论'],a:[0],e:'作业前应由技术负责人进行安全技术交底，明确作业内容、危险点、防护措施和应急处置方法，交底记录应留档。'},
+{t:3,c:6,q:'作业中如遇雷雨、大风等恶劣天气，不宜进行露天和高处作业。',o:['正确','错误'],a:[0],e:'雷雨天气进行露天或高处作业易发生雷击、触电和坠落事故，应立即停止作业并撤离到安全区域。'},
+{t:1,c:6,q:'电梯机房内温度过高时，正确的做法是（）。',o:['加强通风散热，必要时停机处理','打开机房所有门窗即可继续','往设备上洒水降温','不作处理继续运行'],a:[0],e:'机房温度过高会加速电气元件老化、造成变频器过热保护。应改善通风散热条件，必要时停机检修，不得用水降温。'},
+{t:3,c:6,q:'电梯机房内不得存放易燃易爆物品和与设备无关的杂物。',o:['正确','错误'],a:[0],e:'机房是电气设备集中场所，存放易燃易爆物品会大幅增加火灾风险，无关杂物还会影响检修通行和设备散热。'},
+{t:1,c:6,q:'电梯井道内的作业照明开关应当设置在（）。',o:['井道外便于操作的位置','井道顶部','底坑内','轿厢顶上'],a:[0],e:'井道照明开关应设在井道外便于操作处，这样作业人员在进入井道前就能开灯，撤离后也能及时关灯。'},
+{t:3,c:6,q:'在井道内作业时应当系好安全带，并挂在牢固可靠的位置。',o:['正确','错误'],a:[0],e:'井道属高处作业场所，安全带应高挂低用并挂在导轨支架等牢固结构上，严禁挂在导轨、钢丝绳等活动或非承重部件上。'},
+{t:1,c:6,q:'使用单梯进行高处作业时，梯子与地面的夹角宜为（）。',o:['45°左右','60°左右','75°左右','90°'],a:[2],e:'单梯与地面夹角以75°左右为宜（约为梯长1/4处离墙），夹角过小易滑倒，过大易后翻。'},
+{t:1,c:6,q:'电梯处于运行状态时，严禁进行（）作业。',o:['擦拭、润滑或调整运动部件','观察运行状态','记录运行数据','在机房值守'],a:[0],e:'在电梯运行中接触运动部件极易被卷入、挤压造成严重伤害，清洁润滑调整必须在停梯断电状态下进行。'},
+{t:3,c:6,q:'清洁和润滑电梯部件必须在电梯停止并断电的状态下进行。',o:['正确','错误'],a:[0],e:'这是电梯维保的基本安全要求。特殊情况下确需在检修状态下进行时，也必须停机并安排专人监护。'},
+{t:1,c:6,q:'在电梯控制柜内作业时，正确的做法是（）。',o:['断电验电后作业，必要时悬挂标示牌','直接带电测量省时间','请同事扶着柜门即可','用手触碰元件判断是否发热'],a:[0],e:'控制柜内作业必须断电、验电，悬挂"有人工作，禁止合闸"标示牌，必要时加锁；带电作业须有专人监护并采取绝缘防护。'},
+{t:3,c:6,q:'确需带电作业时，必须安排专人监护并采取充分的绝缘防护措施。',o:['正确','错误'],a:[0],e:'带电作业应尽量用仪器测量代替接触，必须接触时使用绝缘工具、穿戴绝缘手套和绝缘鞋，并保持一人作业一人监护。'},
+{t:1,c:6,q:'电梯维修使用临时电源时，应当（）。',o:['使用带漏电保护的专用配电箱','从附近插座直接拉线','用两根裸线搭接','借用轿厢照明电源'],a:[0],e:'临时用电应使用带漏电保护器的专用配电箱，做到一机一闸一漏一箱，严禁私拉乱接或使用破损电线。'},
+{t:3,c:6,q:'严禁在电梯机房、井道内使用明火照明。',o:['正确','错误'],a:[0],e:'机房和井道内可能存在油污和可燃物，使用明火照明极易引发火灾，必须使用符合安全要求的电气照明。'},
+{t:1,c:6,q:'电梯作业人员发现自身状态或能力不适合继续作业时，应当（）。',o:['立即报告并停止作业','坚持完成作业','降低作业标准继续','请同事代为操作'],a:[0],e:'疲劳、身体不适或技能不足时强行作业极易导致事故。作业人员有权并有义务在此时停止作业并报告。'},
+{t:2,c:6,q:'电梯作业前应当确认的现场安全条件包括（）。',o:['电梯轿厢内无乘客','层门处于关闭状态或设专人看守','作业区域已设置警示标志','电源已断开或已挂牌上锁'],a:[0,1,2,3],e:'轿内无人、层门受控、警示到位、电源受控是安全作业的四项前置条件，缺一不可。'},
+{t:1,c:6,q:'电梯维修后需要试运行时，应当（）。',o:['确认轿顶、底坑、井道内无人并通知相关人员','直接通电运行','只通知使用单位即可','先在轿顶运行一次'],a:[0],e:'试运行前必须清点人员、确认井道各部位无人并通知现场所有相关人员，防止有人仍在井道内造成伤亡。'},
+{t:3,c:6,q:'试运行前必须清点人员和工具，确认无遗漏、无遗留。',o:['正确','错误'],a:[0],e:'人员遗漏会造成挤压、坠落事故，工具遗漏会造成运行故障甚至卡阻，因此试运行前的清点确认是必做环节。'},
+{t:1,c:6,q:'电梯故障处理完毕后，应当（）并向使用单位交代注意事项。',o:['填写维修记录','直接离开现场','口头说明即可','只通知本单位'],a:[0],e:'故障处理应如实记录故障现象、原因分析和处理措施，并向使用单位说明使用注意事项和后续观察要点。'},
+{t:3,c:6,q:'维保人员应当拒绝使用单位提出的违反安全技术规范的要求。',o:['正确','错误'],a:[0],e:'作业人员对违章指挥和违反安全规程的要求有权拒绝执行，并应当向本单位报告，不能因迁就用户而留下安全隐患。'},
+{t:1,c:6,q:'电梯作业中发生人身伤害事故时，应当首先（）。',o:['抢救伤员并及时报告','保护现场后再救人','先恢复电梯运行','等待监察部门到场'],a:[0],e:'抢救伤员是第一位工作，同时应迅速报告并采取防止事故扩大的措施；现场保护应在不阻碍抢救的前提下进行。'},
+{t:3,c:6,q:'电梯作业人员应当掌握触电急救和心肺复苏的基本方法。',o:['正确','错误'],a:[0],e:'电梯作业存在触电风险，作业人员应掌握使触电者脱离电源的方法以及心肺复苏等现场急救技能，为抢救争取时间。'},
+{t:1,c:6,q:'电梯维修作业结束后，应当确认电梯处于（）状态。',o:['一切开关复位、可正常运行','检修状态','停止使用状态','断电状态'],a:[0],e:'作业结束后应恢复所有开关和保护装置、清理工具和现场，经试运行确认正常后，方可交付使用单位投入使用。'},
+
+/* ============ 扩充：故障排除与应急救援 ============ */
+{t:1,c:7,q:'救援时确认轿厢位置的正确方法是（）。',o:['通过层楼指示器判断，或到机房观察曳引钢丝绳上的平层标记','打开层门探头查看','用力敲击层门听回声','通过轿厢晃动判断'],a:[0],e:'可通过楼层显示、监控、机房观察钢丝绳平层标记或紧急电动运行等方式判断轿厢位置，严禁探身进入井道查看。'},
+{t:3,c:7,q:'救援人员不应擅自开启层门查看轿厢位置。',o:['正确','错误'],a:[0],e:'擅自开层门是造成救援人员自身坠落的头号原因。必须通过楼层显示、机房平层标记等间接方式确认位置。'},
+{t:1,c:7,q:'手动松闸盘车时，松闸人员的正确做法是（）。',o:['保持闸瓦完全松开并听从盘车人员指挥，随时准备恢复制动','一直用力拉到底不松手','与盘车人员各自操作','松开后离开机房'],a:[0],e:'盘车必须两人配合：一人持续松闸，一人盘车，保持口令沟通，随时准备在异常时恢复制动，防止溜车失控。'},
+{t:3,c:7,q:'手动盘车救援前应当先切断电梯主电源。',o:['正确','错误'],a:[0],e:'切断主电源可防止盘车过程中电梯突然通电启动造成伤害，同时应挂上"有人工作，禁止合闸"标示牌。'},
+{t:1,c:7,q:'电梯困人救援完成后，应当（）。',o:['检查设备状态并恢复运行，做好救援记录','立即离开现场','直接把电梯停用','让使用单位自行恢复'],a:[0],e:'救援后应检查电梯各部位有无异常，恢复正常运行并向使用单位说明情况，如实记录困人时间、原因、救援过程和结果。'},
+{t:2,c:7,q:'电梯困人救援中禁止的行为包括（）。',o:['攀爬轿顶引导乘客放人','从开启的层门把乘客拉出来','让乘客自行扒门逃生','安抚乘客并等待专业救援'],a:[0,1,2],e:'从轿顶放人、从层门拉人、让乘客自行扒门都属于严重违章救援，极易造成坠落和剪切伤亡，必须由专业人员在平层位置开门放人。'},
+{t:1,c:7,q:'电梯关门后又立即开门、反复动作，最常见的原因是（）。',o:['光幕或安全触板误动作，或门锁触点接触不良','曳引机故障','缓冲器漏油','限速器动作'],a:[0],e:'门入口保护装置被污染、错位或元件损坏会造成误动作；门锁触点接触不良也会使控制系统判断为门未关好而重新开门。'},
+{t:3,c:7,q:'光幕被灰尘污染或被异物遮挡，会造成电梯反复开关门。',o:['正确','错误'],a:[0],e:'光幕的发射和接收窗口积尘会削弱光信号，导致误触发保护。维保中应清洁光幕表面并检查安装是否牢固、有无错位。'},
+{t:1,c:7,q:'电梯运行中突然停梯但轿内照明正常，比较可能的原因是（）。',o:['安全回路或门锁回路瞬间断开','主电源停电','曳引机烧毁','轿厢超载'],a:[0],e:'轿内照明正常说明主电源基本正常，突然停梯多因安全回路或门锁回路中某个触点接触不良、瞬间断开所致。'},
+{t:1,c:7,q:'电梯运行时轿厢抖动、不平稳，常见原因是（）。',o:['导轨润滑不良或导靴磨损、间隙过大','轿厢装饰过重','按钮失灵','层门地坎间隙小'],a:[0],e:'导轨润滑不足会增大摩擦并产生爬行，导靴磨损或间隙过大会造成晃动。此外还需检查导轨支架、钢丝绳张力和编码器。'},
+{t:3,c:7,q:'曳引钢丝绳与曳引轮之间打滑，会造成平层不准和曳引力下降。',o:['正确','错误'],a:[0],e:'绳槽磨损、绳槽内有油污或钢丝绳张力不均都会引起打滑，应清洁绳槽、调整张力，磨损超标的曳引轮须更换。'},
+{t:1,c:7,q:'电梯平层后轿厢地坎与层门地坎高度不一致，应当检查（）。',o:['平层感应器位置和制动器状态','轿厢照明','层门地坎间隙','轿内按钮'],a:[0],e:'平层不准的常见原因是平层感应器（隔磁板、干簧管或光电开关）位置偏移、编码器反馈异常或制动器制动力不足。'},
+{t:2,c:7,q:'电梯关门后不启动，可能的原因包括（）。',o:['安全回路断开','门锁回路断开','急停开关被按下','轿厢照明灯损坏'],a:[0,1,2],e:'安全回路和门锁回路串联了全部安全触点，任一断开电梯均不能启动。轿厢照明损坏与启动控制无关。'},
+{t:1,c:7,q:'电梯层门关闭不严或自动打开，可能是（）。',o:['自动关闭层门装置（重锤或弹簧）失效','曳引机故障','限速器动作','缓冲器损坏'],a:[0],e:'层门靠自重或弹簧自动关闭，装置失效会使层门长时间敞开，形成坠落危险，必须立即修复。'},
+{t:3,c:7,q:'层门自动关闭装置失效会导致层门敞开，存在坠落危险。',o:['正确','错误'],a:[0],e:'层门敞开而井道内无轿厢时，人员极易误入井道坠落，因此自动关闭层门装置必须保持有效。'},
+{t:1,c:7,q:'电梯运行中闻到焦糊味时，应当（）。',o:['立即停梯、切断电源并检查','继续运行观察','打开门窗通风','等自动保护动作'],a:[0],e:'焦糊味通常是绝缘老化、接触不良或元件过热的征兆，是电气火灾的前兆，必须立即停梯断电检查，不得带病运行。'},
+{t:3,c:7,q:'电气元件过热或接触不良会产生焦糊味，往往是电气火灾的前兆。',o:['正确','错误'],a:[0],e:'发现焦糊味应立即停梯断电，检查接触器触点、接线端子、变频器等有无过热变色、打火痕迹，及时处理。'},
+{t:1,c:7,q:'判断曳引钢丝绳是否需要报废，主要依据是（）。',o:['断丝数量、磨损量和锈蚀程度','钢丝绳使用年限','钢丝绳颜色','曳引轮直径'],a:[0],e:'按GB/T 5972钢丝绳报废标准，从断丝数、直径减小量、磨损和锈蚀程度等方面综合判定，出现断股、笼状畸变等应立即更换。'},
+{t:2,c:7,q:'电梯制动器制动力不足的可能原因有（）。',o:['闸瓦（制动衬）磨损','制动间隙调整不当','制动弹簧压力不足','线圈电压过低'],a:[0,1,2,3],e:'制动力不足会导致溜车、冲顶蹲底等严重后果，应检查闸瓦磨损量、间隙、弹簧压缩量和供电电压，必要时更换制动器。'},
+{t:1,c:7,q:'电梯制动器动作时有明显撞击声，最可能的原因是（）。',o:['制动间隙过大或闸瓦磨损严重','供电电压过高','曳引轮磨损','导轨润滑不足'],a:[0],e:'间隙过大使动铁芯行程加大，合闸时冲击加剧并产生撞击声；闸瓦磨损后同样会出现类似现象，应调整间隙或更换闸瓦。'},
+{t:3,c:7,q:'制动器动作声音异常应当查明原因并调整，不得带病运行。',o:['正确','错误'],a:[0],e:'制动器是电梯最关键的安全部件之一，其动作异常可能预示制动力矩下降，必须及时检查调整并做制动力试验。'},
+{t:1,c:7,q:'电梯安全触板或光幕保护装置误动作，会直接造成（）。',o:['门无法正常关闭','电梯超速','轿厢超载','制动器打不开'],a:[0],e:'保护装置误动作会使控制系统判断门口有障碍物而重新开门，导致电梯无法关门运行，应清洁、调整或更换保护装置。'},
+{t:2,c:7,q:'液压电梯的常见故障包括（）。',o:['液压油温过高','油缸渗漏','系统油压不足','限速器动作速度过快'],a:[0,1,2],e:'液压电梯故障多集中在液压系统，如油温过高、油缸和管路渗漏、油压不足、阀件卡阻等；限速器属机械安全部件，其故障不属液压系统。'},
+{t:1,c:7,q:'液压电梯轿厢下行速度过快，应当重点检查（）。',o:['限速切断阀和下行阀','曳引轮绳槽','轿厢照明','层门地坎'],a:[0],e:'限速切断阀和下行阀控制液压电梯的下降速度，一旦阀件卡阻或调节失当，会造成下降速度失控，应立即停梯检修。'},
+{t:3,c:7,q:'液压电梯油箱油位过低会影响系统压力，应当及时补充同牌号液压油。',o:['正确','错误'],a:[0],e:'油位过低会使油泵吸空、产生噪声和压力波动，还会加速油液氧化。补油应使用规定牌号的液压油，不得混用不同牌号。'},
+{t:1,c:7,q:'电梯发生轿厢意外移动（UCMP动作）后，正确的处理是（）。',o:['查明原因并按规定手动复位','直接短接保护开关恢复运行','反复送电尝试启动','等待自动复位'],a:[0],e:'轿厢意外移动说明制动或门锁系统存在严重问题，必须查明原因、排除故障后按制造单位要求手动复位，严禁短接保护开关。'},
+{t:1,c:7,q:'发生地震后，电梯应当（）。',o:['立即停用并全面检查，确认正常后方可恢复运行','继续正常运行','只做外观检查','由乘客自行判断'],a:[0],e:'地震可能造成导轨变形、钢丝绳脱槽、部件位移等隐蔽损伤，必须停用检查，必要时经检验合格后方可恢复使用。'},
+{t:3,c:7,q:'发生地震、水浸、火灾后，电梯应当经检查确认安全后方可恢复使用。',o:['正确','错误'],a:[0],e:'上述灾害都会对电梯的机械和电气系统造成潜在损伤，未经检查确认即投入使用极易引发事故。'},
+{t:2,c:7,q:'电梯井道或机房进水后的处置措施包括（）。',o:['立即切断相关电源','排水并清除淤泥杂物','检查电气设备绝缘电阻','干燥处理后试运行确认'],a:[0,1,2,3],e:'进水后必须先断电再排水，防止触电；随后检查绝缘、清洁干燥，经试运行确认无误后方可恢复使用。'},
+{t:1,c:7,q:'电梯困人救援中，与被困人员保持沟通的主要作用是（）。',o:['稳定情绪、了解人员状况并指导其安全等待','加快盘车速度','节省救援人力','替代现场救援'],a:[0],e:'及时沟通能缓解乘客恐慌、避免其采取危险自救行为，同时可了解是否有伤病人员，便于安排医疗救助。'},
+{t:3,c:7,q:'救援过程中应当始终保持与被困人员的联系，告知救援进展。',o:['正确','错误'],a:[0],e:'告知"救援人员已到、正在处理、请勿擅自行动"能有效防止乘客恐慌扒门，是困人救援的重要环节。'},
+{t:1,c:7,q:'电梯底坑排水后，仍需重点检查（）。',o:['缓冲器状态和底坑电气设备的绝缘状况','轿厢装饰','层门颜色','轿内按钮样式'],a:[0],e:'积水会造成缓冲器锈蚀失效和底坑电气设备绝缘下降，排水后应检查缓冲器、急停开关、照明和检修插座等。'},
+{t:1,c:7,q:'防止电梯冲顶和蹲底事故，主要依靠（）。',o:['端站保护装置和缓冲器','限速器和安全钳','门锁和光幕','称重装置和编码器'],a:[0],e:'端站三级保护（强迫换速、限位、极限）负责在端站前减速停梯，缓冲器作为最后一道防线吸收失控时的冲击能量。'},
+{t:3,c:7,q:'电梯故障未查明原因前，不得反复强行送电试运行。',o:['正确','错误'],a:[0],e:'反复送电可能扩大故障范围、损坏设备，甚至使原本可通过保护装置停止的电梯失去保护，造成更严重的后果。'},
+
+/* ============ 扩充：事故案例与职业道德 ============ */
+{t:1,c:8,q:'电梯维修作业中最容易造成坠落事故的违章行为是（）。',o:['不确认轿厢位置就打开层门','不佩戴安全帽','使用不合格工具','未填写维保记录'],a:[0],e:'层门开启而轿厢不在该层时，人员或乘客会直接坠入井道。这是电梯行业伤亡事故中占比最高的原因。'},
+{t:3,c:8,q:'站在轿顶作业时未按下急停开关，电梯突然启动可能造成挤压事故。',o:['正确','错误'],a:[0],e:'轿顶与井道顶部、对重之间的间隙很小，电梯突然运行会把作业人员挤压在两者之间，因此作业时必须按下轿顶急停。'},
+{t:1,c:8,q:'电梯维保中"以修代保"（只修不养）的主要危害是（）。',o:['隐患得不到及时发现，故障率上升','维保成本降低','设备寿命延长','乘客满意度提高'],a:[0],e:'维保的核心是通过清洁、润滑、调整、检查把隐患消灭在萌芽状态。以修代保会使部件加速磨损，最终导致故障频发甚至事故。'},
+{t:2,c:8,q:'电梯事故的常见原因包括（）。',o:['违章操作','维保不到位','设备本身存在缺陷','使用管理缺失'],a:[0,1,2,3],e:'事故往往是人的不安全行为、物的不安全状态和管理缺陷共同作用的结果，因此防范需从人、设备、管理三方面同时着手。'},
+{t:3,c:8,q:'电梯事故的发生往往是多种因素叠加的结果，不能简单归结为"操作失误"。',o:['正确','错误'],a:[0],e:'事故调查应查明直接原因、间接原因和管理原因，只强调操作失误会掩盖培训、制度、监督等深层次问题，难以真正防止事故重演。'},
+{t:1,c:8,q:'作业人员对发现的事故隐患"视而不见"，属于（）。',o:['失职行为，应当承担相应责任','可以理解的行为','与本人无关','由使用单位负责'],a:[0],e:'作业人员负有发现和报告事故隐患的义务，明知隐患而不报告、不处理，属于失职行为，造成事故的应依法承担责任。'},
+{t:2,c:8,q:'良好的职业道德在电梯作业中的体现包括（）。',o:['忠于职守、尽职尽责','精益求精、提高技能','诚实守信、如实记录','严格遵守安全规程'],a:[0,1,2,3],e:'职业道德不是抽象口号，而是体现在如实填写记录、不偷工减料、不弄虚作假、严格执行规程等具体行为中。'},
+{t:3,c:8,q:'电梯作业人员应当把"安全"放在比"效率"和"进度"更高的位置。',o:['正确','错误'],a:[0],e:'安全与效率发生冲突时必须安全优先。为赶进度而简化安全步骤，是把命押在概率上的行为。'},
+{t:1,c:8,q:'电梯困人事故中导致乘客伤亡的处置不当行为，主要原因是（）。',o:['救援人员不具备专业能力、违章救援','救援时间过长','乘客过于紧张','现场没有监控'],a:[0],e:'多起困人救援伤亡事故源于非专业人员（如保安、物业人员）擅自开门或让乘客自行扒门逃生，必须由持证专业人员实施救援。'},
+{t:1,c:8,q:'组织学习电梯事故案例、以案为鉴的最终目的是（）。',o:['防止同类事故重复发生','追究相关人员责任','完成上级检查要求','增加培训课时'],a:[0],e:'案例学习重在举一反三、查找本单位在制度、管理和作业上的类似问题并整改，最终目的是切断事故重演的链条。'},
+{t:3,c:8,q:'事故案例学习是提高电梯作业人员安全意识的有效方法。',o:['正确','错误'],a:[0],e:'通过剖析真实事故的成因和教训，比单纯讲授规程更能让作业人员建立直观的风险认知，是安全教育的常用方式。'},
+{t:1,c:8,q:'电梯维保记录造假（补记、代签）在性质上属于（）。',o:['违法行为','工作习惯问题','可以理解的做法','内部管理问题'],a:[0],e:'维保记录造假违反了特种设备安全法律法规，一经查实将受到行政处罚，情节严重的吊销许可证并追究法律责任。'},
+{t:2,c:8,q:'电梯作业人员应当具备的基本素质包括（）。',o:['安全责任意识','扎实的专业技能','应急处置能力','法律与规范意识'],a:[0,1,2,3],e:'电梯维修属高风险技术工种，既要有技能，也要有安全意识和法律意识，三者缺一不可。'},
+{t:3,c:8,q:'将《特种设备作业人员证》出借他人使用，属于违法违规行为。',o:['正确','错误'],a:[0],e:'证书挂靠、出借会造成无证人员实际作业，是特种设备安全领域重点查处的行为，出借人和使用人均需承担法律责任。'},
+{t:1,c:8,q:'特种设备事故造成3人以下死亡，属于（）事故。',o:['一般事故','较大事故','重大事故','特别重大事故'],a:[0],e:'特种设备事故分为特别重大、重大、较大和一般事故四个等级，其中造成3人以下死亡、或者10人以下重伤、或者1000万元以下直接经济损失的，属于一般事故。'},
+{t:3,c:8,q:'特种设备事故等级的划分主要依据人员伤亡数量和直接经济损失。',o:['正确','错误'],a:[0],e:'依据事故造成的人员伤亡数量和直接经济损失大小划分事故等级，不同等级对应不同的调查主体、责任追究和处置要求。'},
+];
+
+const CHAPTERS = [
+  {id:1, name:'法规标准', icon:'⚖️'},
+  {id:2, name:'维保规则与制度', icon:'📋'},
+  {id:3, name:'电工与机械基础', icon:'⚡'},
+  {id:4, name:'电梯结构与原理', icon:'🏗️'},
+  {id:5, name:'自动扶梯与人行道', icon:'📐'},
+  {id:6, name:'安全操作与防护', icon:'🦺'},
+  {id:7, name:'故障排除与应急救援', icon:'🚨'},
+  {id:8, name:'事故案例与职业道德', icon:'📚'}
+];
+const TYPE_NAME = {1:'单选题', 2:'多选题', 3:'判断题'};
+const LETTER = ['A','B','C','D','E','F'];
+</script>
+
+<script>
+/* =========================================================
+   应用逻辑
+   ========================================================= */
+const $ = id => document.getElementById(id);
+const LSKEY = 'elev_T_quiz_v1';
+let store = loadStore();
+
+function loadStore(){
+  try{
+    const raw = localStorage.getItem(LSKEY);
+    if(raw) return Object.assign(defaultStore(), JSON.parse(raw));
+  }catch(e){}
+  return defaultStore();
+}
+function defaultStore(){
+  return { wrong:{}, missed:{}, fav:{}, stats:{total:0, right:0, days:{}}, last:null, qStat:{}, exam:null };
+}
+function save(){ try{ localStorage.setItem(LSKEY, JSON.stringify(store)); }catch(e){} }
+function today(){ const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+
+function toast(m){
+  const t = $('toast'); t.textContent = m; t.classList.add('show');
+  clearTimeout(t._t); t._t = setTimeout(()=>t.classList.remove('show'), 1400);
+}
+
+/* ---------------- 视图切换 ---------------- */
+let curView = 'home';
+function show(v){
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  const el = $('v-'+v); if(el) el.classList.add('active');
+  curView = v;
+  const isTab = ['home','wrong','mine'].includes(v);
+  $('tabbar').classList.toggle('show', isTab);
+  document.querySelectorAll('#tabbar button').forEach(b=>b.classList.toggle('on', b.dataset.v===v));
+  if(v==='home') renderHome();
+  if(v==='wrong') renderWrong();
+  if(v==='mine') renderMine();
+  window.scrollTo(0,0);
+}
+function closeSheet(){ $('sheet').classList.remove('show'); $('mask').classList.remove('show'); }
+function openSheet(title, html){
+  $('shTitle').textContent = title; $('shBody').innerHTML = html;
+  $('sheet').classList.add('show'); $('mask').classList.add('show');
+}
+
+/* ---------------- 首页 ---------------- */
+function renderHome(){
+  const bank = QUESTIONS.length;
+  const mastered = Object.keys(store.qStat||{}).length;
+  const pct = bank ? Math.round(mastered/bank*100) : 0;
+  $('ringPct').textContent = pct+'%';
+  $('ringArc').setAttribute('stroke-dashoffset', String(195 - 195*pct/100));
+  $('hs-total').textContent = store.stats.total;
+  $('hs-rate').textContent = store.stats.total ? Math.round(store.stats.right/store.stats.total*100)+'%' : '0%';
+  const wn = Object.keys(store.wrong||{}).length;
+  const mn = Object.keys(store.missed||{}).length;
+  $('hs-wrong').textContent = wn;
+  $('e-order').textContent = '按题库顺序刷完 ' + bank + ' 题';
+  $('m-bank').textContent = bank;
+
+  const tabW = $('tabWrong');
+  const totalBadge = wn + mn;
+  tabW.style.display = totalBadge ? 'flex' : 'none';
+  tabW.textContent = totalBadge > 99 ? '99+' : totalBadge;
+
+  // 未完成的模拟考试
+  const ex = store.exam;
+  const card = $('resumeExamCard');
+  if(ex && ex.list && ex.list.length && ex.endAt > Date.now()){
+    card.style.display = 'flex';
+    const done = Object.keys(ex.answers || {}).length;
+    const left = Math.max(0, Math.round((ex.endAt - Date.now())/1000));
+    $('resumeExamSub').textContent = '已答 ' + done + '/' + ex.list.length + ' 题 · 剩余 '
+      + Math.floor(left/60) + ' 分 ' + (left%60) + ' 秒';
+  }else{
+    card.style.display = 'none';
+    if(ex){ store.exam = null; save(); }   // 已超时或已结束，清掉
+  }
+
+  const last = store.last;
+  if(last && last.list && last.list.length){
+    $('lastTitle').textContent = last.title;
+    $('lastSub').textContent = '第 ' + (last.idx+1) + ' / ' + last.list.length + ' 题 · 已答 ' + Object.keys(last.answers||{}).length + ' 题';
+    $('lastTip').textContent = '继续';
+  }else{
+    $('lastTitle').textContent = '还没有练习记录';
+    $('lastSub').textContent = '从「顺序练习」开始，逐题吃透考点';
+    $('lastTip').textContent = '';
+  }
+}
+
+/* ---------------- 练习会话 ---------------- */
+let ses = null;   // {list:[qid], idx, title, mode, answers:{qid:{p:[],ok:bool}}}
+let judged = false;
+
+function qById(i){ return QUESTIONS[i]; }
+function idsOfChapter(c){ return QUESTIONS.map((q,i)=>({q,i})).filter(x=>x.q.c===c).map(x=>x.i); }
+
+function startPractice(mode, chapterId){
+  let ids = [], title = '顺序练习';
+  if(mode==='order'){ ids = QUESTIONS.map((q,i)=>i); }
+  else if(mode==='random'){ ids = QUESTIONS.map((q,i)=>i); shuffle(ids); title='随机练习'; }
+  else if(mode==='chapter'){
+    ids = idsOfChapter(chapterId);
+    title = (CHAPTERS.find(c=>c.id===chapterId)||{}).name || '章节练习';
+  }
+  else if(mode==='wrong'){ ids = listIds(store.wrong); title='错题重做'; }
+  else if(mode==='missed'){ ids = listIds(store.missed); title='未作答重做'; }
+  else if(mode==='recite'){ ids = QUESTIONS.map((q,i)=>i); title='背题模式'; }
+  else if(mode==='fav'){ ids = listIds(store.fav); title='我的收藏'; }
+  if(!ids.length){ toast('这里还没有题目'); return; }
+  ses = { list:ids, idx:0, title, mode, answers:{} };
+  show('practice'); renderQ();
+}
+function listIds(obj){ return Object.keys(obj||{}).map(Number).filter(i=>QUESTIONS[i]); }
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function shuffled(a){ const c = a.slice(); return shuffle(c); }
+
+function renderQ(){
+  const qid = ses.list[ses.idx];
+  const q = qById(qid);
+  if(!q) return;
+  const recite = ses.mode === 'recite';        // 背题模式：直接亮答案，不做题
+  const answered = ses.answers[qid];
+  judged = recite || !!answered;
+
+  $('pTitle').textContent = ses.title;
+  $('pProg').style.width = ((ses.idx+1)/ses.list.length*100)+'%';
+  $('cardInfo').textContent = ' ' + (ses.idx+1) + '/' + ses.list.length;
+  $('favBtn').textContent = store.fav[qid] ? '★' : '☆';
+  $('favBtn').style.color = store.fav[qid] ? '#ff8a00' : '';
+
+  let html = '<div class="q-tags">'
+    + '<span class="tag-p">' + TYPE_NAME[q.t] + '</span>'
+    + (recite ? '<span class="tag-t" style="background:#efeaff;color:#5b45c9">背题模式</span>'
+              : (q.t===2 ? '<span class="tag-t">多选：全部选对才得分</span>' : ''))
+    + '<span class="tag-c">' + chName(q.c) + '</span></div>';
+  html += '<div class="q-stem"><span class="qno">' + (ses.idx+1) + '.</span>' + q.q + '</div>';
+  html += '<div class="opts" id="optWrap">';
+  q.o.forEach((o,i)=>{
+    let cls = 'opt', mk = '';
+    if(recite){
+      if(q.a.includes(i)){ cls += ' right locked'; mk = '✓'; }
+      else cls += ' faded locked';
+    }else if(judged){
+      const picked = answered.p.includes(i);
+      const isRight = q.a.includes(i);
+      if(isRight) cls += ' right';
+      else if(picked) cls += ' wrong';
+      else cls += ' faded';
+      cls += ' locked';
+      if(picked && isRight) cls += ' sel';
+      if(isRight) mk = '✓'; else if(picked) mk = '✗';
+    }else if(q.t===2 && ses._tmpPick && ses._tmpPick.includes(i)){
+      cls += ' sel'; mk = '✓';
+    }
+    html += '<div class="'+cls+'" onclick="pick('+i+')"><span class="tag">'+LETTER[i]+'</span>'
+          + '<span class="txt">'+esc(o)+'</span><span class="mk">'+mk+'</span></div>';
+  });
+  html += '</div>';
+
+  if(judged) html += expHTML(q, recite ? {p:[], ok:false, recite:true} : answered);
+  $('pBody').innerHTML = html;
+
+  const single = ses.list.length === 1;
+  $('btnPrev').style.display = single ? 'none' : '';
+  $('btnCard').style.display = single ? 'none' : '';
+  if(recite || judged){
+    $('mainBtn').disabled = false;
+    $('mainBtn').textContent = single ? '返回'
+      : ((ses.idx === ses.list.length-1) ? (recite ? '完成' : '完成练习') : '下一题');
+  }else if(q.t === 2){
+    $('mainBtn').disabled = false;
+    $('mainBtn').textContent = '确定';
+  }else{
+    $('mainBtn').disabled = true;
+    $('mainBtn').textContent = '请选择答案';
+  }
+  const sc = $('pScroll');
+  setTimeout(()=>{ sc.scrollTop = 0; }, 10);
+}
+
+/* 正确答案的展示文本：判断题直接显示「正确/错误」，单选/多选显示选项字母 */
+function ansText(q){
+  if(q.t === 3) return q.a[0] === 0 ? '正确' : '错误';
+  return q.a.map(i=>LETTER[i]).join('');
+}
+function expHTML(q, answered){
+  const ansTxt = ansText(q);
+  const recite = !!answered.recite;
+  let detail = '';
+  // 多选题答错时补一句评分规则（正确答案已在上方标题展示，此处不再重复）
+  if(q.t===2 && !recite && !answered.ok){
+    detail = '<div style="margin-bottom:6px;color:#c62b20;font-size:13px">多选题多选、少选、错选均不得分</div>';
+  }
+  const badge = recite
+    ? '<span class="res" style="background:#efeaff;color:#5b45c9">背题模式</span>'
+    : '<span class="res ' + (answered.ok?'ok':'no') + '">' + (answered.ok?'✓ 回答正确':'✗ 回答错误') + '</span>';
+  return '<div class="exp">'
+    + '<div class="exp-h"><span class="dot"></span>正确答案：<b>' + ansTxt + '</b>' + badge + '</div>'
+    + '<div class="exp-b">' + detail + '<b>解析：</b>' + esc(q.e) + '</div></div>';
+}
+function chName(id){ const c = CHAPTERS.find(x=>x.id===id); return c ? c.name : '综合'; }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function pick(i){
+  if(!ses || ses.mode === 'recite') return;      // 背题模式不接受作答
+  const qid = ses.list[ses.idx], q = qById(qid);
+  // 越界下标（如判断题按了键盘 3~6）直接忽略，避免被判成"已作答且答错"
+  if(judged || !q || i < 0 || i >= q.o.length) return;
+  if(q.t === 2){
+    ses._tmpPick = ses._tmpPick || [];
+    const p = ses._tmpPick.indexOf(i);
+    if(p>=0) ses._tmpPick.splice(p,1); else ses._tmpPick.push(i);
+    ses._tmpPick.sort((a,b)=>a-b);
+    renderQ();
+  }else{
+    judge([i]);
+  }
+}
+
+function judge(picked){
+  const qid = ses.list[ses.idx], q = qById(qid);
+  const ok = picked.length === q.a.length && picked.every(v=>q.a.includes(v));
+  ses.answers[qid] = {p:picked.slice(), ok};
+  ses._tmpPick = null;
+  // 统计
+  store.stats.total++;
+  if(ok) store.stats.right++;
+  const d = today();
+  store.stats.days[d] = (store.stats.days[d]||0) + 1;
+  // 掌握度 & 错题本（错题本改为全手动移出，答对不再自动移出）
+  store.qStat = store.qStat || {};
+  if(ok){ store.qStat[qid] = (store.qStat[qid]||0)+1; }
+  else { store.wrong[qid] = (store.wrong[qid]||0)+1; delete store.qStat[qid]; }
+  delete store.missed[qid];          // 已作答即从「未作答」清单移出
+  save();
+  renderQ();
+  if(!ok){
+    setTimeout(()=>{
+      const el = document.querySelector('.exp');
+      if(el) el.scrollIntoView({behavior:'smooth', block:'nearest'});
+    }, 60);
+  }
+}
+
+function mainAction(){
+  if(!ses) return;
+  // 背题模式只翻页，不判定
+  if(ses.mode === 'recite'){
+    if(ses.idx >= ses.list.length-1){ exitPractice(); return; }
+    ses.idx++; renderQ(); return;
+  }
+  const qid = ses.list[ses.idx], q = qById(qid);
+  if(!judged){
+    if(q.t===2){
+      if(!ses._tmpPick || !ses._tmpPick.length){ toast('请至少选择一个选项'); return; }
+      judge(ses._tmpPick); return;
+    }
+    return;
+  }
+  if(ses.list.length === 1){ exitPractice(); return; }   // 单题查看模式：直接返回
+  if(ses.idx >= ses.list.length-1){ finishPractice(); return; }
+  ses.idx++; ses._tmpPick = null; renderQ();
+}
+function nextQ(){ mainAction(); }
+function prevQ(){
+  if(ses.idx<=0){ toast('已经是第一题'); return; }
+  ses.idx--; ses._tmpPick=null; renderQ();
+}
+function finishPractice(){
+  const total = Object.keys(ses.answers).length;
+  const right = Object.values(ses.answers).filter(a=>a.ok).length;
+  // 用答题卡跳过、始终没作答的题，记入「未作答」清单
+  const wrongIds = [], missIds = [];
+  ses.list.forEach(id=>{
+    const a = ses.answers[id];
+    if(!a){ missIds.push(id); store.missed[id] = (store.missed[id]||0) + 1; return; }
+    if(!a.ok) wrongIds.push(id);
+  });
+  store.last = null; save();
+
+  const rate = total ? Math.round(right/total*100) : 0;
+  $('rScore').className = 'score-big ' + (rate>=70?'pass':'fail');
+  $('rScore').textContent = rate + '分';
+  $('rLabel').innerHTML = '本轮练习完成 · 共 ' + total + ' 题，答对 <b style="color:#12b76a">' + right + '</b> 题';
+  $('rRight').textContent = right;
+  $('rWrong').textContent = total - right;
+  $('rSkip').textContent = ses.list.length - total;
+
+  const review = wrongIds.concat(missIds);
+  $('rWrongTip').textContent = '共 ' + review.length + ' 题'
+    + (missIds.length ? '（含未作答 ' + missIds.length + ' 题）' : '');
+  $('rWrongList').innerHTML = review.length
+    ? review.map(i=>wrongItemHTML(i, true)).join('')
+    : '<div class="empty"><span class="e-ico">🎉</span>全部答对，太棒了</div>';
+  setResultActions(review);
+  show('result');
+}
+function exitPractice(){
+  // 单题查看模式不覆盖首页「继续上次」的练习进度
+  if(ses && ses.list.length > 1 && ses.mode !== 'single' && Object.keys(ses.answers).length){
+    store.last = { list:ses.list.slice(), idx:ses.idx, title:ses.title, answers:ses.answers };
+    save();
+  }
+  const back = (ses && ses.from) || 'home';
+  ses = null;
+  show(back);
+}
+function resumeLast(){
+  const last = store.last;
+  if(!last){ startPractice('order'); return; }
+  ses = { list:last.list.slice(), idx:last.idx, title:last.title, mode:'resume', answers: Object.assign({}, last.answers) };
+  show('practice'); renderQ();
+}
+function toggleFav(){
+  const qid = ses.list[ses.idx];
+  if(store.fav[qid]){ delete store.fav[qid]; toast('已取消收藏'); }
+  else { store.fav[qid] = 1; toast('已加入收藏'); }
+  save(); renderQ();
+}
+
+/* ---------------- 答题卡 ---------------- */
+let cardMode = 'practice';
+function openCard(){
+  const isExam = curView === 'exam' && !!exam;
+  const s = isExam ? exam : ses;
+  if(!s) return;
+  cardMode = isExam ? 'exam' : 'practice';
+  const answers = s.answers;
+  let okN=0, noN=0;
+  s.list.forEach(id=>{ const a=answers[id]; if(a){ a.ok?okN++:noN++; } });
+  const rest = s.list.length - okN - noN;
+  let html;
+  if(isExam){
+    const doneN = Object.keys(s.answers).length;
+    html = '<div class="legend">'
+      + '<span><i style="background:#c8d2e4"></i>已作答 ' + doneN + '</span>'
+      + '<span><i style="background:#f2f4f9"></i>未作答 ' + (s.list.length-doneN) + '</span></div>';
+  }else{
+    html = '<div class="legend">'
+      + '<span><i style="background:#12b76a"></i>答对 ' + okN + '</span>'
+      + '<span><i style="background:#f04438"></i>答错 ' + noN + '</span>'
+      + '<span><i style="background:#f2f4f9"></i>未答 ' + rest + '</span></div>';
+  }
+  html += '<div class="grid-n">';
+  s.list.forEach((id,i)=>{
+    const a = answers[id];
+    let cls = 'gn';
+    if(isExam){ if(a && a.p && a.p.length) cls += ' do'; }
+    else if(a){ cls += a.ok ? ' ok' : ' no'; }
+    if(i === s.idx) cls += ' cur';
+    html += '<div class="'+cls+'" onclick="jumpTo(' + i + ')">' + (i+1) + '</div>';
+  });
+  html += '</div>';
+  if(isExam){
+    html += '<div style="margin-top:18px"><button class="btn btn-primary btn-block" onclick="submitExam()">交卷 · 已答 '
+      + Object.keys(exam.answers).length + '/' + exam.list.length + '</button></div>';
+  }
+  openSheet(isExam?'答题卡 · 模拟考试':'答题卡', html);
+}
+function jumpTo(i){
+  if(cardMode==='exam'){
+    // 先落盘当前题的多选勾选再跳题，否则临时勾选会"串"到目标题上
+    commitExamPick();
+    if(!exam) return;
+    exam.idx = i; exam._tmpPick = null; persistExam(); renderExamQ();
+  }else{
+    if(!ses) return;
+    ses.idx = i; ses._tmpPick = null; renderQ();
+  }
+  closeSheet();
+}
+
+/* ---------------- 模拟考试 ---------------- */
+let exam = null, timerId = null;
+let examCfg = { count:100, time:60, range:'all' };
+
+function startExamSetup(){
+  document.querySelectorAll('#segCount button').forEach(b=>b.classList.toggle('on', +b.dataset.v===examCfg.count));
+  document.querySelectorAll('#segTime button').forEach(b=>b.classList.toggle('on', +b.dataset.v===examCfg.time));
+  $('rangeBtn').textContent = rangeLabel() + ' ›';
+  show('examset');
+}
+document.addEventListener('click', e=>{
+  const b = e.target.closest('#segCount button,#segTime button');
+  if(!b) return;
+  const p = b.parentElement;
+  p.querySelectorAll('button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  if(p.id==='segCount') examCfg.count = +b.dataset.v;
+  if(p.id==='segTime') examCfg.time = +b.dataset.v;
+});
+
+/* ---------------- 出题范围选择 ---------------- */
+function rangeLabel(){
+  if(examCfg.range === 'all') return '全部题目';
+  if(examCfg.range === 'weak') return '弱项优先';
+  const c = CHAPTERS.find(x => x.id === +examCfg.range);
+  return c ? c.name : '全部题目';
+}
+/* 弱项 = 错题 + 未作答 + 还没答对过的题 */
+function weakIds(){
+  const w = store.wrong||{}, m = store.missed||{}, qs = store.qStat||{};
+  return QUESTIONS.map((q,i)=>i).filter(i => w[i] || m[i] || !qs[i]);
+}
+function openRangePicker(){
+  let html = '<div class="range-item ' + (examCfg.range==='all'?'on':'') + '" onclick="setRange(\'all\')">'
+    + '<div class="r-i">📚</div><div class="r-t"><h4>全部题目</h4><p>从全部 ' + QUESTIONS.length + ' 题中组卷</p></div>'
+    + (examCfg.range==='all' ? '<div class="r-c">✓</div>' : '') + '</div>';
+  html += '<div class="range-item ' + (examCfg.range==='weak'?'on':'') + '" onclick="setRange(\'weak\')">'
+    + '<div class="r-i">🎯</div><div class="r-t"><h4>弱项优先</h4><p>优先出错题、未作答题和还没答对的题（当前 ' + weakIds().length + ' 题）</p></div>'
+    + (examCfg.range==='weak' ? '<div class="r-c">✓</div>' : '') + '</div>';
+  html += '<div class="sec-title" style="margin:16px 4px 10px">按章节出题</div>';
+  CHAPTERS.forEach(c=>{
+    const on = +examCfg.range === c.id;
+    html += '<div class="range-item ' + (on?'on':'') + '" onclick="setRange(' + c.id + ')">'
+      + '<div class="r-i">' + c.icon + '</div><div class="r-t"><h4>' + c.name + '</h4><p>共 '
+      + idsOfChapter(c.id).length + ' 题</p></div>'
+      + (on ? '<div class="r-c">✓</div>' : '') + '</div>';
+  });
+  openSheet('选择出题范围', html);
+}
+function setRange(v){ examCfg.range = v; closeSheet(); startExamSetup(); }
+
+function startExam(){
+  const n = examCfg.count;
+  const all = QUESTIONS.map((q,i)=>i);
+  // scopeIds = 允许抽取的全部题；priIds = 优先抽取的题
+  let scopeIds, priIds, scopeName;
+  if(examCfg.range === 'weak'){
+    scopeIds = all; priIds = weakIds(); scopeName = '弱项优先';
+  }else if(examCfg.range === 'all'){
+    scopeIds = all; priIds = []; scopeName = '';
+  }else{
+    const c = +examCfg.range;
+    scopeIds = idsOfChapter(c); priIds = scopeIds;
+    scopeName = (CHAPTERS.find(x=>x.id===c)||{}).name || '所选范围';
+  }
+  const priSet = new Set(priIds);
+  const secIds = scopeIds.filter(i => !priSet.has(i));
+
+  // 按真实考试比例分配题量：判断 30% / 单选 40% / 多选 30%
+  const target = {3: Math.round(n*0.3)};
+  target[1] = Math.round(n*0.4);
+  target[2] = n - target[1] - target[3];
+
+  const chosen = [], spareIn = [];
+  [3,1,2].forEach(t=>{
+    const pool = shuffled(priIds.filter(i=>QUESTIONS[i].t===t))
+      .concat(shuffled(secIds.filter(i=>QUESTIONS[i].t===t)));
+    const take = Math.min(target[t], pool.length);
+    chosen.push.apply(chosen, pool.slice(0, take));
+    spareIn.push.apply(spareIn, pool.slice(take));   // 该题型多出来的题
+  });
+  // 各题型配额不均时，先在范围内调剂，不跨章节
+  const inRest = shuffled(spareIn);
+  for(let k=0; k<inRest.length && chosen.length<n; k++) chosen.push(inRest[k]);
+
+  // 范围内确实凑不够，才跨范围补足，并明确提示
+  let cross = 0;
+  if(chosen.length < n){
+    const scopeSet = new Set(scopeIds);
+    const outRest = shuffled(all.filter(i => !scopeSet.has(i)));
+    for(let k=0; k<outRest.length && chosen.length<n; k++){ chosen.push(outRest[k]); cross++; }
+  }
+  shuffle(chosen);
+
+  exam = { list:chosen, idx:0, answers:{}, endAt: Date.now() + examCfg.time*60000 };
+  show('exam'); renderExamQ();
+  if(cross) toast(scopeName + '仅 ' + scopeIds.length + ' 题，已跨章节补足 ' + cross + ' 题');
+  persistExam();
+  clearInterval(timerId); timerId = setInterval(tickExam, 1000); tickExam();
+}
+
+/* ---------------- 考试中断恢复 ---------------- */
+function persistExam(){
+  if(!exam) return;
+  store.exam = {
+    list: exam.list.slice(),
+    idx: exam.idx,
+    answers: JSON.parse(JSON.stringify(exam.answers)),
+    endAt: exam.endAt
+  };
+  save();
+}
+function resumeExam(){
+  const e = store.exam;
+  if(!e || !e.list || !e.list.length){ toast('没有未完成的考试'); return; }
+  if(e.endAt - Date.now() <= 0){
+    store.exam = null; save();
+    clearInterval(timerId); timerId = null; exam = null;
+    toast('上次考试已超时结束'); renderHome();
+    return;
+  }
+  exam = {
+    list: e.list.slice(),
+    idx: Math.min(e.idx || 0, e.list.length-1),
+    answers: e.answers || {},
+    endAt: e.endAt
+  };
+  show('exam'); renderExamQ();
+  clearInterval(timerId); timerId = setInterval(tickExam, 1000); tickExam();
+}
+function tickExam(){
+  if(!exam) return;
+  const left = Math.max(0, Math.round((exam.endAt - Date.now())/1000));
+  const m = Math.floor(left/60), s = left%60;
+  $('eTimer').textContent = (m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+  $('eTimer').classList.toggle('warn', left<=300);
+  if(left<=0){ toast('考试时间到，自动交卷'); submitExam(true); }
+}
+function renderExamQ(){
+  const qid = exam.list[exam.idx], q = qById(qid);
+  if(!q) return;
+  const picked = exam.answers[qid];
+  $('eCount').textContent = (exam.idx+1) + ' / ' + exam.list.length;
+  $('eProg').style.width = ((exam.idx+1)/exam.list.length*100)+'%';
+  $('eCardInfo').textContent = ' ' + (exam.idx+1) + '/' + exam.list.length;
+
+  let html = '<div class="q-tags"><span class="tag-p">' + TYPE_NAME[q.t] + '</span>'
+    + '<span class="tag-c">' + chName(q.c) + '</span></div>';
+  html += '<div class="q-stem"><span class="qno">' + (exam.idx+1) + '.</span>' + q.q + '</div><div class="opts">';
+  q.o.forEach((o,i)=>{
+    let cls = 'opt';
+    const cur = exam._tmpPick || (picked ? picked.p : null);
+    if(cur && cur.includes(i)) cls += ' sel';
+    html += '<div class="'+cls+'" onclick="examPick('+i+')"><span class="tag">'+LETTER[i]+'</span>'
+      + '<span class="txt">'+esc(o)+'</span></div>';
+  });
+  html += '</div>';
+  $('eBody').innerHTML = html;
+  $('eMain').textContent = (exam.idx === exam.list.length-1) ? '交卷' : '下一题';
+  $('eScroll').scrollTop = 0;
+}
+function examPick(i){
+  if(!exam) return;
+  const qid = exam.list[exam.idx], q = qById(qid);
+  if(!q || i < 0 || i >= q.o.length) return;      // 防止键盘越界按键
+  if(q.t === 2){
+    const cur = exam._tmpPick
+      ? exam._tmpPick.slice()
+      : (exam.answers[qid] ? exam.answers[qid].p.slice() : []);
+    const p = cur.indexOf(i);
+    if(p>=0) cur.splice(p,1); else cur.push(i);
+    cur.sort((a,b)=>a-b);
+    exam._tmpPick = cur;
+    exam.answers[qid] = { p:cur.slice(), ok:null };   // 实时同步到答题卡
+  }else{
+    exam.answers[qid] = { p:[i], ok:null };
+    exam._tmpPick = null;
+  }
+  persistExam();
+  renderExamQ();
+}
+/* 离开当前题目前，落盘多选勾选并清空临时勾选，避免选项"串"到别的题上 */
+function commitExamPick(){
+  if(!exam) return;
+  const qid = exam.list[exam.idx], q = qById(qid);
+  if(q && q.t === 2 && exam._tmpPick && !exam._tmpPick.length) delete exam.answers[qid];
+  exam._tmpPick = null;
+}
+function examNext(){
+  if(!exam) return;
+  commitExamPick();
+  if(exam.idx === exam.list.length-1){ submitExam(); return; }
+  exam.idx++; persistExam(); renderExamQ();
+}
+function examPrev(){
+  if(!exam) return;
+  commitExamPick();
+  if(exam.idx<=0){ toast('已经是第一题'); return; }
+  exam.idx--; persistExam(); renderExamQ();
+}
+function quitExam(){
+  if(!exam){ show('home'); return; }
+  if(!confirm('退出考试？进度会保存，可在首页「继续模拟考试」接着答。')) return;
+  persistExam();
+  clearInterval(timerId); timerId = null; exam = null;
+  show('home');
+  toast('已保存，可随时继续');
+}
+function submitExam(force){
+  if(!exam) return;
+  const total = exam.list.length;
+  const un = total - Object.keys(exam.answers).length;
+  // force=true（时间到自动交卷）不再弹确认框，避免用户不在页面上时被阻塞
+  if(!force && un > 0 && !confirm('还有 ' + un + ' 题未作答，确定交卷吗？')) return;
+  clearInterval(timerId); timerId = null;
+  commitExamPick();
+
+  let right=0, wrong=0, skip=0;
+  const wrongIds = [], missIds = [];
+  exam.list.forEach(id=>{
+    const q = qById(id), a = exam.answers[id];
+    if(!a || !a.p || !a.p.length){
+      // 未作答：收进独立的「未作答」清单，不污染错题本
+      skip++; missIds.push(id);
+      store.missed[id] = (store.missed[id]||0) + 1;
+      return;
+    }
+    const ok = a.p.length===q.a.length && a.p.every(v=>q.a.includes(v));
+    a.ok = ok;
+    store.stats.total++; const d=today(); store.stats.days[d]=(store.stats.days[d]||0)+1;
+    store.qStat = store.qStat||{};
+    delete store.missed[id];                       // 已作答 → 离开「未作答」清单
+    if(ok){ right++; store.stats.right++; store.qStat[id]=(store.qStat[id]||0)+1; }
+    else { wrong++; store.wrong[id]=(store.wrong[id]||0)+1; delete store.qStat[id]; wrongIds.push(id); }
+  });
+  store.exam = null;                               // 考试已结束，清除可恢复状态
+  save();
+  const score = Math.round(right/total*100);
+  $('rScore').textContent = score + '分';
+  $('rScore').className = 'score-big ' + (score>=70?'pass':'fail');
+  $('rLabel').innerHTML = score>=70
+    ? '🎉 <b style="color:#12b76a">合格</b> · 达到 70 分及格线，继续保持'
+    : '未达 70 分及格线，建议重做错题后再考一次';
+  $('rRight').textContent = right; $('rWrong').textContent = wrong; $('rSkip').textContent = skip;
+  const review = wrongIds.concat(missIds);
+  $('rWrongTip').textContent = '共 ' + review.length + ' 题' + (skip ? '（含未作答 ' + skip + ' 题）' : '');
+  $('rWrongList').innerHTML = review.length
+    ? review.map(i=>wrongItemHTML(i, true)).join('')
+    : '<div class="empty"><span class="e-ico">🎉</span>全部答对，太棒了</div>';
+  setResultActions(review);
+  exam = null;
+  show('result');
+}
+
+/* 成绩页底部操作：重做本轮错题 / 返回首页 */
+let _resultWrongIds = [];
+function setResultActions(ids){
+  _resultWrongIds = ids.slice();
+  $('rRedo').style.display = _resultWrongIds.length ? '' : 'none';
+}
+function redoWrong(){
+  if(!_resultWrongIds.length){ toast('本轮没有错题'); return; }
+  ses = { list:_resultWrongIds.slice(), idx:0, title:'重做本轮错题', mode:'redo', answers:{} };
+  show('practice'); renderQ();
+}
+function wrongItemHTML(id, withExp, showDel){
+  const q = QUESTIONS[id];
+  if(!q) return '';
+  let h = '<div class="wrong-item" onclick="viewQuestion(' + id + ')">'
+    + '<div class="wi-top"><span class="tag-p">' + TYPE_NAME[q.t] + '</span><span class="tag-c">' + chName(q.c) + '</span>'
+    + (showDel ? '<button class="wi-del danger" style="margin-left:auto" onclick="event.stopPropagation();removeFromList(' + id + ')">移出</button>' : '')
+    + '</div>'
+    + '<div class="wi-q">' + esc(q.q) + '</div>';
+  if(withExp){
+    h += '<div style="font-size:13px;color:#0b8a51;margin-top:8px">正确答案：<b>' + ansText(q) + '</b></div>'
+      + '<div style="font-size:12.5px;color:#6b7488;margin-top:4px;line-height:1.7">' + esc(q.e) + '</div>';
+  }else{
+    const label = wrongTab === 'missed' ? '未作答' : ('错 ' + (store.wrong[id]||1) + ' 次');
+    h += '<div class="wi-b"><span class="badge-n">' + label + '</span><span>点击查看答案与解析</span></div>';
+  }
+  return h + '</div>';
+}
+function viewQuestion(id){
+  const from = (curView === 'practice') ? 'home' : curView;  // 记住来路，返回时回到原页面
+  ses = { list:[id], idx:0, title:'错题解析', mode:'single', answers:{}, from:from };
+  show('practice'); renderQ();
+}
+
+/* ---------------- 章节选择 ---------------- */
+function openChapters(){
+  let html = '';
+  CHAPTERS.forEach(c=>{
+    const ids = idsOfChapter(c.id);
+    const done = ids.filter(i=>store.qStat && store.qStat[i]).length;
+    const pct = ids.length ? Math.round(done/ids.length*100) : 0;
+    html += '<div class="ch-row" onclick="closeSheet();startPractice(\'chapter\',' + c.id + ')">'
+      + '<div class="ch-i">' + c.icon + '</div>'
+      + '<div class="ch-t"><h4>' + c.name + '</h4>'
+      + '<p>共 ' + ids.length + ' 题 · 已掌握 ' + done + ' 题</p>'
+      + '<div class="bar-mini"><i style="width:' + pct + '%"></i></div></div>'
+      + '<div class="ch-n">' + pct + '%</div></div>';
+  });
+  openSheet('选择章节', html);
+}
+
+/* ---------------- 题库本：错题 / 未作答 ---------------- */
+let wrongTab = 'wrong';
+const LIST_EMPTY = {
+  wrong:  {ico:'📭', t1:'还没有错题',   t2:'练习中答错的题会自动收进这里'},
+  missed: {ico:'🕳️', t1:'没有未作答的题', t2:'模拟考试中漏做的题会收进这里'}
+};
+function listOf(tab){ return (tab==='missed' ? store.missed : store.wrong) || {}; }
+function switchWrongTab(tab){ wrongTab = tab; renderWrong(); }
+
+function renderWrong(){
+  const isMissed = wrongTab === 'missed';
+  const obj = listOf(wrongTab);
+  const ids = Object.keys(obj).map(Number).filter(i=>QUESTIONS[i]);
+  if(isMissed) ids.sort((a,b)=>a-b);                        // 未作答按题号排序
+  else ids.sort((a,b)=>(obj[b]||0)-(obj[a]||0));            // 错题按错误次数排序
+
+  const wN = Object.keys(listOf('wrong')).length, mN = Object.keys(listOf('missed')).length;
+  $('tcntWrong').textContent  = wN ? ' ' + wN : '';
+  $('tcntMissed').textContent = mN ? ' ' + mN : '';
+  $('tbtnWrong').classList.toggle('on', !isMissed);
+  $('tbtnMissed').classList.toggle('on', isMissed);
+
+  if(!ids.length){
+    const e = LIST_EMPTY[wrongTab];
+    $('wrongList').innerHTML = '<div class="empty"><span class="e-ico">' + e.ico + '</span>' + e.t1
+      + '<br><span style="font-size:12.5px">' + e.t2 + '</span></div>';
+    return;
+  }
+  $('wrongList').innerHTML =
+    '<div style="font-size:12.5px;color:#6b7488;margin:2px 4px 12px">共 ' + ids.length + ' 道'
+      + (isMissed ? '未作答题 · 按题号排序' : '错题 · 按错误次数排序') + '（仅手动移出）</div>'
+    + ids.map(i=>wrongItemHTML(i, false, true)).join('')
+    + '<div style="padding:8px 0 0"><button class="btn btn-primary btn-block" onclick="startPractice(\''
+      + (isMissed ? 'missed' : 'wrong') + '\')">开始重做</button></div>';
+}
+function removeFromList(id){
+  delete listOf(wrongTab)[id];
+  save(); renderWrong(); renderMine(); renderHome();
+  toast('已移出');
+}
+function clearCurrentList(){
+  const isMissed = wrongTab === 'missed';
+  const name = isMissed ? '「未作答」清单' : '错题本';
+  if(!Object.keys(listOf(wrongTab)).length){ toast(name + '已经是空的'); return; }
+  if(!confirm('确定清空' + name + '？此操作不可恢复。')) return;
+  if(isMissed) store.missed = {}; else store.wrong = {};
+  save(); renderWrong(); renderMine(); renderHome();
+  toast('已清空' + name);
+}
+function renderMine(){
+  $('m-total').textContent = store.stats.total;
+  $('m-rate').textContent = store.stats.total ? Math.round(store.stats.right/store.stats.total*100)+'%' : '0%';
+  $('m-today').textContent = store.stats.days[today()] || 0;
+  $('m-wrongn').textContent = Object.keys(store.wrong||{}).length + ' 题 ›';
+  $('m-missedn').textContent = Object.keys(store.missed||{}).length + ' 题 ›';
+  $('m-favn').textContent = Object.keys(store.fav||{}).length + ' 题 ›';
+}
+function resetAll(){
+  if(!confirm('确定清空全部学习数据？包括答题记录、错题本和收藏。')) return;
+  store = defaultStore(); save(); renderMine(); renderHome(); toast('已重置');
+}
+
+/* ---------------- 返回键 / 键盘 ---------------- */
+document.addEventListener('keydown', e=>{
+  const k = ['1','2','3','4','5','6'].indexOf(e.key);
+  if(curView==='practice' && ses){
+    if(e.key==='ArrowRight'){ mainAction(); return; }
+    if(e.key==='ArrowLeft'){ prevQ(); return; }
+    if(k>=0) pick(k);
+  }
+  if(curView==='exam' && exam){
+    if(e.key==='ArrowRight'){ examNext(); return; }
+    if(e.key==='ArrowLeft'){ examPrev(); return; }
+    if(k>=0) examPick(k);
+  }
+});
+
+/* ---------------- 初始化 ---------------- */
+renderHome();
+</script>
+</body>
+</html>

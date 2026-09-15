@@ -1,0 +1,15 @@
+# 操作系统 / 编辑器
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+.idea/
+.vscode/
+
+# 临时文件
+*.log
+*.tmp
+_*.js
+
+# 依赖（本项目无依赖，保留以防误提交）
+node_modules/
